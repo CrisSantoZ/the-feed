@@ -22,16 +22,18 @@ export async function processarPedido(playerId, restaurante, pratoId) {
         await comerEtapa(prato, i, etapas);
     }
     
-    // Debita o dinheiro
-    await debitarDinheiro(playerId, prato.preco);
+    // Processa a compra e aplica os efeitos no backend
+    const resultado = await processarCompraEfeitos(playerId, prato.nome, prato.preco, prato.recuperacao);
     
-    // Aplica os efeitos de recuperação
-    await aplicarRecuperacao(playerId, prato.recuperacao);
+    if (!resultado.sucesso) {
+        return { sucesso: false, mensagem: resultado.erro };
+    }
     
     return { 
         sucesso: true, 
         mensagem: `🍽️ Você comeu ${prato.nome} e pagou C$${prato.preco}!`,
-        recuperacao: prato.recuperacao
+        recuperacao: prato.recuperacao,
+        novoSaldo: resultado.saldoRestante
     };
 }
 
@@ -48,35 +50,52 @@ async function verificarSaldo(playerId) {
     });
 }
 
-async function debitarDinheiro(playerId, valor) {
+async function processarCompraEfeitos(playerId, pratoNome, preco, recuperacao) {
     return new Promise((resolve) => {
         const socket = window.socket;
-        if (!socket) return resolve(false);
+        if (!socket) return resolve({ sucesso: false, erro: "Sem conexão com o servidor" });
         
-        // Criar item virtual para compra
-        const item = {
-            id: `comida_${Date.now()}`,
-            nome: "Refeição",
-            tipo: "comida",
-            valorCompra: valor
-        };
+        socket.emit('comerDireto', {
+            playerId: playerId,
+            prato: pratoNome,
+            preco: preco,
+            recuperacao: recuperacao
+        });
         
-        socket.emit('comprar', { playerId, item, quantidade: 1 });
-        socket.once('compraRealizada', () => resolve(true));
-        socket.once('erroServidor', () => resolve(false));
-        setTimeout(() => resolve(false), 3000);
+        socket.once('comidaConsumida', (data) => {
+            console.log('[COMER] Efeitos aplicados:', data);
+            // Atualizar interface se houver elementos
+            atualizarInterface(data);
+            resolve({ sucesso: true, saldoRestante: data.saldoRestante });
+        });
+        
+        socket.once('erroServidor', (erro) => {
+            console.error('[COMER] Erro:', erro);
+            resolve({ sucesso: false, erro: erro });
+        });
+        
+        setTimeout(() => resolve({ sucesso: false, erro: "Timeout" }), 5000);
     });
 }
 
-async function aplicarRecuperacao(playerId, recuperacao) {
-    // TODO: Integrar com backend para atualizar fome, sede, energia
-    console.log(`[COMER] Recuperação aplicada:`, recuperacao);
-    return true;
+function atualizarInterface(data) {
+    // Atualiza elementos de status se existirem
+    const fomeElement = document.getElementById('player-fome');
+    const energiaElement = document.getElementById('player-energia');
+    const felicidadeElement = document.getElementById('player-felicidade');
+    const saldoElement = document.getElementById('player-dinheiro');
+    
+    if (fomeElement) fomeElement.textContent = data.novaFome || '?';
+    if (energiaElement) energiaElement.textContent = data.novaEnergia || '?';
+    if (felicidadeElement) felicidadeElement.textContent = data.novaFelicidade || '?';
+    if (saldoElement) saldoElement.textContent = data.saldoRestante || '?';
+    
+    // Disparar evento para atualizar outros componentes
+    window.dispatchEvent(new CustomEvent('statusAtualizado', { detail: data }));
 }
 
 function mostrarPreparo(prato) {
     return new Promise((resolve) => {
-        // Criar modal de preparo rápido
         const modal = document.createElement('div');
         modal.style.cssText = `
             position: fixed;
@@ -103,7 +122,6 @@ function mostrarPreparo(prato) {
             </div>
         `;
         
-        // Adicionar animação
         const style = document.createElement('style');
         style.textContent = `
             @keyframes fadeInUp {
@@ -113,6 +131,10 @@ function mostrarPreparo(prato) {
             @keyframes progress {
                 from { width: 0%; }
                 to { width: 100%; }
+            }
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
             }
         `;
         document.head.appendChild(style);
