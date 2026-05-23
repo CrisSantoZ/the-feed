@@ -4,8 +4,8 @@ let chatAberto = false;
 let chatMinimizado = false;
 let salaAtual = null;
 let localNomeCache = '';
-let mensagensPendentes = []; // Guarda mensagens recebidas enquanto minimizado
 let intervaloPisca = null;
+let mensagensRecebidasMinimizado = 0; // Conta quantas mensagens novas recebeu
 
 export function iniciarChatLocal(localId, localNome, localTipo) {
     if (chatAberto) return;
@@ -14,7 +14,7 @@ export function iniciarChatLocal(localId, localNome, localTipo) {
     localNomeCache = localNome;
     chatAberto = true;
     chatMinimizado = false;
-    mensagensPendentes = [];
+    mensagensRecebidasMinimizado = 0;
     
     criarChatContainer();
     
@@ -23,11 +23,10 @@ export function iniciarChatLocal(localId, localNome, localTipo) {
         socket.emit('entrarSala', salaAtual);
         
         socket.on('novaMensagemLocal', (data) => {
-            // Guarda a mensagem no array de pendentes
-            mensagensPendentes.push(data);
-            
-            // Se o chat está minimizado, apenas notifica
+            // Se o chat está minimizado, guarda contagem e notifica
             if (chatMinimizado) {
+                mensagensRecebidasMinimizado++;
+                atualizarMiniContador();
                 notificarNovaMensagemLoop();
             } else {
                 // Se está aberto, adiciona direto
@@ -171,6 +170,8 @@ function minimizarChat() {
         document.getElementById('chat-mini').onclick = () => restaurarChat();
         
         chatMinimizado = true;
+        mensagensRecebidasMinimizado = 0;
+        atualizarMiniContador();
     }
 }
 
@@ -208,18 +209,16 @@ function restaurarChat() {
             socket.emit('entrarSala', salaAtual);
         }
         
-        // Adicionar mensagens pendentes
-        for (const msg of mensagensPendentes) {
-            adicionarMensagem(msg.nome, msg.mensagem);
-        }
-        mensagensPendentes = [];
-        
-        // Parar notificação piscante
+        // Limpar notificação
         if (intervaloPisca) {
             clearInterval(intervaloPisca);
             intervaloPisca = null;
         }
-        // Resetar cor do botão
+        
+        // Resetar contador de mensagens pendentes
+        mensagensRecebidasMinimizado = 0;
+        atualizarMiniContador();
+        
         const miniDiv = document.getElementById('chat-mini');
         if (miniDiv) {
             miniDiv.style.background = 'rgba(0, 243, 255, 0.15)';
@@ -229,11 +228,25 @@ function restaurarChat() {
     chatMinimizado = false;
 }
 
+function atualizarMiniContador() {
+    const miniContador = document.getElementById('chat-mini-contador');
+    if (miniContador) {
+        if (mensagensRecebidasMinimizado > 0) {
+            miniContador.textContent = mensagensRecebidasMinimizado;
+            miniContador.style.display = 'block';
+        } else {
+            miniContador.textContent = '0';
+        }
+    }
+}
+
 function notificarNovaMensagemLoop() {
     if (!chatMinimizado) return;
     
-    // Se já tem um intervalo, não criar outro
-    if (intervaloPisca) return;
+    if (intervaloPisca) {
+        clearInterval(intervaloPisca);
+        intervaloPisca = null;
+    }
     
     intervaloPisca = setInterval(() => {
         if (!chatMinimizado) {
@@ -247,7 +260,7 @@ function notificarNovaMensagemLoop() {
         const miniDiv = document.getElementById('chat-mini');
         if (miniDiv) {
             const bgAtual = miniDiv.style.background;
-            if (bgAtual === 'rgba(255, 0, 85, 0.6)' || bgAtual === 'rgb(255, 0, 85)') {
+            if (bgAtual === 'rgba(255, 0, 85, 0.6)') {
                 miniDiv.style.background = 'rgba(0, 243, 255, 0.15)';
             } else {
                 miniDiv.style.background = 'rgba(255, 0, 85, 0.6)';
@@ -256,17 +269,9 @@ function notificarNovaMensagemLoop() {
     }, 800);
 }
 
-function notificarNovaMensagem() {
-    if (!chatMinimizado) return;
-    notificarNovaMensagemLoop();
-}
-
 function atualizarContador(contador) {
     const contadorSpan = document.getElementById('contador-pessoas');
     if (contadorSpan) contadorSpan.textContent = contador;
-    
-    const miniContador = document.getElementById('chat-mini-contador');
-    if (miniContador) miniContador.textContent = contador;
 }
 
 function enviarMensagem() {
@@ -321,5 +326,5 @@ export function fecharChatLocal() {
     chatAberto = false;
     chatMinimizado = false;
     salaAtual = null;
-    mensagensPendentes = [];
+    mensagensRecebidasMinimizado = 0;
 }
