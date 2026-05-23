@@ -17,10 +17,6 @@
         min-width: auto !important;
     }
     
-    .mapa-btn-voltar {
-        font-size: 10px !important;
-    }
-    
     .mapa-titulo {
         font-size: 12px !important;
         text-align: center !important;
@@ -30,91 +26,6 @@
     /* ==================== CONTAINER PRINCIPAL ==================== */
     .mapa-container {
         padding: 10px !important;
-    }
-    
-    /* ==================== AMBIENTE DO RESTAURANTE ==================== */
-    .ambiente-box {
-        padding: 12px !important;
-        margin-bottom: 15px !important;
-    }
-    
-    .ambiente-header {
-        margin-bottom: 10px !important;
-        flex-wrap: wrap !important;
-        gap: 8px !important;
-    }
-    
-    .ambiente-header span:first-child {
-        font-size: 20px !important;
-    }
-    
-    .ambiente-header .status {
-        font-size: 11px !important;
-    }
-    
-    .btn-sair {
-        padding: 4px 10px !important;
-        font-size: 10px !important;
-    }
-    
-    .ambiente-descricao {
-        font-size: 11px !important;
-        margin-bottom: 10px !important;
-        line-height: 1.4 !important;
-    }
-    
-    .ambiente-info {
-        gap: 8px !important;
-        flex-wrap: wrap !important;
-    }
-    
-    .ambiente-info span {
-        font-size: 9px !important;
-    }
-    
-    /* ==================== CARDÁPIO ==================== */
-    .cardapio-titulo {
-        font-size: 14px !important;
-        margin-bottom: 10px !important;
-    }
-    
-    .cardapio-item {
-        padding: 10px !important;
-        margin-bottom: 8px !important;
-    }
-    
-    .cardapio-item-header {
-        margin-bottom: 6px !important;
-        flex-wrap: wrap !important;
-    }
-    
-    .cardapio-item-header h4 {
-        font-size: 13px !important;
-    }
-    
-    .cardapio-preco {
-        font-size: 13px !important;
-    }
-    
-    .cardapio-descricao {
-        font-size: 10px !important;
-        margin-bottom: 8px !important;
-        line-height: 1.3 !important;
-    }
-    
-    .cardapio-tags {
-        gap: 5px !important;
-        margin-bottom: 8px !important;
-    }
-    
-    .cardapio-tags span {
-        font-size: 9px !important;
-        padding: 2px 6px !important;
-    }
-    
-    .btn-pedir {
-        padding: 8px !important;
-        font-size: 11px !important;
     }
     
     /* ==================== CATEGORIAS (CIDADE) ==================== */
@@ -130,68 +41,133 @@
         font-size: 13px !important;
     }
     
-    .categoria-header .icone {
-        font-size: 16px !important;
-    }
-    
-    .categoria-header .quantidade {
-        font-size: 10px !important;
-    }
-    
     .categoria-conteudo {
         padding: 10px !important;
     }
     
     .categoria-item {
-        padding: 8px !important;
-        margin-bottom: 6px !important;
+        padding: 10px !important;
+        margin-bottom: 8px !important;
     }
     
     .categoria-item h4 {
-        font-size: 12px !important;
+        font-size: 13px !important;
     }
     
     .categoria-item p {
+        font-size: 11px !important;
+    }
+    
+    /* ==================== AMBIENTE DO RESTAURANTE ==================== */
+    .ambiente-box {
+        padding: 12px !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .ambiente-header {
+        margin-bottom: 10px !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+    
+    .btn-sair {
+        padding: 4px 10px !important;
         font-size: 10px !important;
-        margin-top: 3px !important;
     }
     
-    .categoria-item .preco {
-        font-size: 9px !important;
-        margin-top: 4px !important;
+    .ambiente-box p {
+        font-size: 11px !important;
+        margin-bottom: 10px !important;
     }
     
-    /* ==================== CHAT MINIMIZADO ==================== */
-    #chat-mini {
-        width: 50px !important;
-        height: 50px !important;
+    /* ==================== CARDÁPIO ==================== */
+    .cardapio-titulo {
+        font-size: 14px !important;
+        margin-bottom: 10px !important;
     }
     
-    #chat-mini span:first-child {
-        font-size: 24px !important;
-    }
-    
-    #chat-mini-contador {
-        font-size: 9px !important;
-    }
-    
-    /* ==================== MODAL DE VIAGEM ==================== */
-    .modal-viagem {
-        width: 95% !important;
-        padding: 15px !important;
-    }
-    
-    .modal-viagem h2 {
-        font-size: 16px !important;
-    }
-    
-    .modal-viagem p {
-        font-size: 12px !important;
-    }
-    
-    .modal-viagem select, .modal-viagem button {
+    .cardapio-item {
         padding: 10px !important;
-        font-size: 12px !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .cardapio-item-header h4 {
+        font-size: 13px !important;
+    }
+    
+    .cardapio-preco {
+        font-size: 13px !important;
+    }
+    
+    .cardapio-descricao {
+        font-size: 10px !important;
+    }
+    
+    .btn-pedir {
+        padding: 8px !important;
+        font-size: 11px !important;
+    }
+    
+    /* ==================== CHAT - APENAS O EXPANDIDO ==================== */
+    /* IMPORTANTE: NÃO aplicar regras que afetam o minimizado */
+    .chat-container {
+        width: 90% !important;
+        right: 5% !important;
+        left: 5% !important;
+        bottom: 10px !important;
+        height: 350px !important;
+    }
+    
+    #chat-header {
+        padding: 8px 10px !important;
+    }
+    
+    #chat-mensagens {
+        padding: 8px !important;
+    }
+    
+    #chat-mensagens div {
+        font-size: 11px !important;
+    }
+    
+    #chat-input {
+        padding: 6px !important;
+        font-size: 11px !important;
+    }
+    
+    #enviar-mensagem {
+        padding: 6px 12px !important;
+        font-size: 11px !important;
+    }
+    
+    /* ==================== ESTADO (CIDADES) ==================== */
+    .estado-container {
+        padding: 10px !important;
+    }
+    
+    .estado-header {
+        margin-bottom: 12px !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+    
+    .estado-btn-voltar {
+        padding: 4px 10px !important;
+        font-size: 11px !important;
+    }
+    
+    .estado-titulo {
+        font-size: 14px !important;
+    }
+    
+    .cidades-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important;
+        gap: 8px !important;
+    }
+    
+    .cidade-card {
+        padding: 8px !important;
+        font-size: 11px !important;
     }
     
     /* ==================== LEGENDA ==================== */
@@ -222,245 +198,20 @@
         font-size: 11px !important;
     }
     
-    .ambiente-descricao {
-        font-size: 10px !important;
-    }
-    
-    .ambiente-info span {
-        font-size: 8px !important;
+    .categoria-item h4 {
+        font-size: 12px !important;
     }
     
     .cardapio-item-header h4 {
         font-size: 12px !important;
     }
     
-    .cardapio-preco {
-        font-size: 12px !important;
-    }
-    
     .btn-pedir {
         padding: 6px !important;
         font-size: 10px !important;
-    }
-    
-    .categoria-item h4 {
-        font-size: 11px !important;
-    }
-}
-
-@media (max-width: 768px) {
-    .categoria-item {
-        padding: 10px !important;
-        margin-bottom: 8px !important;
-    }
-    
-    .categoria-item h4 {
-        font-size: 13px !important;
-    }
-    
-    .categoria-item p {
-        font-size: 11px !important;
-    }
-    
-    .categoria-item .preco {
-        font-size: 10px !important;
-    }
-    
-    .categoria-header {
-        padding: 12px !important;
-    }
-    
-    .categoria-header span {
-        font-size: 13px !important;
-    }
-    
-    .categoria-header .icone {
-        font-size: 16px !important;
-    }
-    
-    .categoria-conteudo {
-        padding: 10px !important;
-    }
-}
-
-/* Ajustes para tela do local (restaurante) */
-@media (max-width: 768px) {
-    .ambiente-box {
-        padding: 12px !important;
-        margin-bottom: 15px !important;
-    }
-    
-    .ambiente-header {
-        margin-bottom: 10px !important;
-        flex-wrap: wrap !important;
-        gap: 8px !important;
-    }
-    
-    .ambiente-header span:first-child {
-        font-size: 20px !important;
-    }
-    
-    .ambiente-header .status {
-        font-size: 11px !important;
-    }
-    
-    .btn-sair {
-        padding: 4px 10px !important;
-        font-size: 10px !important;
-    }
-    
-    .ambiente-box p {
-        font-size: 11px !important;
-        margin-bottom: 10px !important;
-        line-height: 1.4 !important;
-    }
-    
-    .ambiente-box .info-item {
-        font-size: 9px !important;
-    }
-    
-    .cardapio-container {
-        margin-top: 15px !important;
-    }
-    
-    .cardapio-titulo {
-        font-size: 14px !important;
-        margin-bottom: 10px !important;
-    }
-    
-    .cardapio-item {
-        padding: 10px !important;
-        margin-bottom: 8px !important;
-    }
-    
-    .cardapio-item-header {
-        margin-bottom: 6px !important;
-        flex-wrap: wrap !important;
-    }
-    
-    .cardapio-item-header h4 {
-        font-size: 13px !important;
-    }
-    
-    .cardapio-preco {
-        font-size: 13px !important;
-    }
-    
-    .cardapio-descricao {
-        font-size: 10px !important;
-        margin-bottom: 8px !important;
-        line-height: 1.3 !important;
-    }
-    
-    .cardapio-tags {
-        gap: 5px !important;
-        margin-bottom: 8px !important;
-    }
-    
-    .cardapio-tags span {
-        font-size: 9px !important;
-        padding: 2px 6px !important;
-    }
-    
-    .btn-pedir {
-        padding: 8px !important;
-        font-size: 11px !important;
-    }
-}
-
-/* Ajustes para o chat no mobile */
-@media (max-width: 768px) {
-    .chat-container {
-        width: 90% !important;
-        right: 5% !important;
-        left: 5% !important;
-        bottom: 10px !important;
-        height: 350px !important;
-    }
-    
-    #chat-header {
-        padding: 8px 10px !important;
-    }
-    
-    #chat-header span:first-child {
-        font-size: 12px !important;
-    }
-    
-    #chat-header button {
-        padding: 2px 6px !important;
-        font-size: 14px !important;
-    }
-    
-    #chat-mensagens {
-        padding: 8px !important;
-        gap: 6px !important;
-    }
-    
-    #chat-mensagens div {
-        padding: 4px 8px !important;
-        font-size: 11px !important;
-    }
-    
-    #chat-input {
-        padding: 6px !important;
-        font-size: 11px !important;
-    }
-    
-    #enviar-mensagem {
-        padding: 6px 12px !important;
-        font-size: 11px !important;
-    }
-    
-    .chat-mini {
-        width: 50px !important;
-        height: 50px !important;
-    }
-    
-    .chat-mini span:first-child {
-        font-size: 24px !important;
-    }
-    
-    #chat-mini-contador {
-        font-size: 9px !important;
-    }
-}
-
-/* Ajustes para tela de estado (cidades) no mobile */
-@media (max-width: 768px) {
-    .estado-container {
-        padding: 10px !important;
-    }
-    
-    .estado-header {
-        margin-bottom: 12px !important;
-        flex-wrap: wrap !important;
-        gap: 8px !important;
-    }
-    
-    .estado-btn-voltar {
-        padding: 4px 10px !important;
-        font-size: 11px !important;
-    }
-    
-    .estado-titulo {
-        font-size: 14px !important;
-        text-align: center !important;
-        flex: 1 !important;
-    }
-    
-    .estado-btn-fechar {
-        font-size: 16px !important;
-        padding: 4px 8px !important;
-    }
-    
-    .cidades-grid {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important;
-        gap: 8px !important;
-        margin-top: 15px !important;
     }
     
     .cidade-card {
-        padding: 8px !important;
-        font-size: 11px !important;
+        font-size: 10px !important;
     }
 }
