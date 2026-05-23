@@ -364,6 +364,28 @@ window.fazerPedido = async function(restauranteId, pratoId) {
     }
 };
 
+// ==================== CONFIRMAR ENTRADA NO LOCAL ====================
+window.confirmarLocal = async function(tipo, id, nome, cidade, estado, pais, descricao, endereco, horario) {
+    const { mostrarModalConfirmacao } = await import('./transporte/transporteUI.js');
+    
+    const conteudo = `
+        <p style="color: #fff; margin-bottom: 10px;">${descricao}</p>
+        ${endereco ? `<p style="color: #888; font-size: 12px;">📍 ${endereco}</p>` : ''}
+        ${horario ? `<p style="color: #888; font-size: 12px;">⏰ ${horario}</p>` : ''}
+    `;
+    
+    const confirmar = await mostrarModalConfirmacao(nome, conteudo);
+    
+    if (confirmar) {
+        // Salva que o personagem está neste local
+        sessionStorage.setItem('playerLocal', id);
+        sessionStorage.setItem('playerLocalNome', nome);
+        sessionStorage.setItem('playerLocalTipo', tipo);
+        
+        window.selecionarLocal(tipo, id, nome, cidade, estado, pais);
+    }
+};
+
 window.fecharPainel = function() {
     // Remove qualquer painel ativo
     const painelAtivo = document.getElementById('painel-ativo');

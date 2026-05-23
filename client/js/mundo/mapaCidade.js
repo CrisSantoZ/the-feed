@@ -60,7 +60,7 @@ export async function renderizarMapaCidade(paisNome, estadoNome, cidadeNome) {
         }[catNome] || { icone: "📍", titulo: catNome.toUpperCase(), cor: "#888" };
         
         const itensHtml = Object.values(itens).map(item => `
-            <div onclick="window.selecionarLocal('${catNome}', '${item.id}', '${item.nome}', '${cidadeNome}', '${estadoNome}', '${paisNome}')" style="
+            <div onclick="window.confirmarLocal('${catNome}', '${item.id}', '${item.nome}', '${cidadeNome}', '${estadoNome}', '${paisNome}', '${item.descricao.replace(/'/g, "\\'")}', '${(item.endereco || '').replace(/'/g, "\\'")}', '${(item.horario || '').replace(/'/g, "\\'")}')" style="
                 background: rgba(0, 243, 255, 0.05);
                 border: 1px solid rgba(0, 243, 255, 0.3);
                 border-radius: 12px;
