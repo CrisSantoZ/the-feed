@@ -181,15 +181,19 @@ function mostrarMenu(menuId) {
     
     const sidebarMenu = document.querySelector('.sidebar-menu');
     if (sidebarMenu) {
-        // Se for o menu personagem, mostra o dashboard ANTES dos links
+        // Se for o menu personagem, renderiza o dashboard + links
         if (menuId === 'personagem') {
-            // Renderiza o dashboard no container principal
-            renderizarConteudoCentral('personagem');
-            
-            // Mostra os links no menu lateral
-            sidebarMenu.innerHTML = itens.map(item => `
-                <li onclick="selecionarItem('${item.id}')">${item.nome}</li>
-            `).join('');
+            // Renderiza o dashboard diretamente no sidebar
+            import('./personagem/perfil.js').then(module => {
+                const dashboardHtml = module.renderizarPerfilSidebar();
+                // Insere o dashboard no topo do sidebar
+                sidebarMenu.innerHTML = `
+                    <div class="personagem-dashboard" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #00f3ff;">
+                        ${dashboardHtml}
+                    </div>
+                    ${itens.map(item => `<li onclick="selecionarItem('${item.id}')">${item.nome}</li>`).join('')}
+                `;
+            });
         } else {
             sidebarMenu.innerHTML = itens.map(item => `
                 <li onclick="selecionarItem('${item.id}')">${item.nome}</li>

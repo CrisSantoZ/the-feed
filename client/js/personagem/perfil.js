@@ -136,3 +136,29 @@ function calcularXPProximo() {
     const nivel = Math.floor(xp / 1000) + 1;
     return nivel * 1000;
 }
+
+function mostrarMenu(menuId) {
+    menuAtual = menuId;
+    const itens = menus[menuId];
+    if (!itens) return;
+    
+    const sidebarMenu = document.querySelector('.sidebar-menu');
+    if (sidebarMenu) {
+        // Se for o menu personagem, renderiza o dashboard + links
+        if (menuId === 'personagem') {
+            import('./personagem/perfil.js').then(module => {
+                const dashboardHtml = module.renderizarPerfilSidebar();
+                sidebarMenu.innerHTML = `
+                    <div class="personagem-dashboard" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #00f3ff;">
+                        ${dashboardHtml}
+                    </div>
+                    ${itens.map(item => `<li onclick="selecionarItem('${item.id}')">${item.nome}</li>`).join('')}
+                `;
+            });
+        } else {
+            sidebarMenu.innerHTML = itens.map(item => `
+                <li onclick="selecionarItem('${item.id}')">${item.nome}</li>
+            `).join('');
+        }
+    }
+}
