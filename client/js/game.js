@@ -22,6 +22,7 @@ import { renderizarFaccoes } from './social/faccoes.js';
 import { renderizarItens } from './loja/itens.js';
 import { renderizarRoupas } from './loja/roupas.js';
 import { renderizarImoveis } from './loja/imoveis.js';
+import { renderizarPerfil } from './personagem/perfil.js';
 
 // Variáveis globais
 let mapaInicializado = false;
@@ -43,13 +44,14 @@ const menus = {
         { id: 'voltar', nome: '⬅ Voltar' }
     ],
     personagem: [
-        { id: 'atributos', nome: '📊 Atributos' },
-        { id: 'inventario', nome: '🎒 Inventário' },
-        { id: 'habilidades', nome: '⚡ Habilidades' },
-        { id: 'estatisticas', nome: '📈 Estatísticas' },
-        { id: 'idiomas', nome: '🗣️ Idiomas' },
-        { id: 'voltar', nome: '⬅ Voltar' }
-    ],
+    { id: 'perfil', nome: '👤 PERFIL' },      // ← PRIMEIRA OPÇÃO (dashboard)
+    { id: 'atributos', nome: '📊 Atributos' },
+    { id: 'inventario', nome: '🎒 Inventário' },
+    { id: 'habilidades', nome: '⚡ Habilidades' },
+    { id: 'estatisticas', nome: '📈 Estatísticas' },
+    { id: 'idiomas', nome: '🗣️ Idiomas' },
+    { id: 'voltar', nome: '⬅ Voltar' }
+],
     social: [
         { id: 'amigos', nome: '👫 Amigos' },
         { id: 'chat', nome: '💬 Chat Global' },
@@ -69,7 +71,6 @@ const menus = {
 const renderizadores = {
     mapa: (dados) => {
         if (dados?.nivel === 'pais') {
-            // return renderizarMapaPais(dados.pais);  // COMENTADO - não usa mais
             return '';
         } else if (dados?.nivel === 'estado') {
             return renderizarMapaEstado(dados.pais, dados.estado);
@@ -78,7 +79,8 @@ const renderizadores = {
     },
     feed: () => renderizarFeed(),
     pessoas: () => renderizarPessoas(),
-    atributos: () => renderizarAtributos(),
+    perfil: () => renderizarPerfil(),        // NOVO - dashboard principal
+    atributos: () => renderizarAtributos(),  // MANTÉM (aba secundária)
     inventario: () => renderizarInventario(),
     habilidades: () => renderizarHabilidades(),
     estatisticas: () => renderizarEstatisticas(),
