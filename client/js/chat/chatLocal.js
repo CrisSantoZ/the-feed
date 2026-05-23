@@ -129,7 +129,7 @@ function enviarMensagem() {
     if (socket && salaAtual) {
         // Exibe a mensagem localmente IMEDIATAMENTE
         const nome = sessionStorage.getItem('playerNome') || 'Você';
-        adicionarMensagem(nome, mensagem);
+        // adicionarMensagem(nome, mensagem);
         
         // Envia para o servidor (para os outros)
         socket.emit('mensagemLocal', {
