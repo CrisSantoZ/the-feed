@@ -29,7 +29,7 @@ export function renderizarMapaEstado(paisNome, estadoNome) {
             <div class="estado-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
                 <button class="mapa-btn-voltar" onclick="window.voltarParaPais('${paisNome}')" style="background:none; border:1px solid #00f3ff; color:#00f3ff; border-radius:8px; cursor:pointer;">← VOLTAR</button>
                 <h2 class="estado-titulo" style="color:#00f3ff; margin:0;">📍 ${estadoNome}</h2>
-                <button class="mapa-btn-voltar" onclick="window.fecharPainel()" style="background:none; border:none; color:#ff0055; font-size:20px; cursor:pointer;">✖</button>
+                <button class="mapa-btn-fechar" onclick="window.fecharPainel()" style="background:none; border:none; color:#ff0055; font-size:20px; cursor:pointer;">✖</button>
             </div>
             
             <div style="background:rgba(0,243,255,0.05); padding:20px; border-radius:16px; margin-top:20px;">
