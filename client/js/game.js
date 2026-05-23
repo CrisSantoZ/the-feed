@@ -332,23 +332,30 @@ window.fazerPedido = async function(restauranteId, pratoId) {
     const playerId = sessionStorage.getItem('playerId');
     const cidade = sessionStorage.getItem('playerCidade');
     const estado = sessionStorage.getItem('playerEstado');
+    const pais = sessionStorage.getItem('playerPais');
     
-    if (!playerId || !cidade || !estado) {
+    if (!playerId || !cidade || !estado || !pais) {
         alert("❌ Dados de localização ou login não encontrados!");
         return;
     }
     
     try {
-        // Importa dados do restaurante
-        const { restaurantesSP } = await import('/locais/brasil/sp/RestaurantesSP.js');
-        const restaurante = restaurantesSP[estado]?.[cidade]?.[restauranteId];
+        // CAMINHO DINÂMICO para qualquer país/estado
+        const paisSlug = pais.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const estadoSlug = estado.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ /g, '-');
+        
+        // Importa o arquivo de restaurantes do estado específico
+        const modulo = await import(`/js/locais/${paisSlug}/${estadoSlug}/Restaurantes.js`);
+        const dadosRestaurantes = modulo.default || modulo;
+        
+        // Busca o restaurante pela cidade e ID
+        const restaurante = dadosRestaurantes[cidade]?.[restauranteId];
         
         if (!restaurante) {
             alert("❌ Restaurante não encontrado!");
             return;
         }
         
-        // Importa e executa o sistema de alimentação
         const { processarPedido } = await import('./actions/comer.js');
         const resultado = await processarPedido(playerId, restaurante, pratoId);
         
