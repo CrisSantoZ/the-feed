@@ -1,6 +1,6 @@
 const Account = require('../models/Account');
 const Player = require('../models/Player');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 /**
  * REGISTRO: Cria a Conta Mãe no banco de dados e aplica a trava de +18 anos
