@@ -204,6 +204,28 @@ export function initMundo() {
         point.userData = { id: pais.id, nome: pais.nome, cor: pais.cor, bandeira: pais.bandeira };
         pontosGroup.add(point);
 
+        const playerPais = sessionStorage.getItem('playerPais') || 'brasil';
+
+if (pais.id === playerPais) {
+    // Aumenta o ponto do país atual
+    point.scale.set(1.8, 1.8, 1.8);
+    pointMat.emissiveIntensity = 1.5;
+    
+    // Adiciona um anel pulsante ao redor do país
+    const anelGeo = new THREE.SphereGeometry(0.045, 16, 16);
+    const anelMat = new THREE.MeshBasicMaterial({ 
+        color: 0x00ff00, 
+        transparent: true, 
+        opacity: 0.7 
+    });
+    const anel = new THREE.Mesh(anelGeo, anelMat);
+    anel.position.set(x, y, z);
+    pontosGroup.add(anel);
+    
+    // Adiciona efeito de partículas ao redor (opcional)
+    console.log(`[MUNDO] Destaque aplicado ao país: ${pais.nome}`);
+}
+
         // Anel de luz ao redor (pulse)
         const ringGeo = new THREE.SphereGeometry(0.035, 8, 8);
         const ringMat = new THREE.MeshBasicMaterial({

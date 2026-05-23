@@ -7,19 +7,53 @@ const Player = require('../models/Player');
 const TMDB_API_KEY = process.env.TMDB_API_KEY || '731610e843145f8e3606d094492f9178';
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
+// ==================== FUNÇÃO DE SIMILARIDADE ====================
+function levenshtein(a, b) {
+    const matrix = [];
+    for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+    for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+    
+    for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+            const custo = a[j-1] === b[i-1] ? 0 : 1;
+            matrix[i][j] = Math.min(
+                matrix[i-1][j] + 1,
+                matrix[i][j-1] + 1,
+                matrix[i-1][j-1] + custo
+            );
+        }
+    }
+    return matrix[b.length][a.length];
+}
+
+function nomesParecidos(nome1, nome2) {
+    const limpo1 = nome1.toLowerCase().replace(/[^a-záéíóúãõç]/g, '');
+    const limpo2 = nome2.toLowerCase().replace(/[^a-záéíóúãõç]/g, '');
+    
+    const distancia = levenshtein(limpo1, limpo2);
+    const maxLen = Math.max(limpo1.length, limpo2.length);
+    const similaridade = (maxLen - distancia) / maxLen;
+    
+    return similaridade > 0.80; // 85% de similaridade bloqueia erros de digitação
+}
+
 function configurarFaceclaimSocket(io, socket, { groq }) {
     
     socket.on('buscarFaceclaim', async (nomeFamoso) => {
         try {
             const nomeLimpo = nomeFamoso.toLowerCase().trim();
 
-            // 1. Verifica se o faceclaim já está em uso
-            const ocupado = await Player.findOne({ faceclaim: nomeLimpo });
-            if (ocupado) {
-                return socket.emit('erroServidor', `⚠️ '@${nomeFamoso}' já está blindado por outro cidadão.`);
+            // ========== 1. VERIFICAÇÃO POR SIMILARIDADE LOCAL ==========
+            const todosFaceclaims = await Player.find({ faceclaim: { $ne: null } }).select('faceclaim');
+            
+            for (const existente of todosFaceclaims) {
+                if (nomesParecidos(nomeLimpo, existente.faceclaim)) {
+                    return socket.emit('erroServidor', 
+                        `⚠️ '@${nomeFamoso}' é muito parecido com '@${existente.faceclaim}' já blindado por outro cidadão.`);
+                }
             }
 
-            // 2. Validação da GROQ IA com modelo atualizado
+            // ========== 2. VALIDAÇÃO DA GROQ IA ==========
             console.log(`[GROQ] Analisando nome: ${nomeLimpo}`);
             
             const chatCompletion = await groq.chat.completions.create({
@@ -34,7 +68,7 @@ function configurarFaceclaimSocket(io, socket, { groq }) {
                     },
                     { role: 'user', content: `Analisar: "${nomeLimpo}"` }
                 ],
-                model: 'llama-3.3-70b-versatile',  // ← MODELO ATUALIZADO
+                model: 'llama-3.3-70b-versatile',
                 response_format: { type: "json_object" }
             });
 
@@ -46,15 +80,34 @@ function configurarFaceclaimSocket(io, socket, { groq }) {
 
             console.log(`[TMDB] Buscando imagens para: "${analiseIA.termoBusca}"`);
 
-            // 3. Busca no TMDB
+            // ========== 3. BUSCA NO TMDB E CAPTURA ID ==========
             let urlsImagens = await buscarImagensTMDB(analiseIA.termoBusca);
             
-            // 4. Embaralhar as imagens
+            // Pega o ID do primeiro resultado para validação futura
+            let tmdbId = null;
+            const urlBuscaId = `${TMDB_BASE_URL}/search/person?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(analiseIA.termoBusca)}&language=pt-BR`;
+            const respostaId = await fetch(urlBuscaId);
+            const dadosId = await respostaId.json();
+            
+            if (dadosId.results && dadosId.results.length > 0) {
+                tmdbId = dadosId.results[0].id;
+            }
+            
+            // ========== 4. VERIFICA SE O ID DO TMDB JÁ ESTÁ EM USO ==========
+            if (tmdbId) {
+                const ocupadoPorId = await Player.findOne({ faceclaimId: tmdbId });
+                if (ocupadoPorId) {
+                    return socket.emit('erroServidor', 
+                        `⚠️ '${dadosId.results[0].name}' já está blindado por outro cidadão (identificado pelo TMDB).`);
+                }
+            }
+            
+            // ========== 5. EMBARALHAR IMAGENS ==========
             urlsImagens = embaralharArray(urlsImagens);
             
             console.log(`[TMDB] Total de imagens: ${urlsImagens.length}`);
-
-            // 5. Fallback
+            
+            // ========== 6. FALLBACK ==========
             const fallbacks = [
                 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
                 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
@@ -69,7 +122,8 @@ function configurarFaceclaimSocket(io, socket, { groq }) {
             }
 
             socket.emit('faceclaimResultados', { 
-                famoso: analiseIA.termoBusca, 
+                famoso: analiseIA.termoBusca,
+                tmdbId: tmdbId,
                 urls: urlsImagens 
             });
 

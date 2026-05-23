@@ -25,6 +25,8 @@ export function renderizarMapaEstado(paisNome, estadoNome) {
         cidades = ['Carregando...'];
     }
     
+const playerCidade = sessionStorage.getItem('playerCidade') || '';
+
     return `
         <div style="padding:20px; height:100%; overflow-y:auto; background:#030407;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
@@ -36,19 +38,25 @@ export function renderizarMapaEstado(paisNome, estadoNome) {
             <div style="background:rgba(0,243,255,0.05); padding:20px; border-radius:16px; margin-top:20px;">
                 <p style="color:#00f3ff; margin-bottom:15px;">🏙️ CIDADES DE ${estadoNome.toUpperCase()}</p>
                 <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); gap:10px;">
-                    ${cidades.map(cidade => `
-                        <div onclick="window.selecionarCidade('${paisNome}', '${estadoNome}', '${cidade}')" style="
-                            background:rgba(0,243,255,0.1);
-                            border:1px solid #00f3ff;
-                            border-radius:8px;
-                            padding:12px;
-                            text-align:center;
-                            cursor:pointer;
-                            transition:all 0.2s;
-                        ">
-                            🏙️ ${cidade}
-                        </div>
-                    `).join('')}
+                    ${cidades.map(cidade => {
+    // Verifica se é a cidade atual do personagem
+    const isCidadeAtual = (cidade === playerCidade);
+    
+    return `
+        <div onclick="window.selecionarCidade('${paisNome}', '${estadoNome}', '${cidade}')" style="
+            background: ${isCidadeAtual ? 'rgba(0, 255, 100, 0.2)' : 'rgba(0,243,255,0.1)'};
+            border: ${isCidadeAtual ? '2px solid #00ff66' : '1px solid #00f3ff'};
+            border-radius:8px;
+            padding:12px;
+            text-align:center;
+            cursor:pointer;
+            transition:all 0.2s;
+            ${isCidadeAtual ? 'box-shadow: 0 0 10px rgba(0, 255, 100, 0.5);' : ''}
+        ">
+            🏙️ ${cidade} ${isCidadeAtual ? '📍' : ''}
+        </div>
+    `;
+}).join('')}
                 </div>
             </div>
         </div>
