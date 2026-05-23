@@ -1,54 +1,45 @@
 // js/personagem/perfil.js
 // Dashboard principal do personagem
-
-export async function renderizarPerfil() {
-    // Buscar dados do sessionStorage
+export function renderizarPerfil() {
+    // Usar dados do sessionStorage (já disponíveis)
     const playerNome = sessionStorage.getItem('playerNome') || 'Carregando...';
     const playerSobrenome = sessionStorage.getItem('playerSobrenome') || '';
-    const playerId = sessionStorage.getItem('playerId');
-    const avatarUrl = sessionStorage.getItem('playerAvatar') || '';
+    const avatarUrl = sessionStorage.getItem('avatarUrl') || '';
     const dinheiro = sessionStorage.getItem('playerDinheiro') || 0;
     const playerPais = sessionStorage.getItem('playerPais') || 'Brasil';
     const playerEstado = sessionStorage.getItem('playerEstado') || 'São Paulo';
     const playerCidade = sessionStorage.getItem('playerCidade') || 'São Paulo';
     const playerLocal = sessionStorage.getItem('playerLocalNome') || 'Nenhum';
     
-    // Buscar dados atualizados via socket
-    let necessidades = { fome: 0, sede: 0, sono: 0, energia: 100 };
-    let saude = { geral: 100 };
-    let saldoBancario = 0;
-    let patrimonio = 0;
-    
-    if (window.socket && playerId) {
-        necessidades = await buscarNecessidades(playerId);
-        saude = await buscarSaude(playerId);
-        const financeiro = await buscarFinanceiro(playerId);
-        saldoBancario = financeiro.saldoBancario;
-        patrimonio = financeiro.patrimonio;
-    }
+    // Dados mock (depois atualiza via socket)
+    const fome = 30;
+    const sede = 45;
+    const sono = 20;
+    const energia = 80;
+    const saude = 100;
+    const saldoBancario = 5000;
+    const patrimonio = 6500;
+    const nivel = 5;
+    const xp = 2450;
+    const xpProximo = 5000;
     
     return `
         <div class="perfil-container" style="padding: 20px; height: 100%; overflow-y: auto; background: #030407;">
             
-            <!-- Botão fechar -->
-            <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
-                <button class="mapa-btn-fechar" onclick="window.fecharPainel()" style="background: none; border: none; color: #ff0055; font-size: 20px; cursor: pointer;">✖</button>
-            </div>
-            
-            <!-- Grid principal -->
+            <!-- Conteúdo principal -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
                 
                 <!-- COLUNA 1: AVATAR E INFORMAÇÕES BÁSICAS -->
                 <div style="background: linear-gradient(135deg, #0a0a1a, #1a0a2a); border-radius: 16px; padding: 20px; border: 1px solid #00f3ff;">
                     <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
                         <div style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 2px solid #00f3ff; margin-bottom: 15px;">
-                            <img src="${avatarUrl}" style="width: 100%; height: 100%; object-fit: cover;">
+                            <img src="${avatarUrl}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://via.placeholder.com/100'">
                         </div>
                         <h2 style="color: #fff; margin: 0;">${playerNome} ${playerSobrenome}</h2>
                         <p style="color: #888; margin: 5px 0;">🎭 Faceclaim</p>
                         <div style="margin-top: 15px; width: 100%;">
-                            <p style="color: #00f3ff; margin: 5px 0;">⭐ Nível: <span style="color: #fff;">${calcularNivel()}</span></p>
-                            <p style="color: #00f3ff; margin: 5px 0;">📈 XP: <span style="color: #fff;">${calcularXP()} / ${calcularXPProximo()}</span></p>
+                            <p style="color: #00f3ff; margin: 5px 0;">⭐ Nível: <span style="color: #fff;">${nivel}</span></p>
+                            <p style="color: #00f3ff; margin: 5px 0;">📈 XP: <span style="color: #fff;">${xp} / ${xpProximo}</span></p>
                         </div>
                     </div>
                 </div>
@@ -56,11 +47,11 @@ export async function renderizarPerfil() {
                 <!-- COLUNA 2: NECESSIDADES -->
                 <div style="background: linear-gradient(135deg, #0a0a1a, #1a0a2a); border-radius: 16px; padding: 20px; border: 1px solid #00f3ff;">
                     <h3 style="color: #00f3ff; margin: 0 0 15px 0;">📊 NECESSIDADES</h3>
-                    ${criarBarraProgresso("🍔 Fome", necessidades.fome || 0, "#ff0055")}
-                    ${criarBarraProgresso("💧 Sede", necessidades.sede || 0, "#00f3ff")}
-                    ${criarBarraProgresso("😴 Sono", necessidades.sono || 0, "#8844cc")}
-                    ${criarBarraProgresso("⚡ Energia", necessidades.energia || 100, "#00ff66")}
-                    ${criarBarraProgresso("❤️ Saúde", saude.geral || 100, "#ff0055")}
+                    ${criarBarraProgresso("🍔 Fome", fome, "#ff0055")}
+                    ${criarBarraProgresso("💧 Sede", sede, "#00f3ff")}
+                    ${criarBarraProgresso("😴 Sono", sono, "#8844cc")}
+                    ${criarBarraProgresso("⚡ Energia", energia, "#00ff66")}
+                    ${criarBarraProgresso("❤️ Saúde", saude, "#ff0055")}
                 </div>
                 
                 <!-- COLUNA 3: FINANCEIRO E STATUS -->
@@ -78,7 +69,7 @@ export async function renderizarPerfil() {
                 </div>
             </div>
             
-            <!-- ABAS SECUNDÁRIAS -->
+            <!-- BOTÕES DAS ABAS (embaixo do dashboard) -->
             <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center;">
                 <button onclick="window.mudarCategoria('atributos')" style="background: rgba(0,243,255,0.1); border: 1px solid #00f3ff; color: #00f3ff; padding: 8px 16px; border-radius: 8px; cursor: pointer;">📊 ATRIBUTOS</button>
                 <button onclick="window.mudarCategoria('inventario')" style="background: rgba(0,243,255,0.1); border: 1px solid #00f3ff; color: #00f3ff; padding: 8px 16px; border-radius: 8px; cursor: pointer;">🎒 INVENTÁRIO</button>

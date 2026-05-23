@@ -44,7 +44,7 @@ const menus = {
         { id: 'voltar', nome: '⬅ Voltar' }
     ],
     personagem: [
-    { id: 'perfil', nome: '👤 PERFIL' },      // ← PRIMEIRA OPÇÃO (dashboard)
+    { id: 'personagem', nome: '👤 Personagem' },
     { id: 'atributos', nome: '📊 Atributos' },
     { id: 'inventario', nome: '🎒 Inventário' },
     { id: 'habilidades', nome: '⚡ Habilidades' },
@@ -79,8 +79,10 @@ const renderizadores = {
     },
     feed: () => renderizarFeed(),
     pessoas: () => renderizarPessoas(),
-    perfil: () => renderizarPerfil(),        // NOVO - dashboard principal
-    atributos: () => renderizarAtributos(),  // MANTÉM (aba secundária)
+    // "personagem" agora chama o PERFIL (dashboard)
+    personagem: () => renderizarPerfil(),
+    // Mantém as outras abas
+    atributos: () => renderizarAtributos(),
     inventario: () => renderizarInventario(),
     habilidades: () => renderizarHabilidades(),
     estatisticas: () => renderizarEstatisticas(),
