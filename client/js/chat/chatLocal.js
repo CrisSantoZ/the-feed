@@ -5,7 +5,7 @@ let chatMinimizado = false;
 let salaAtual = null;
 let localNomeCache = '';
 let intervaloPisca = null;
-let mensagensRecebidasMinimizado = 0; // Conta quantas mensagens novas recebeu
+let mensagensRecebidasMinimizado = []; // Guarda as mensagens recebidas
 
 export function iniciarChatLocal(localId, localNome, localTipo) {
     if (chatAberto) return;
@@ -14,7 +14,7 @@ export function iniciarChatLocal(localId, localNome, localTipo) {
     localNomeCache = localNome;
     chatAberto = true;
     chatMinimizado = false;
-    mensagensRecebidasMinimizado = 0;
+    mensagensRecebidasMinimizado = [];
     
     criarChatContainer();
     
@@ -23,13 +23,12 @@ export function iniciarChatLocal(localId, localNome, localTipo) {
         socket.emit('entrarSala', salaAtual);
         
         socket.on('novaMensagemLocal', (data) => {
-            // Se o chat está minimizado, guarda contagem e notifica
             if (chatMinimizado) {
-                mensagensRecebidasMinimizado++;
+                // Guarda a mensagem para depois
+                mensagensRecebidasMinimizado.push(data);
                 atualizarMiniContador();
                 notificarNovaMensagemLoop();
             } else {
-                // Se está aberto, adiciona direto
                 adicionarMensagem(data.nome, data.mensagem);
             }
         });
@@ -139,7 +138,6 @@ function minimizarChat() {
     if (!container) return;
     
     if (!chatMinimizado) {
-        // Salvar o conteúdo atual para restaurar depois
         const conteudoSalvo = container.innerHTML;
         container.setAttribute('data-conteudo', conteudoSalvo);
         
@@ -170,8 +168,6 @@ function minimizarChat() {
         document.getElementById('chat-mini').onclick = () => restaurarChat();
         
         chatMinimizado = true;
-        mensagensRecebidasMinimizado = 0;
-        atualizarMiniContador();
     }
 }
 
@@ -203,20 +199,24 @@ function restaurarChat() {
             });
         }
         
-        // Reentrar na sala para restaurar contador
+        // Reentrar na sala
         const socket = window.socket;
         if (socket && salaAtual) {
             socket.emit('entrarSala', salaAtual);
         }
         
-        // Limpar notificação
+        // Adicionar mensagens que ficaram pendentes
+        for (const msg of mensagensRecebidasMinimizado) {
+            adicionarMensagem(msg.nome, msg.mensagem);
+        }
+        mensagensRecebidasMinimizado = [];
+        
+        // Parar notificação
         if (intervaloPisca) {
             clearInterval(intervaloPisca);
             intervaloPisca = null;
         }
         
-        // Resetar contador de mensagens pendentes
-        mensagensRecebidasMinimizado = 0;
         atualizarMiniContador();
         
         const miniDiv = document.getElementById('chat-mini');
@@ -231,8 +231,9 @@ function restaurarChat() {
 function atualizarMiniContador() {
     const miniContador = document.getElementById('chat-mini-contador');
     if (miniContador) {
-        if (mensagensRecebidasMinimizado > 0) {
-            miniContador.textContent = mensagensRecebidasMinimizado;
+        const total = mensagensRecebidasMinimizado.length;
+        if (total > 0) {
+            miniContador.textContent = total;
             miniContador.style.display = 'block';
         } else {
             miniContador.textContent = '0';
@@ -326,5 +327,5 @@ export function fecharChatLocal() {
     chatAberto = false;
     chatMinimizado = false;
     salaAtual = null;
-    mensagensRecebidasMinimizado = 0;
+    mensagensRecebidasMinimizado = [];
 }
