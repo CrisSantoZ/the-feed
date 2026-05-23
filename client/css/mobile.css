@@ -108,9 +108,8 @@
         font-size: 11px !important;
     }
     
-    /* ==================== CHAT - APENAS O EXPANDIDO ==================== */
-    /* IMPORTANTE: NÃO aplicar regras que afetam o minimizado */
-    .chat-container {
+    /* ==================== CHAT - APENAS QUANDO EXPANDIDO ==================== */
+    #chat-local-container:not([style*="width: 60px"]) {
         width: 90% !important;
         right: 5% !important;
         left: 5% !important;
@@ -122,22 +121,32 @@
         padding: 8px 10px !important;
     }
     
-    #chat-mensagens {
+    #chat-local-container:not([style*="width: 60px"]) #chat-mensagens {
         padding: 8px !important;
     }
     
-    #chat-mensagens div {
+    #chat-local-container:not([style*="width: 60px"]) #chat-mensagens div {
         font-size: 11px !important;
     }
     
-    #chat-input {
+    #chat-local-container:not([style*="width: 60px"]) #chat-input {
         padding: 6px !important;
         font-size: 11px !important;
     }
     
-    #enviar-mensagem {
+    #chat-local-container:not([style*="width: 60px"]) #enviar-mensagem {
         padding: 6px 12px !important;
         font-size: 11px !important;
+    }
+    
+    /* Garantir tamanho do chat minimizado */
+    #chat-local-container[style*="width: 60px"] {
+        width: 60px !important;
+        height: 60px !important;
+        right: 20px !important;
+        bottom: 20px !important;
+        left: auto !important;
+        border-radius: 30px !important;
     }
     
     /* ==================== ESTADO (CIDADES) ==================== */
@@ -149,11 +158,6 @@
         margin-bottom: 12px !important;
         flex-wrap: wrap !important;
         gap: 8px !important;
-    }
-    
-    .estado-btn-voltar {
-        padding: 4px 10px !important;
-        font-size: 11px !important;
     }
     
     .estado-titulo {
