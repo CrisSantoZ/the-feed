@@ -79,6 +79,21 @@ export async function renderizarMapaLocal(paisNome, estadoNome, cidadeNome, loca
             conteudo = `<div class="mapa-dev-msg">🚧 Tipo de local não implementado: ${localTipo}</div>`;
     }
     
+try {
+        const { fecharChatLocal } = await import('../chat/chatLocal.js');
+        fecharChatLocal();
+    } catch(e) {
+        // Chat não estava aberto, ignorar
+    }
+    
+    // Iniciar chat local se o personagem estiver neste local
+    if (localData && sessionStorage.getItem('playerLocal') === localData.id) {
+        setTimeout(async () => {
+            const { iniciarChatLocal } = await import('../chat/chatLocal.js');
+            iniciarChatLocal(localData.id, localData.nome, localTipo);
+        }, 500);
+    }
+
 if (localData && sessionStorage.getItem('playerLocal') === localData.id) {
         setTimeout(async () => {
             const { iniciarChatLocal } = await import('../chat/chatLocal.js');

@@ -401,7 +401,6 @@ window.confirmarLocal = async function(tipo, id, nome, cidade, estado, pais, des
 };
 
 window.sairDoLocal = async function() {
-    // Fechar chat se estiver aberto
     try {
         const { fecharChatLocal } = await import('./chat/chatLocal.js');
         fecharChatLocal();
@@ -421,7 +420,6 @@ window.sairDoLocal = async function() {
 };
 
 window.fecharPainel = function() {
-    // Remove qualquer painel ativo
     const painelAtivo = document.getElementById('painel-ativo');
     if (painelAtivo) {
         painelAtivo.classList.remove('visivel');
