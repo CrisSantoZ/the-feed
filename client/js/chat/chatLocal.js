@@ -2,6 +2,7 @@
 // Sistema de chat local para qualquer tipo de local
 
 let chatAberto = false;
+let chatMinimizado = false;
 let salaAtual = null;
 
 export function iniciarChatLocal(localId, localNome, localTipo) {
@@ -9,14 +10,34 @@ export function iniciarChatLocal(localId, localNome, localTipo) {
     
     salaAtual = `${localTipo}_${localId}`;
     chatAberto = true;
+    chatMinimizado = false;
     
-    // Criar container do chat
+    criarChatContainer(localNome);
+    
+    const socket = window.socket;
+    if (socket) {
+        socket.emit('entrarSala', salaAtual);
+        
+        socket.on('novaMensagemLocal', (data) => {
+            adicionarMensagem(data.nome, data.mensagem);
+            if (chatMinimizado) {
+                notificarNovaMensagem();
+            }
+        });
+        
+        socket.on('atualizarContadorSala', (contador) => {
+            atualizarContador(contador);
+        });
+    }
+}
+
+function criarChatContainer(localNome) {
     const chatContainer = document.createElement('div');
     chatContainer.id = 'chat-local-container';
     chatContainer.style.cssText = `
         position: fixed;
-        bottom: 80px;
         right: 20px;
+        bottom: 80px;
         width: 320px;
         height: 400px;
         background: rgba(3, 4, 7, 0.95);
@@ -28,6 +49,7 @@ export function iniciarChatLocal(localId, localNome, localTipo) {
         backdrop-filter: blur(10px);
         font-family: 'JetBrains Mono', monospace;
         box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+        transition: all 0.3s ease;
     `;
     
     chatContainer.innerHTML = `
@@ -44,7 +66,10 @@ export function iniciarChatLocal(localId, localNome, localTipo) {
                 <span style="color: #00f3ff;">💬 CHAT LOCAL</span>
                 <span style="color: #888; font-size: 10px; margin-left: 8px;">${localNome}</span>
             </div>
-            <button id="fechar-chat" style="background: none; border: none; color: #ff0055; cursor: pointer;">✖</button>
+            <div>
+                <button id="minimizar-chat" style="background: none; border: none; color: #00f3ff; cursor: pointer; margin-right: 8px;">−</button>
+                <button id="fechar-chat" style="background: none; border: none; color: #ff0055; cursor: pointer;">✖</button>
+            </div>
         </div>
         
         <div id="chat-mensagens" style="
@@ -88,36 +113,107 @@ export function iniciarChatLocal(localId, localNome, localTipo) {
     
     document.body.appendChild(chatContainer);
     
-    // Entrar na sala via socket
-    const socket = window.socket;
-    if (socket) {
-        socket.emit('entrarSala', salaAtual);
-        
-        // Receber mensagens
-        socket.on('novaMensagemLocal', (data) => {
-            adicionarMensagem(data.nome, data.mensagem);
-        });
-        
-        // Atualizar contador de pessoas
-        socket.on('atualizarContadorSala', (contador) => {
-            const contadorSpan = document.getElementById('contador-pessoas');
-            if (contadorSpan) contadorSpan.textContent = contador;
-        });
-    }
-    
     // Eventos
-    document.getElementById('fechar-chat').onclick = () => {
-        fecharChatLocal();
-    };
-    
-    document.getElementById('enviar-mensagem').onclick = () => {
-        enviarMensagem();
-    };
+    document.getElementById('minimizar-chat').onclick = () => minimizarChat();
+    document.getElementById('fechar-chat').onclick = () => fecharChatLocal();
+    document.getElementById('enviar-mensagem').onclick = () => enviarMensagem();
     
     const input = document.getElementById('chat-input');
     input.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') enviarMensagem();
     });
+}
+
+function minimizarChat() {
+    const container = document.getElementById('chat-local-container');
+    const minimizarBtn = document.getElementById('minimizar-chat');
+    
+    if (!chatMinimizado) {
+        // Minimizar
+        container.style.width = '60px';
+        container.style.height = '60px';
+        container.style.right = '20px';
+        container.style.bottom = '20px';
+        container.style.borderRadius = '30px';
+        container.style.overflow = 'hidden';
+        
+        // Esconder conteúdo e mostrar versão minimalista
+        const mensagensDiv = document.getElementById('chat-mensagens');
+        const inputDiv = container.querySelector('div:last-child');
+        const headerDiv = container.querySelector('div:first-child');
+        
+        mensagensDiv.style.display = 'none';
+        inputDiv.style.display = 'none';
+        
+        // Mudar o header para estilo de botão
+        headerDiv.style.padding = '0';
+        headerDiv.style.height = '60px';
+        headerDiv.style.justifyContent = 'center';
+        headerDiv.innerHTML = `
+            <div style="text-align: center;">
+                <span style="color: #00f3ff; font-size: 24px;">💬</span>
+                <span id="chat-mini-contador" style="color: #fff; font-size: 10px; display: block;">0</span>
+            </div>
+        `;
+        
+        chatMinimizado = true;
+    } else {
+        // Restaurar
+        container.style.width = '320px';
+        container.style.height = '400px';
+        container.style.right = '20px';
+        container.style.bottom = '80px';
+        container.style.borderRadius = '12px';
+        
+        const mensagensDiv = document.getElementById('chat-mensagens');
+        const inputDiv = container.querySelector('div:last-child');
+        const headerDiv = container.querySelector('div:first-child');
+        
+        mensagensDiv.style.display = 'flex';
+        inputDiv.style.display = 'block';
+        
+        // Restaurar header
+        const localNome = headerDiv.querySelector('span span')?.innerText || '';
+        headerDiv.style.padding = '12px';
+        headerDiv.style.justifyContent = 'space-between';
+        headerDiv.innerHTML = `
+            <div>
+                <span style="color: #00f3ff;">💬 CHAT LOCAL</span>
+                <span style="color: #888; font-size: 10px; margin-left: 8px;">${localNome}</span>
+            </div>
+            <div>
+                <button id="minimizar-chat" style="background: none; border: none; color: #00f3ff; cursor: pointer; margin-right: 8px;">−</button>
+                <button id="fechar-chat" style="background: none; border: none; color: #ff0055; cursor: pointer;">✖</button>
+            </div>
+        `;
+        
+        document.getElementById('minimizar-chat').onclick = () => minimizarChat();
+        document.getElementById('fechar-chat').onclick = () => fecharChatLocal();
+        
+        chatMinimizado = false;
+    }
+}
+
+function notificarNovaMensagem() {
+    if (chatMinimizado) {
+        const miniDiv = document.querySelector('#chat-local-container div:first-child');
+        if (miniDiv) {
+            miniDiv.style.background = 'rgba(255, 0, 85, 0.3)';
+            setTimeout(() => {
+                if (chatMinimizado) {
+                    miniDiv.style.background = 'rgba(0, 243, 255, 0.1)';
+                }
+            }, 2000);
+        }
+    }
+}
+
+function atualizarContador(contador) {
+    const contadorSpan = document.getElementById('contador-pessoas');
+    if (contadorSpan) contadorSpan.textContent = contador;
+    
+    const miniContador = document.getElementById('chat-mini-contador');
+    if (miniContador) miniContador.textContent = contador;
 }
 
 function enviarMensagem() {
@@ -127,11 +223,6 @@ function enviarMensagem() {
     
     const socket = window.socket;
     if (socket && salaAtual) {
-        // Exibe a mensagem localmente IMEDIATAMENTE
-        const nome = sessionStorage.getItem('playerNome') || 'Você';
-        // adicionarMensagem(nome, mensagem);
-        
-        // Envia para o servidor (para os outros)
         socket.emit('mensagemLocal', {
             sala: salaAtual,
             mensagem: mensagem
@@ -170,5 +261,6 @@ export function fecharChatLocal() {
     if (container) container.remove();
     
     chatAberto = false;
+    chatMinimizado = false;
     salaAtual = null;
 }
