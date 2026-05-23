@@ -4,6 +4,8 @@ let chatAberto = false;
 let chatMinimizado = false;
 let salaAtual = null;
 let localNomeCache = '';
+let mensagensPendentes = []; // Guarda mensagens recebidas enquanto minimizado
+let intervaloPisca = null;
 
 export function iniciarChatLocal(localId, localNome, localTipo) {
     if (chatAberto) return;
@@ -12,6 +14,7 @@ export function iniciarChatLocal(localId, localNome, localTipo) {
     localNomeCache = localNome;
     chatAberto = true;
     chatMinimizado = false;
+    mensagensPendentes = [];
     
     criarChatContainer();
     
@@ -20,9 +23,15 @@ export function iniciarChatLocal(localId, localNome, localTipo) {
         socket.emit('entrarSala', salaAtual);
         
         socket.on('novaMensagemLocal', (data) => {
-            adicionarMensagem(data.nome, data.mensagem);
+            // Guarda a mensagem no array de pendentes
+            mensagensPendentes.push(data);
+            
+            // Se o chat está minimizado, apenas notifica
             if (chatMinimizado) {
-                notificarNovaMensagem();
+                notificarNovaMensagemLoop();
+            } else {
+                // Se está aberto, adiciona direto
+                adicionarMensagem(data.nome, data.mensagem);
             }
         });
         
@@ -33,7 +42,6 @@ export function iniciarChatLocal(localId, localNome, localTipo) {
 }
 
 function criarChatContainer() {
-    // Remove container antigo se existir
     const oldContainer = document.getElementById('chat-local-container');
     if (oldContainer) oldContainer.remove();
     
@@ -136,7 +144,6 @@ function minimizarChat() {
         const conteudoSalvo = container.innerHTML;
         container.setAttribute('data-conteudo', conteudoSalvo);
         
-        // Minimizar
         container.style.width = '60px';
         container.style.height = '60px';
         container.style.right = '20px';
@@ -200,23 +207,58 @@ function restaurarChat() {
         if (socket && salaAtual) {
             socket.emit('entrarSala', salaAtual);
         }
+        
+        // Adicionar mensagens pendentes
+        for (const msg of mensagensPendentes) {
+            adicionarMensagem(msg.nome, msg.mensagem);
+        }
+        mensagensPendentes = [];
+        
+        // Parar notificação piscante
+        if (intervaloPisca) {
+            clearInterval(intervaloPisca);
+            intervaloPisca = null;
+        }
+        // Resetar cor do botão
+        const miniDiv = document.getElementById('chat-mini');
+        if (miniDiv) {
+            miniDiv.style.background = 'rgba(0, 243, 255, 0.15)';
+        }
     }
     
     chatMinimizado = false;
 }
 
-function notificarNovaMensagem() {
-    if (chatMinimizado) {
+function notificarNovaMensagemLoop() {
+    if (!chatMinimizado) return;
+    
+    // Se já tem um intervalo, não criar outro
+    if (intervaloPisca) return;
+    
+    intervaloPisca = setInterval(() => {
+        if (!chatMinimizado) {
+            if (intervaloPisca) {
+                clearInterval(intervaloPisca);
+                intervaloPisca = null;
+            }
+            return;
+        }
+        
         const miniDiv = document.getElementById('chat-mini');
         if (miniDiv) {
-            miniDiv.style.background = 'rgba(255, 0, 85, 0.6)';
-            setTimeout(() => {
-                if (chatMinimizado && miniDiv) {
-                    miniDiv.style.background = 'rgba(0, 243, 255, 0.15)';
-                }
-            }, 1500);
+            const bgAtual = miniDiv.style.background;
+            if (bgAtual === 'rgba(255, 0, 85, 0.6)' || bgAtual === 'rgb(255, 0, 85)') {
+                miniDiv.style.background = 'rgba(0, 243, 255, 0.15)';
+            } else {
+                miniDiv.style.background = 'rgba(255, 0, 85, 0.6)';
+            }
         }
-    }
+    }, 800);
+}
+
+function notificarNovaMensagem() {
+    if (!chatMinimizado) return;
+    notificarNovaMensagemLoop();
 }
 
 function atualizarContador(contador) {
@@ -261,6 +303,11 @@ function adicionarMensagem(nome, mensagem) {
 export function fecharChatLocal() {
     if (!chatAberto) return;
     
+    if (intervaloPisca) {
+        clearInterval(intervaloPisca);
+        intervaloPisca = null;
+    }
+    
     const socket = window.socket;
     if (socket && salaAtual) {
         socket.emit('sairSala', salaAtual);
@@ -274,4 +321,5 @@ export function fecharChatLocal() {
     chatAberto = false;
     chatMinimizado = false;
     salaAtual = null;
+    mensagensPendentes = [];
 }
