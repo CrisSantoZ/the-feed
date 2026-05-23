@@ -17,7 +17,7 @@ export async function renderizarMapaCidade(paisNome, estadoNome, cidadeNome) {
     
     // Carrega restaurantes
     try {
-        const modulo = await import(`/client/js/locais/${paisSlug}/${estadoSlug}/Restaurantes.js`);
+        const modulo = await import(`/js/locais/${paisSlug}/${estadoSlug}/Restaurantes.js`);
         const dados = modulo.default || modulo;
         categorias.restaurantes = dados[cidadeNome] || {};
     } catch(e) {}
