@@ -60,7 +60,7 @@ export async function renderizarMapaCidade(paisNome, estadoNome, cidadeNome) {
         }[catNome] || { icone: "📍", titulo: catNome.toUpperCase(), cor: "#888" };
         
         const itensHtml = Object.values(itens).map(item => `
-            <div onclick="window.confirmarLocal('${catNome}', '${item.id}', '${item.nome}', '${cidadeNome}', '${estadoNome}', '${paisNome}', '${item.descricao.replace(/'/g, "\\'")}', '${(item.endereco || '').replace(/'/g, "\\'")}', '${(item.horario || '').replace(/'/g, "\\'")}')" style="
+            <div class="categoria-item" onclick="window.confirmarLocal('${catNome}', '${item.id}', '${item.nome}', '${cidadeNome}', '${estadoNome}', '${paisNome}', '${item.descricao.replace(/'/g, "\\'")}', '${(item.endereco || '').replace(/'/g, "\\'")}', '${(item.horario || '').replace(/'/g, "\\'")}')" style="
                 background: rgba(0, 243, 255, 0.05);
                 border: 1px solid rgba(0, 243, 255, 0.3);
                 border-radius: 12px;
@@ -80,7 +80,7 @@ export async function renderizarMapaCidade(paisNome, estadoNome, cidadeNome) {
         
         return `
             <div class="categoria-card" style="margin-bottom: 20px; border: 1px solid ${config.cor}; border-radius: 12px; overflow: hidden;">
-                <div onclick="toggleCategoria('${catNome}')" style="
+                <div class="categoria-header" onclick="toggleCategoria('${catNome}')" style="
                     background: rgba(0,0,0,0.5);
                     padding: 15px;
                     cursor: pointer;
@@ -95,7 +95,7 @@ export async function renderizarMapaCidade(paisNome, estadoNome, cidadeNome) {
                     </div>
                     <span id="categoria-seta-${catNome}" style="color: ${config.cor}; transition: transform 0.3s;">▼</span>
                 </div>
-                <div id="categoria-conteudo-${catNome}" style="padding: 15px; display: none; background: rgba(0,0,0,0.3);">
+                <div id="categoria-conteudo-${catNome}" class="categoria-conteudo" style="display: none; background: rgba(0,0,0,0.3);">
                     ${itensHtml}
                 </div>
             </div>

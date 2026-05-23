@@ -247,3 +247,38 @@
         font-size: 11px !important;
     }
 }
+
+@media (max-width: 768px) {
+    .categoria-item {
+        padding: 10px !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .categoria-item h4 {
+        font-size: 13px !important;
+    }
+    
+    .categoria-item p {
+        font-size: 11px !important;
+    }
+    
+    .categoria-item .preco {
+        font-size: 10px !important;
+    }
+    
+    .categoria-header {
+        padding: 12px !important;
+    }
+    
+    .categoria-header span {
+        font-size: 13px !important;
+    }
+    
+    .categoria-header .icone {
+        font-size: 16px !important;
+    }
+    
+    .categoria-conteudo {
+        padding: 10px !important;
+    }
+}
