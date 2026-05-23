@@ -1,0 +1,249 @@
+/* ==========================================================================
+   MOBILE.CSS - OTIMIZAÇÕES PARA DISPOSITIVOS MÓVEIS
+   ========================================================================== */
+
+/* Ajustes para telas menores que 768px */
+@media (max-width: 768px) {
+    
+    /* ==================== CABEÇALHO DO MAPA ==================== */
+    .mapa-header {
+        padding: 8px 12px !important;
+        gap: 6px !important;
+    }
+    
+    .mapa-btn-voltar, .mapa-btn-fechar {
+        padding: 4px 10px !important;
+        font-size: 11px !important;
+        min-width: auto !important;
+    }
+    
+    .mapa-btn-voltar {
+        font-size: 10px !important;
+    }
+    
+    .mapa-titulo {
+        font-size: 12px !important;
+        text-align: center !important;
+        flex: 1 !important;
+    }
+    
+    /* ==================== CONTAINER PRINCIPAL ==================== */
+    .mapa-container {
+        padding: 10px !important;
+    }
+    
+    /* ==================== AMBIENTE DO RESTAURANTE ==================== */
+    .ambiente-box {
+        padding: 12px !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .ambiente-header {
+        margin-bottom: 10px !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+    
+    .ambiente-header span:first-child {
+        font-size: 20px !important;
+    }
+    
+    .ambiente-header .status {
+        font-size: 11px !important;
+    }
+    
+    .btn-sair {
+        padding: 4px 10px !important;
+        font-size: 10px !important;
+    }
+    
+    .ambiente-descricao {
+        font-size: 11px !important;
+        margin-bottom: 10px !important;
+        line-height: 1.4 !important;
+    }
+    
+    .ambiente-info {
+        gap: 8px !important;
+        flex-wrap: wrap !important;
+    }
+    
+    .ambiente-info span {
+        font-size: 9px !important;
+    }
+    
+    /* ==================== CARDÁPIO ==================== */
+    .cardapio-titulo {
+        font-size: 14px !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .cardapio-item {
+        padding: 10px !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .cardapio-item-header {
+        margin-bottom: 6px !important;
+        flex-wrap: wrap !important;
+    }
+    
+    .cardapio-item-header h4 {
+        font-size: 13px !important;
+    }
+    
+    .cardapio-preco {
+        font-size: 13px !important;
+    }
+    
+    .cardapio-descricao {
+        font-size: 10px !important;
+        margin-bottom: 8px !important;
+        line-height: 1.3 !important;
+    }
+    
+    .cardapio-tags {
+        gap: 5px !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .cardapio-tags span {
+        font-size: 9px !important;
+        padding: 2px 6px !important;
+    }
+    
+    .btn-pedir {
+        padding: 8px !important;
+        font-size: 11px !important;
+    }
+    
+    /* ==================== CATEGORIAS (CIDADE) ==================== */
+    .categoria-card {
+        margin-bottom: 12px !important;
+    }
+    
+    .categoria-header {
+        padding: 10px !important;
+    }
+    
+    .categoria-header span {
+        font-size: 13px !important;
+    }
+    
+    .categoria-header .icone {
+        font-size: 16px !important;
+    }
+    
+    .categoria-header .quantidade {
+        font-size: 10px !important;
+    }
+    
+    .categoria-conteudo {
+        padding: 10px !important;
+    }
+    
+    .categoria-item {
+        padding: 8px !important;
+        margin-bottom: 6px !important;
+    }
+    
+    .categoria-item h4 {
+        font-size: 12px !important;
+    }
+    
+    .categoria-item p {
+        font-size: 10px !important;
+        margin-top: 3px !important;
+    }
+    
+    .categoria-item .preco {
+        font-size: 9px !important;
+        margin-top: 4px !important;
+    }
+    
+    /* ==================== CHAT MINIMIZADO ==================== */
+    #chat-mini {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    #chat-mini span:first-child {
+        font-size: 24px !important;
+    }
+    
+    #chat-mini-contador {
+        font-size: 9px !important;
+    }
+    
+    /* ==================== MODAL DE VIAGEM ==================== */
+    .modal-viagem {
+        width: 95% !important;
+        padding: 15px !important;
+    }
+    
+    .modal-viagem h2 {
+        font-size: 16px !important;
+    }
+    
+    .modal-viagem p {
+        font-size: 12px !important;
+    }
+    
+    .modal-viagem select, .modal-viagem button {
+        padding: 10px !important;
+        font-size: 12px !important;
+    }
+    
+    /* ==================== LEGENDA ==================== */
+    .mapa-legenda {
+        font-size: 9px !important;
+        margin-bottom: 10px !important;
+    }
+    
+    /* ==================== MENSAGEM DE DESENVOLVIMENTO ==================== */
+    .mapa-dev-msg {
+        font-size: 9px !important;
+        padding: 6px !important;
+    }
+}
+
+/* Ajustes para telas muito pequenas (até 480px) */
+@media (max-width: 480px) {
+    .mapa-header {
+        padding: 6px 10px !important;
+    }
+    
+    .mapa-btn-voltar, .mapa-btn-fechar {
+        padding: 3px 8px !important;
+        font-size: 10px !important;
+    }
+    
+    .mapa-titulo {
+        font-size: 11px !important;
+    }
+    
+    .ambiente-descricao {
+        font-size: 10px !important;
+    }
+    
+    .ambiente-info span {
+        font-size: 8px !important;
+    }
+    
+    .cardapio-item-header h4 {
+        font-size: 12px !important;
+    }
+    
+    .cardapio-preco {
+        font-size: 12px !important;
+    }
+    
+    .btn-pedir {
+        padding: 6px !important;
+        font-size: 10px !important;
+    }
+    
+    .categoria-item h4 {
+        font-size: 11px !important;
+    }
+}
