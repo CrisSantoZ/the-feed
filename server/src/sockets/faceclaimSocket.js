@@ -4,7 +4,7 @@
 
 const Player = require('../models/Player');
 
-const TMDB_API_KEY = process.env.TMDB_API_KEY || '731610e843145f8e3606d094492f9178';
+const TMDB_API_KEY = process.env.TMDB_API_KEY;
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
 // ==================== FUNÇÃO DE SIMILARIDADE ====================
