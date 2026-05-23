@@ -217,13 +217,13 @@ function renderizarAlimentacao(local) {
     
     // Ambiente imersivo
     const ambienteHtml = `
-        <div style="background: linear-gradient(135deg, #0a0a1a, #1a0a2a); border-radius: 16px; padding: 20px; margin-bottom: 20px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <div class="ambiente-box" style="background: linear-gradient(135deg, #0a0a1a, #1a0a2a); border-radius: 16px; margin-bottom: 20px;">
+            <div class="ambiente-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                 <div>
                     <span style="font-size: 24px;">🍽️</span>
                     <span style="color: #00f3ff; font-weight: bold; margin-left: 10px;">${estaAqui ? '📍 VOCÊ ESTÁ AQUI' : '📍 LOCAL'}</span>
                 </div>
-                ${estaAqui ? `<button onclick="window.sairDoLocal()" style="background: none; border: 1px solid #ff0055; color: #ff0055; padding: 8px 16px; border-radius: 8px; cursor: pointer;">🚪 SAIR</button>` : ''}
+                ${estaAqui ? `<button class="btn-sair" onclick="window.sairDoLocal()" style="background: none; border: 1px solid #ff0055; color: #ff0055; border-radius: 8px; cursor: pointer;">🚪 SAIR</button>` : ''}
             </div>
             <p style="color: #fff; margin-bottom: 15px; font-size: 14px;">${local.descricao}</p>
             <div style="display: flex; gap: 20px; flex-wrap: wrap;">
@@ -239,11 +239,11 @@ function renderizarAlimentacao(local) {
     let cardapioHtml = '';
     if (local.cardapio && local.cardapio.length > 0) {
         cardapioHtml = `
-            <div style="margin-top: 20px;">
-                <h3 style="color: #00f3ff; margin-bottom: 15px;">🍽️ CARDÁPIO</h3>
+            <div class="cardapio-container" style="margin-top: 20px;">
+    <h3 class="cardapio-titulo" style="color: #00f3ff; margin-bottom: 15px;">🍽️ CARDÁPIO</h3>
                 <div style="display: flex; flex-direction: column; gap: 12px;">
                     ${local.cardapio.map(prato => `
-                        <div style="background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.3); border-radius: 12px; padding: 15px;">
+                        <div class="cardapio-item" style="background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.3); border-radius: 12px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                                 <h4 style="color: #fff; margin: 0;">${prato.nome}</h4>
                                 <span style="color: #ff0055; font-weight: bold;">C$${prato.preco}</span>
