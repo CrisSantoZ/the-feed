@@ -1,11 +1,20 @@
 // js/personagem/perfil.js
 // Dashboard do personagem (versão compacta para o sidebar)
 
-// Fallback confiável (usando emoji ou SVG inline)
-const FALLBACK_AVATAR = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="%2300f3ff"%3E%3Cpath d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/%3E%3C/svg%3E';
+// Fallback confiável (ui-avatars.com com as iniciais do nome)
+function gerarFallbackAvatar(nome, sobrenome) {
+    const inicial = (nome?.charAt(0) || '?') + (sobrenome?.charAt(0) || '');
+    return `https://ui-avatars.com/api/?background=00f3ff&color=fff&bold=true&size=60&name=${encodeURIComponent(inicial)}`;
+}
 
-// Ou usar um CDN mais confiável:
-// const FALLBACK_AVATAR = 'https://ui-avatars.com/api/?background=00f3ff&color=fff&bold=true&rounded=true&size=60';
+// Verifica se a URL da imagem é válida
+function isUrlValida(url) {
+    if (!url || url === 'null' || url === 'undefined') return false;
+    if (!url.startsWith('http')) return false;
+    // Evita URLs quebradas do TMDB
+    if (url.includes('image.tmdb.org') && !url.includes('w342')) return false;
+    return true;
+}
 
 export function renderizarPerfil() {
     const playerNome = sessionStorage.getItem('playerNome') || 'Carregando...';
@@ -17,20 +26,21 @@ export function renderizarPerfil() {
     const playerCidade = sessionStorage.getItem('playerCidade') || 'São Paulo';
     
     // Valida a URL do avatar
-    if (!avatarUrl || avatarUrl === 'null' || avatarUrl === 'undefined' || !avatarUrl.startsWith('http')) {
-        avatarUrl = FALLBACK_AVATAR;
+    let urlFinal = avatarUrl;
+    if (!isUrlValida(avatarUrl)) {
+        urlFinal = gerarFallbackAvatar(playerNome, playerSobrenome);
     }
     
     return `
         <div style="padding: 10px;">
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
                 <div style="width: 50px; height: 50px; border-radius: 50%; overflow: hidden; border: 2px solid #00f3ff; background: #1a1a2a; display: flex; align-items: center; justify-content: center;">
-                    <img src="${avatarUrl}" style="width: 100%; height: 100%; object-fit: cover;" 
-                         onerror="this.onerror=null; this.src='${FALLBACK_AVATAR}';">
+                    <img src="${urlFinal}" style="width: 100%; height: 100%; object-fit: cover;" 
+                         onerror="this.onerror=null; this.src='${gerarFallbackAvatar(playerNome, playerSobrenome)}';">
                 </div>
                 <div>
                     <h4 style="color: #fff; margin: 0;">${escapeHtml(playerNome)} ${escapeHtml(playerSobrenome)}</h4>
-                    <p style="color: #888; margin: 0; font-size: 11px;">⭐ Nível 5</p>
+                    <p style="color: #888; margin: 0; font-size: 11px;">⭐ Nível ${calcularNivel()}</p>
                 </div>
             </div>
             
@@ -81,11 +91,12 @@ export function renderizarPerfilSidebar() {
     const playerCidade = sessionStorage.getItem('playerCidade') || 'São Paulo';
     
     // Valida a URL do avatar
-    if (!avatarUrl || avatarUrl === 'null' || avatarUrl === 'undefined' || !avatarUrl.startsWith('http')) {
-        avatarUrl = FALLBACK_AVATAR;
+    let urlFinal = avatarUrl;
+    if (!isUrlValida(avatarUrl)) {
+        urlFinal = gerarFallbackAvatar(playerNome, playerSobrenome);
     }
     
-    // Dados mock (depois você conecta com o backend)
+    // Dados mock (depois conecta com backend)
     const fome = 30;
     const sede = 45;
     const energia = 80;
@@ -93,11 +104,11 @@ export function renderizarPerfilSidebar() {
     return `
         <div style="text-align: center; padding: 5px;">
             <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 2px solid #00f3ff; margin: 0 auto 10px auto; background: #1a1a2a; display: flex; align-items: center; justify-content: center;">
-                <img src="${avatarUrl}" style="width: 100%; height: 100%; object-fit: cover;" 
-                     onerror="this.onerror=null; this.src='${FALLBACK_AVATAR}';">
+                <img src="${urlFinal}" style="width: 100%; height: 100%; object-fit: cover;" 
+                     onerror="this.onerror=null; this.src='${gerarFallbackAvatar(playerNome, playerSobrenome)}';">
             </div>
             <h3 style="color: #fff; margin: 0 0 5px 0; font-size: 14px;">${escapeHtml(playerNome)} ${escapeHtml(playerSobrenome)}</h3>
-            <p style="color: #888; margin: 0 0 10px 0; font-size: 11px;">⭐ Nível 5</p>
+            <p style="color: #888; margin: 0 0 10px 0; font-size: 11px;">⭐ Nível ${calcularNivel()}</p>
             
             <div style="margin-bottom: 8px; text-align: left;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
@@ -146,6 +157,11 @@ function escapeHtml(str) {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
+}
+
+function calcularNivel() {
+    const xp = parseInt(sessionStorage.getItem('playerXP')) || 0;
+    return Math.floor(xp / 1000) + 1;
 }
 
 // Função auxiliar para criar barras de progresso
@@ -209,11 +225,6 @@ async function buscarFinanceiro(playerId) {
         });
         setTimeout(() => resolve({ saldoBancario: 0, patrimonio: 0 }), 2000);
     });
-}
-
-function calcularNivel() {
-    const xp = parseInt(sessionStorage.getItem('playerXP')) || 0;
-    return Math.floor(xp / 1000) + 1;
 }
 
 function calcularXP() {
