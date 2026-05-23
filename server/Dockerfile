@@ -1,5 +1,8 @@
 FROM node:18-alpine
 
+# Instala dependências necessárias para compilar o bcrypt
+RUN apk add --no-cache python3 make g++
+
 WORKDIR /app
 
 # Copia o package.json da pasta server
