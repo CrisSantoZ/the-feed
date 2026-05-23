@@ -8,6 +8,10 @@ WORKDIR /app
 # Copia o package.json da pasta server
 COPY server/package*.json ./
 
+# Remove qualquer bcrypt existente e reinstala
+RUN npm uninstall bcrypt || true
+RUN npm install bcrypt --build-from-source
+
 RUN npm install
 
 # Copia todo o código da pasta server
