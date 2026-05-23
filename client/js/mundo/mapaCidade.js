@@ -2,7 +2,7 @@ export async function renderizarMapaCidade(paisNome, estadoNome, cidadeNome) {
     // Normaliza os nomes
     const paisSlug = paisNome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     const estadoSlug = estadoNome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ /g, '-');
-    
+
     let categorias = {
         restaurantes: {},
         lojas: {},
@@ -14,19 +14,19 @@ export async function renderizarMapaCidade(paisNome, estadoNome, cidadeNome) {
         entretenimento: {},
         transportes: {}
     };
-    
+
     // Carrega restaurantes
     try {
         const modulo = await import(`/js/locais/${paisSlug}/${estadoSlug}/Restaurantes.js`);
         const dados = modulo.default || modulo;
         categorias.restaurantes = dados[cidadeNome] || {};
-    } catch(e) {}
-    
+    } catch (e) { }
+
     // TODO: Carregar outros tipos (lojas, empregos, etc.)
-    
+
     // Verifica se tem pelo menos uma categoria
     const temConteudo = Object.values(categorias).some(cat => Object.keys(cat).length > 0);
-    
+
     if (!temConteudo) {
         return `
             <div class="mapa-container">
@@ -41,12 +41,12 @@ export async function renderizarMapaCidade(paisNome, estadoNome, cidadeNome) {
             </div>
         `;
     }
-    
+
     // Gera o HTML das categorias (inicialmente recolhidas)
     const categoriasHtml = Object.entries(categorias).map(([catNome, itens]) => {
         const total = Object.keys(itens).length;
         if (total === 0) return '';
-        
+
         const config = {
             restaurantes: { icone: "🍔", titulo: "RESTAURANTES", cor: "#00f3ff" },
             lojas: { icone: "🛒", titulo: "LOJAS", cor: "#00f3ff" },
@@ -58,7 +58,7 @@ export async function renderizarMapaCidade(paisNome, estadoNome, cidadeNome) {
             entretenimento: { icone: "🎮", titulo: "ENTRETENIMENTO", cor: "#00f3ff" },
             transportes: { icone: "🚗", titulo: "TRANSPORTES", cor: "#ff0055" }
         }[catNome] || { icone: "📍", titulo: catNome.toUpperCase(), cor: "#888" };
-        
+
         const itensHtml = Object.values(itens).map(item => `
             <div class="categoria-item" onclick="window.confirmarLocal('${catNome}', '${item.id}', '${item.nome}', '${cidadeNome}', '${estadoNome}', '${paisNome}', '${item.descricao.replace(/'/g, "\\'")}', '${(item.endereco || '').replace(/'/g, "\\'")}', '${(item.horario || '').replace(/'/g, "\\'")}')" style="
                 background: rgba(0, 243, 255, 0.05);
@@ -77,7 +77,7 @@ export async function renderizarMapaCidade(paisNome, estadoNome, cidadeNome) {
                 ${item.preco_medio ? `<p style="color: #ff0055; font-size: 11px; margin: 8px 0 0 0;">💰 Preço médio: C$${item.preco_medio}</p>` : ''}
             </div>
         `).join('');
-        
+
         return `
             <div class="categoria-card" style="margin-bottom: 20px; border: 1px solid ${config.cor}; border-radius: 12px; overflow: hidden;">
                 <div class="categoria-header" onclick="toggleCategoria('${catNome}')" style="
@@ -101,7 +101,7 @@ export async function renderizarMapaCidade(paisNome, estadoNome, cidadeNome) {
             </div>
         `;
     }).join('');
-    
+
     return `
         <div class="mapa-container" style="overflow-y: auto;">
             <div class="mapa-header">
@@ -112,8 +112,8 @@ export async function renderizarMapaCidade(paisNome, estadoNome, cidadeNome) {
             
             <div style="padding: 0 20px 20px 20px;">
                 <div class="mapa-legenda" style="margin-bottom: 20px;">
-                    🗂️ CATEGORIAS
-                </div>
+    📍 LOCAIS
+</div>
                 
                 <div id="categorias-container">
                     ${categoriasHtml}
@@ -124,10 +124,10 @@ export async function renderizarMapaCidade(paisNome, estadoNome, cidadeNome) {
 }
 
 // Função global para abrir/fechar categorias
-window.toggleCategoria = function(catNome) {
+window.toggleCategoria = function (catNome) {
     const conteudo = document.getElementById(`categoria-conteudo-${catNome}`);
     const seta = document.getElementById(`categoria-seta-${catNome}`);
-    
+
     if (conteudo.style.display === 'none') {
         conteudo.style.display = 'block';
         seta.style.transform = 'rotate(180deg)';
