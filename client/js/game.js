@@ -44,7 +44,6 @@ const menus = {
         { id: 'voltar', nome: '⬅ Voltar' }
     ],
     personagem: [
-    { id: 'personagem', nome: '👤 Personagem' },
     { id: 'atributos', nome: '📊 Atributos' },
     { id: 'inventario', nome: '🎒 Inventário' },
     { id: 'habilidades', nome: '⚡ Habilidades' },
@@ -182,9 +181,20 @@ function mostrarMenu(menuId) {
     
     const sidebarMenu = document.querySelector('.sidebar-menu');
     if (sidebarMenu) {
-        sidebarMenu.innerHTML = itens.map(item => `
-            <li onclick="selecionarItem('${item.id}')">${item.nome}</li>
-        `).join('');
+        // Se for o menu personagem, mostra o dashboard ANTES dos links
+        if (menuId === 'personagem') {
+            // Renderiza o dashboard no container principal
+            renderizarConteudoCentral('personagem');
+            
+            // Mostra os links no menu lateral
+            sidebarMenu.innerHTML = itens.map(item => `
+                <li onclick="selecionarItem('${item.id}')">${item.nome}</li>
+            `).join('');
+        } else {
+            sidebarMenu.innerHTML = itens.map(item => `
+                <li onclick="selecionarItem('${item.id}')">${item.nome}</li>
+            `).join('');
+        }
     }
 }
 
