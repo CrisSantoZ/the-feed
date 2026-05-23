@@ -79,6 +79,13 @@ export async function renderizarMapaLocal(paisNome, estadoNome, cidadeNome, loca
             conteudo = `<div class="mapa-dev-msg">🚧 Tipo de local não implementado: ${localTipo}</div>`;
     }
     
+if (localData && sessionStorage.getItem('playerLocal') === localData.id) {
+        setTimeout(async () => {
+            const { iniciarChatLocal } = await import('../chat/chatLocal.js');
+            iniciarChatLocal(localData.id, localData.nome, localTipo);
+        }, 500);
+    }
+
     return `
         <div class="mapa-container" style="overflow-y: auto;">
             <div class="mapa-header">

@@ -400,7 +400,13 @@ window.confirmarLocal = async function(tipo, id, nome, cidade, estado, pais, des
     }
 };
 
-window.sairDoLocal = function() {
+window.sairDoLocal = async function() {
+    // Fechar chat se estiver aberto
+    try {
+        const { fecharChatLocal } = await import('./chat/chatLocal.js');
+        fecharChatLocal();
+    } catch(e) {}
+    
     // Limpa o local atual
     sessionStorage.removeItem('playerLocal');
     sessionStorage.removeItem('playerLocalNome');
