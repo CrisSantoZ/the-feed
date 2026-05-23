@@ -366,24 +366,52 @@ window.fazerPedido = async function(restauranteId, pratoId) {
 
 // ==================== CONFIRMAR ENTRADA NO LOCAL ====================
 window.confirmarLocal = async function(tipo, id, nome, cidade, estado, pais, descricao, endereco, horario) {
+    // Verifica se já está neste local
+    const playerLocal = sessionStorage.getItem('playerLocal');
+    
+    if (playerLocal === id) {
+        // Já está aqui, mostra o local diretamente
+        window.selecionarLocal(tipo, id, nome, cidade, estado, pais);
+        return;
+    }
+    
+    // Se não está, pergunta se quer ir
     const { mostrarModalConfirmacao } = await import('./transporte/transporteUI.js');
     
     const conteudo = `
         <p style="color: #fff; margin-bottom: 10px;">${descricao}</p>
         ${endereco ? `<p style="color: #888; font-size: 12px;">📍 ${endereco}</p>` : ''}
         ${horario ? `<p style="color: #888; font-size: 12px;">⏰ ${horario}</p>` : ''}
+        <p style="color: #ff0055; font-size: 12px; margin-top: 10px;">Você não está neste local. Deseja ir agora?</p>
     `;
     
     const confirmar = await mostrarModalConfirmacao(nome, conteudo);
     
     if (confirmar) {
-        // Salva que o personagem está neste local
+        // Salva a nova localização
         sessionStorage.setItem('playerLocal', id);
         sessionStorage.setItem('playerLocalNome', nome);
         sessionStorage.setItem('playerLocalTipo', tipo);
+        sessionStorage.setItem('playerCidade', cidade);
+        sessionStorage.setItem('playerEstado', estado);
+        sessionStorage.setItem('playerPais', pais);
         
         window.selecionarLocal(tipo, id, nome, cidade, estado, pais);
     }
+};
+
+window.sairDoLocal = function() {
+    // Limpa o local atual
+    sessionStorage.removeItem('playerLocal');
+    sessionStorage.removeItem('playerLocalNome');
+    sessionStorage.removeItem('playerLocalTipo');
+    
+    // Volta para a cidade
+    const cidade = sessionStorage.getItem('playerCidade');
+    const estado = sessionStorage.getItem('playerEstado');
+    const pais = sessionStorage.getItem('playerPais');
+    
+    window.voltarParaCidade(cidade, estado, pais);
 };
 
 window.fecharPainel = function() {

@@ -189,14 +189,36 @@ function renderizarLoja(local) {
 }
 
 function renderizarAlimentacao(local) {
-    // Verifica se é um restaurante com cardápio detalhado
+    // Verifica se o personagem está neste local
+    const playerLocal = sessionStorage.getItem('playerLocal');
+    const estaAqui = (playerLocal === local.id);
+    
+    // Ambiente imersivo
+    const ambienteHtml = `
+        <div style="background: linear-gradient(135deg, #0a0a1a, #1a0a2a); border-radius: 16px; padding: 20px; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <div>
+                    <span style="font-size: 24px;">🍽️</span>
+                    <span style="color: #00f3ff; font-weight: bold; margin-left: 10px;">${estaAqui ? '📍 VOCÊ ESTÁ AQUI' : '📍 LOCAL'}</span>
+                </div>
+                ${estaAqui ? `<button onclick="window.sairDoLocal()" style="background: none; border: 1px solid #ff0055; color: #ff0055; padding: 8px 16px; border-radius: 8px; cursor: pointer;">🚪 SAIR</button>` : ''}
+            </div>
+            <p style="color: #fff; margin-bottom: 15px; font-size: 14px;">${local.descricao}</p>
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                ${local.endereco ? `<span style="color: #888; font-size: 12px;">📍 ${local.endereco}</span>` : ''}
+                ${local.horario ? `<span style="color: #888; font-size: 12px;">⏰ ${local.horario}</span>` : ''}
+                ${local.telefone ? `<span style="color: #888; font-size: 12px;">📞 ${local.telefone}</span>` : ''}
+                ${local.estrelas ? `<span style="color: #ff0055; font-size: 12px;">⭐ ${local.estrelas} (${local.avaliacoes} avaliações)</span>` : ''}
+            </div>
+        </div>
+    `;
+    
+    // Cardápio (se existir)
+    let cardapioHtml = '';
     if (local.cardapio && local.cardapio.length > 0) {
-        return `
+        cardapioHtml = `
             <div style="margin-top: 20px;">
-                <h3 style="color: #00f3ff; margin-bottom: 10px;">🍽️ CARDÁPIO</h3>
-                <p style="color: #888; font-size: 12px; margin-bottom: 15px;">
-                    ⏰ ${local.horario || 'Horário não informado'} | 📍 ${local.endereco || ''}
-                </p>
+                <h3 style="color: #00f3ff; margin-bottom: 15px;">🍽️ CARDÁPIO</h3>
                 <div style="display: flex; flex-direction: column; gap: 12px;">
                     ${local.cardapio.map(prato => `
                         <div style="background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.3); border-radius: 12px; padding: 15px;">
@@ -220,7 +242,8 @@ function renderizarAlimentacao(local) {
                                 cursor: pointer;
                                 width: 100%;
                                 font-weight: bold;
-                            ">🍽️ Pedir Agora</button>
+                                ${!estaAqui ? 'opacity: 0.5; cursor: not-allowed;' : ''}
+                            " ${!estaAqui ? 'disabled' : ''}>🍽️ ${estaAqui ? 'Pedir Agora' : 'Você precisa estar no local para pedir'}</button>
                         </div>
                     `).join('')}
                 </div>
@@ -228,17 +251,22 @@ function renderizarAlimentacao(local) {
         `;
     }
     
-    // Fallback para dados antigos (caso não tenha cardápio)
-    return `
-        <div style="margin-top: 20px;">
-            <h3 style="color: #00f3ff; margin-bottom: 15px;">🍽️ CARDÁPIO</h3>
-            <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
-                <p><span style="color: #00f3ff;">🍔 Tipo:</span> ${local.tipo_comida?.join(', ') || 'Variado'}</p>
-                <p><span style="color: #00f3ff;">💰 Preço médio:</span> C$${local.preco_medio || 30}</p>
-                <button onclick="alert('Comer em ${local.nome}')" style="margin-top: 15px; background: linear-gradient(135deg, #00f3ff, #ff0055); border: none; color: #fff; padding: 10px 20px; border-radius: 8px; cursor: pointer;">🍽️ Comer Agora</button>
+    // Fallback para dados antigos
+    if (!local.cardapio || local.cardapio.length === 0) {
+        return `
+            ${ambienteHtml}
+            <div style="margin-top: 20px;">
+                <h3 style="color: #00f3ff; margin-bottom: 15px;">🍽️ CARDÁPIO</h3>
+                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
+                    <p><span style="color: #00f3ff;">🍔 Tipo:</span> ${local.tipo_comida?.join(', ') || 'Variado'}</p>
+                    <p><span style="color: #00f3ff;">💰 Preço médio:</span> C$${local.preco_medio || 30}</p>
+                    <button onclick="alert('Comer em ${local.nome}')" style="margin-top: 15px; background: linear-gradient(135deg, #00f3ff, #ff0055); border: none; color: #fff; padding: 10px 20px; border-radius: 8px; cursor: pointer;">🍽️ Comer Agora</button>
+                </div>
             </div>
-        </div>
-    `;
+        `;
+    }
+    
+    return ambienteHtml + cardapioHtml;
 }
 
 function renderizarEmprego(local) {
