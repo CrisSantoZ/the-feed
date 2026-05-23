@@ -45,7 +45,8 @@ function criarChatContainer() {
     
     const chatContainer = document.createElement('div');
     chatContainer.id = 'chat-local-container';
-    chatContainer.style.cssText = `
+    chatContainer.className = 'chat-container';
+chatContainer.style.cssText = `
         position: fixed;
         right: 20px;
         bottom: 80px;
@@ -149,7 +150,7 @@ function minimizarChat() {
         container.style.overflow = 'hidden';
         
         container.innerHTML = `
-            <div id="chat-mini" style="
+    <div id="chat-mini" class="chat-mini" style="
                 width: 100%;
                 height: 100%;
                 display: flex;

@@ -367,3 +367,60 @@
         font-size: 11px !important;
     }
 }
+
+/* Ajustes para o chat no mobile */
+@media (max-width: 768px) {
+    .chat-container {
+        width: 90% !important;
+        right: 5% !important;
+        left: 5% !important;
+        bottom: 10px !important;
+        height: 350px !important;
+    }
+    
+    #chat-header {
+        padding: 8px 10px !important;
+    }
+    
+    #chat-header span:first-child {
+        font-size: 12px !important;
+    }
+    
+    #chat-header button {
+        padding: 2px 6px !important;
+        font-size: 14px !important;
+    }
+    
+    #chat-mensagens {
+        padding: 8px !important;
+        gap: 6px !important;
+    }
+    
+    #chat-mensagens div {
+        padding: 4px 8px !important;
+        font-size: 11px !important;
+    }
+    
+    #chat-input {
+        padding: 6px !important;
+        font-size: 11px !important;
+    }
+    
+    #enviar-mensagem {
+        padding: 6px 12px !important;
+        font-size: 11px !important;
+    }
+    
+    .chat-mini {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    .chat-mini span:first-child {
+        font-size: 24px !important;
+    }
+    
+    #chat-mini-contador {
+        font-size: 9px !important;
+    }
+}
