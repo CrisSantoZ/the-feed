@@ -46,6 +46,10 @@ function configurarFaceclaimSocket(io, socket, { groq }) {
             // ========== 1. VERIFICAÇÃO POR SIMILARIDADE LOCAL ==========
             const todosFaceclaims = await Player.find({ faceclaim: { $ne: null } }).select('faceclaim');
             
+// Dentro da verificação, antes do for
+console.log(`[DEBUG] Verificando similaridade para: "${nomeLimpo}"`);
+console.log(`[DEBUG] Total de faceclaims no banco: ${todosFaceclaims.length}`);
+
             for (const existente of todosFaceclaims) {
                 if (nomesParecidos(nomeLimpo, existente.faceclaim)) {
                     return socket.emit('erroServidor', 
