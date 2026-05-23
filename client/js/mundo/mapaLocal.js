@@ -16,7 +16,7 @@ export async function renderizarMapaLocal(paisNome, estadoNome, cidadeNome, loca
             // CAMINHO DINÂMICO
             const paisSlug = paisNome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
             const estadoSlug = estadoNome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ /g, '-');
-            const modulo = await import(`/client/js/locais/${paisSlug}/${estadoSlug}/Restaurantes.js`);
+            const modulo = await import(`/js/locais/${paisSlug}/${estadoSlug}/Restaurantes.js`);
             const restaurantesSP = modulo.restaurantesSP || modulo.default;
             const restaurante = restaurantesSP[cidadeNome]?.[localId];
             if (restaurante) {
