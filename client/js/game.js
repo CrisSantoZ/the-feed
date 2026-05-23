@@ -130,7 +130,7 @@ if (tipo === 'mapa' && dados?.nivel === 'pais') {
     
     if (paisNome === 'Brasil') {
         setTimeout(async () => {
-            const { initMapaPais } = await import('/js/mundo/mapaManager.js');
+            const { initMapaPais } = await import('./mundo/mapaManager.js');
             initMapaPais('brasil');
         }, 200);
     }
@@ -340,7 +340,7 @@ window.fazerPedido = async function(restauranteId, pratoId) {
     
     try {
         // Importa dados do restaurante
-        const { restaurantesSP } = await import('/js/locais/brasil/sp/RestaurantesSP.js');
+        const { restaurantesSP } = await import('/locais/brasil/sp/RestaurantesSP.js');
         const restaurante = restaurantesSP[estado]?.[cidade]?.[restauranteId];
         
         if (!restaurante) {
