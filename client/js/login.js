@@ -487,6 +487,10 @@ window.socket.on('jogoIniciadoSucesso', (dadosIniciais) => {
         sessionStorage.setItem('playerCidade', 'São Paulo');
         sessionStorage.setItem('playerDinheiro', 150);
 
+         if (window.socket) {
+            window.socket.emit('setPlayerName', dadosIniciais.nome);
+        }
+
     const containers = ['selecao-container', 'autenticacao-container', 'criacao-container', 'transicao-container'];
     containers.forEach(id => {
         const el = document.getElementById(id);
