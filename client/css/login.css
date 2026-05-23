@@ -1,0 +1,399 @@
+
+/* ==========================================================================
+   TELA DE LOGIN E CADASTRO - MIAMI CYBER NOIR // SUPREMO NIGHT CLUB
+   Versão corrigida para Android / Mobile WebView
+   ========================================================================== */
+
+/* CORREÇÃO 1: Sintaxe correta do Google Fonts (wght@ ao invés de wght=) */
+@import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@700;800&family=Montserrat:wght@600;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+    --club-neon-pink: #ff0055;
+    --club-neon-pink-glow: rgba(255, 0, 85, 0.6);
+    --club-neon-cyan: #00f3ff;
+    --club-neon-cyan-glow: rgba(0, 243, 255, 0.6);
+    --club-purple: #13021f;
+    --bg-night-wet: #030407;
+
+    --bg-card-glass: rgba(6, 7, 13, 0.65);
+    --border-neon-dim: rgba(255, 0, 85, 0.35);
+    --border-cyan-dim: rgba(0, 243, 255, 0.2);
+
+    --text-light: #ffffff;
+    --text-muted: #626a7a;
+
+    --font-club: 'Syncopate', sans-serif;
+    --font-impact: 'Montserrat', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --transition-supreme: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+body {
+    background-color: transparent !important;
+    font-family: var(--font-mono);
+    overflow: hidden;
+    position: relative;
+}
+
+body::before {
+    content: " ";
+    display: block;
+    position: fixed;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(180deg, rgba(0, 243, 255, 0.02) 0%, rgba(255, 0, 85, 0.02) 100%);
+    opacity: 0.8;
+    z-index: 0;
+    pointer-events: none;
+}
+
+html, body {
+    background-color: transparent !important;
+}
+
+/* ==========================================================================
+   ANIMAÇÕES
+   ========================================================================== */
+
+@keyframes aurora-panel {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* CORREÇÃO 2: "0 0 8 #fff" → "0 0 8px #fff" (unidade px faltando) */
+@keyframes strobe-flicker {
+    0%, 18%, 22%, 25%, 53%, 57%, 100% {
+        text-shadow: 0 0 8px #fff, 0 0 20px var(--club-neon-pink), 0 0 40px var(--club-neon-pink);
+        color: #ffffff;
+    }
+    20%, 24%, 55% {
+        text-shadow: 0 0 2px rgba(255, 255, 255, 0.2);
+        color: rgba(255, 255, 255, 0.4);
+    }
+}
+
+@keyframes cyan-glow-pulse {
+    0%, 100% { box-shadow: 0 0 15px rgba(0, 243, 255, 0.2); }
+    50%       { box-shadow: 0 0 30px rgba(0, 243, 255, 0.45), inset 0 0 15px rgba(0, 243, 255, 0.2); }
+}
+
+/* ==========================================================================
+   CONTAINER PRINCIPAL
+   CORREÇÃO 3: overflow-y: auto para não travar em telas pequenas
+   CORREÇÃO 5: padding responsivo com clamp()
+   ========================================================================== */
+.login-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -48%) scale(0.96);
+    opacity: 0;
+
+    width: 95%;
+    max-width: 430px;
+
+    /* CORREÇÃO 3: limita altura e permite scroll interno no Android */
+    max-height: 92dvh;
+    max-height: 92vh; /* fallback */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* scroll suave no Android/iOS */
+
+    background: linear-gradient(135deg,
+        rgba(5, 6, 10, 0.45) 0%,
+        rgba(23, 4, 36, 0.3) 50%,
+        rgba(3, 10, 18, 0.45) 100%
+    );
+    background-size: 300% 300%;
+    animation: aurora-panel 10s ease infinite;
+
+    backdrop-filter: blur(15px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(15px) saturate(190%) !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-top: 5px solid var(--club-neon-pink);
+    border-radius: 0px !important;
+
+    /* CORREÇÃO 5: padding responsivo — não devora a tela em 360px */
+    padding: clamp(28px, 6vw, 50px) clamp(20px, 5vw, 40px) clamp(24px, 5vw, 45px);
+    box-sizing: border-box;
+
+    box-shadow: 12px 12px 0px #000000,
+                0 0 50px rgba(255, 0, 85, 0.2),
+                0 30px 60px rgba(0, 0, 0, 0.6);
+    z-index: 1001;
+
+    transition: opacity 0.5s var(--transition-supreme), transform 0.6s var(--transition-supreme);
+
+    /* CORREÇÃO 4: scrollbar invisível mas funcional no Android */
+    scrollbar-width: none;
+}
+.login-box::-webkit-scrollbar { display: none; }
+
+.login-box.mostrar {
+    opacity: 1 !important;
+    transform: translate(-50%, -50%) scale(1) !important;
+}
+
+.login-box::after {
+    content: '';
+    position: absolute;
+    top: -5px; left: 0; right: 0;
+    height: 5px;
+    background: var(--club-neon-pink);
+    box-shadow: 0 0 25px var(--club-neon-pink);
+    z-index: 10;
+}
+
+/* ==========================================================================
+   TÍTULO E SUBTÍTULO
+   CORREÇÃO 6: font-size com clamp() para não vazar em 360px
+   ========================================================================== */
+.login-title {
+    text-align: center;
+    color: var(--text-light);
+    font-family: var(--font-club);
+    font-size: clamp(1.6rem, 6vw, 2.3rem); /* CORREÇÃO 6 */
+    font-weight: 800;
+    letter-spacing: 3px;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    animation: strobe-flicker 4s infinite;
+}
+
+.login-subtitle {
+    text-align: center;
+    color: var(--club-neon-cyan);
+    font-family: var(--font-mono);
+    font-size: clamp(0.55rem, 1.8vw, 0.7rem); /* CORREÇÃO 6 */
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 28px;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(0, 243, 255, 0.2);
+    padding-bottom: 16px;
+    text-shadow: 0 0 10px var(--club-neon-cyan);
+}
+
+/* ==========================================================================
+   ABAS
+   ========================================================================== */
+.auth-tabs {
+    display: flex;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 24px;
+}
+
+.tab-button {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-family: var(--font-club);
+    font-size: clamp(0.7rem, 2.2vw, 0.85rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s var(--transition-supreme);
+    touch-action: manipulation;               /* CORREÇÃO 7 */
+    -webkit-tap-highlight-color: transparent;
+}
+
+.tab-button:hover { color: var(--text-light); }
+
+.tab-button.active {
+    background: linear-gradient(90deg, #00b3ff, #00f3ff);
+    color: #000000;
+    font-weight: 800;
+    box-shadow: 0 0 25px var(--club-neon-cyan-glow);
+}
+
+/* ==========================================================================
+   INPUTS
+   CORREÇÃO 8: gap responsivo no form
+   ========================================================================== */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(12px, 3vw, 18px); /* CORREÇÃO 8 */
+}
+
+.form-group input {
+    background-color: rgba(0, 0, 0, 0.85);
+    color: #ffffff !important;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-left: 4px solid var(--text-muted);
+    border-radius: 0px;
+    padding: 14px 16px;
+    font-size: clamp(0.85rem, 2.5vw, 1rem);
+    outline: none;
+    box-sizing: border-box;
+    width: 100%;
+    transition: all 0.25s var(--transition-supreme);
+    /* CORREÇÃO 7: sem delay de toque nos inputs */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.form-group input:focus {
+    border-color: var(--club-neon-cyan);
+    border-left: 4px solid var(--club-neon-cyan);
+    background-color: rgba(0, 0, 0, 0.95);
+    animation: cyan-glow-pulse 2s infinite;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+}
+
+.form-group input::placeholder { color: #525a6c; }
+
+.input-container-data label {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.form-group input[type="date"] { color-scheme: dark; }
+
+/* ==========================================================================
+   BOTÃO PRINCIPAL
+   CORREÇÃO 6: font-size responsivo
+   CORREÇÃO 7: touch-action
+   ========================================================================== */
+.form-group button:not(.btn-voltar-terminal):not(.btn-cancelar-criacao):not(.btn-purgar-cyber) {
+    background: linear-gradient(135deg, #cc0044 0%, var(--club-neon-pink) 100%);
+    color: #ffffff;
+    font-family: var(--font-impact);
+    font-size: clamp(1rem, 3.5vw, 1.5rem); /* CORREÇÃO 6 */
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 16px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 6px 6px 0px #000000, 0 0 20px rgba(255, 0, 85, 0.3);
+    margin-top: 12px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s var(--transition-supreme);
+    touch-action: manipulation;               /* CORREÇÃO 7 */
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.form-group button:not(.btn-voltar-terminal):not(.btn-cancelar-criacao):not(.btn-purgar-cyber)::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: 0.4s;
+}
+
+.form-group button:not(.btn-voltar-terminal):not(.btn-cancelar-criacao):not(.btn-purgar-cyber):hover::before {
+    left: 100%;
+}
+
+.form-group button:not(.btn-voltar-terminal):not(.btn-cancelar-criacao):not(.btn-purgar-cyber):hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0px #000000, 0 0 35px var(--club-neon-pink);
+    background: var(--club-neon-pink);
+}
+
+.form-group button:not(.btn-voltar-terminal):not(.btn-cancelar-criacao):not(.btn-purgar-cyber):active {
+    transform: translate(3px, 3px);
+    box-shadow: 2px 2px 0px #000000;
+}
+
+/* ==========================================================================
+   BOTÃO FECHAR (X)
+   ========================================================================== */
+.btn-fechar-painel {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: rgba(0,0,0,0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    width: 32px; height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    transition: all 0.2s var(--transition-supreme);
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-fechar-painel:hover {
+    color: #ffffff;
+    background: var(--club-neon-pink);
+    border-color: var(--club-neon-pink);
+    box-shadow: 0 0 20px var(--club-neon-pink);
+}
+
+/* ==========================================================================
+   BOTÕES SECUNDÁRIOS (Voltar / Cancelar)
+   ========================================================================== */
+.btn-voltar-terminal,
+.btn-cancelar-criacao {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+    transition: all 0.2s var(--transition-supreme);
+    margin-top: 14px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-voltar-terminal:hover,
+.btn-cancelar-criacao:hover {
+    border-color: var(--club-neon-cyan);
+    background-color: rgba(0, 243, 255, 0.05);
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+}
+
+/* ==========================================================================
+   BOTÃO PURGA (EXCLUSÃO)
+   ========================================================================== */
+.btn-purgar-cyber {
+    background: linear-gradient(135deg, rgba(40,0,15,0.6) 0%, rgba(120,0,40,0.4) 100%) !important;
+    border: 1px solid rgba(255, 0, 85, 0.5) !important;
+    color: #ff5588 !important;
+    font-family: var(--font-club) !important;
+    font-size: 0.95rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    padding: 14px !important;
+    box-shadow: 6px 6px 0px #000000 !important;
+    transition: all 0.2s var(--transition-supreme) !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+
+.btn-purgar-cyber:hover {
+    background: var(--club-neon-pink) !important;
+    color: #ffffff !important;
+    border-color: var(--club-neon-pink) !important;
+    transform: translate(-3px, -3px) !important;
+    box-shadow: 9px 9px 0px #000000, 0 0 35px var(--club-neon-pink) !important;
+}

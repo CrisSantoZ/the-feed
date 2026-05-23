@@ -1,0 +1,248 @@
+/* ==========================================================================
+   MAPA.CSS - ESTILOS PARA TODOS OS MAPAS (PAÍSES, ESTADOS, CIDADES)
+   ========================================================================== */
+
+/* Container geral do mapa */
+.mapa-container {
+    padding: 20px;
+    height: 100%;
+    overflow-y: auto;
+    background: #030407;
+}
+
+/* Cabeçalho do mapa */
+.mapa-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.mapa-titulo {
+    color: #00f3ff;
+    margin: 0;
+    font-family: 'Syncopate', monospace;
+    font-size: 1.2rem;
+}
+
+/* Botões do mapa */
+.mapa-btn-voltar {
+    background: none;
+    border: 1px solid #00f3ff;
+    color: #00f3ff;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    transition: all 0.2s ease;
+}
+
+.mapa-btn-voltar:hover {
+    background: rgba(0, 243, 255, 0.1);
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+}
+
+.mapa-btn-fechar {
+    background: none;
+    border: none;
+    color: #ff0055;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mapa-btn-fechar:hover {
+    text-shadow: 0 0 10px #ff0055;
+    transform: scale(1.1);
+}
+
+/* Legenda do mapa */
+.mapa-legenda {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 12px;
+    color: #888;
+}
+
+.mapa-legenda-ativo {
+    color: #00f3ff;
+}
+
+.mapa-legenda-inativo {
+    color: #555;
+    background: #2a2a3a;
+    padding: 2px 6px;
+}
+
+/* Wrapper do SVG/Componente */
+.mapa-wrapper {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #00f3ff;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mapa-svg {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+}
+
+/* ==================== ESTADOS DO BRASIL ==================== */
+
+/* Estados ativos (disponíveis para explorar) */
+.estado-ativo {
+    fill: rgba(0, 243, 255, 0.25) !important;
+    stroke: #00f3ff !important;
+    stroke-width: 1.5 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+.estado-ativo:hover {
+    fill: rgba(0, 243, 255, 0.5) !important;
+    stroke: #ff0055 !important;
+    stroke-width: 2 !important;
+    filter: drop-shadow(0 0 8px rgba(0, 243, 255, 0.5));
+}
+
+/* Estados inativos (em desenvolvimento) */
+.estado-inativo {
+    fill: #2a2a3a !important;
+    stroke: #4a4a5a !important;
+    stroke-width: 1 !important;
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+    transition: all 0.2s ease !important;
+}
+
+.estado-inativo:hover {
+    fill: #3a3a4a !important;
+    opacity: 0.8 !important;
+}
+
+/* Siglas dos estados */
+.estado-sigla {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    font-weight: bold;
+    pointer-events: none;
+}
+
+.estado-sigla-ativo {
+    fill: #00f3ff;
+    text-shadow: 0 0 4px rgba(0, 243, 255, 0.5);
+}
+
+.estado-sigla-inativo {
+    fill: #555;
+}
+
+/* ==================== LISTA DE CIDADES ==================== */
+
+.cidades-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.cidade-card {
+    background: rgba(0, 243, 255, 0.1);
+    border: 1px solid #00f3ff;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+}
+
+.cidade-card:hover {
+    background: rgba(0, 243, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 243, 255, 0.2);
+}
+
+/* ==================== PAINEL DE INFORMAÇÕES ==================== */
+
+.mapa-info-painel {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: rgba(3, 4, 7, 0.95);
+    border: 1px solid #00f3ff;
+    border-radius: 8px;
+    padding: 12px;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+}
+
+.mapa-info-titulo {
+    color: #00f3ff;
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    font-family: 'Syncopate', monospace;
+}
+
+.mapa-info-texto {
+    color: #888;
+    margin: 0;
+    font-size: 12px;
+}
+
+/* Mensagem de desenvolvimento */
+.mapa-dev-msg {
+    margin-top: 20px;
+    text-align: center;
+    color: #888;
+    font-size: 11px;
+    background: rgba(255, 0, 85, 0.1);
+    border-left: 3px solid #ff0055;
+    padding: 10px;
+}
+
+/* ==================== RESPONSIVO ==================== */
+
+@media (max-width: 768px) {
+    .mapa-container {
+        padding: 15px;
+    }
+    
+    .cidades-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 8px;
+    }
+    
+    .cidade-card {
+        padding: 10px;
+        font-size: 12px;
+    }
+    
+    .estado-sigla {
+        font-size: 6px;
+    }
+    
+    .mapa-info-painel {
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .cidades-grid {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    }
+    
+    .mapa-titulo {
+        font-size: 1rem;
+    }
+}

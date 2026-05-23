@@ -1,0 +1,305 @@
+/* ==========================================================================
+   HUD DE JOGO - THE FEED (VERSÃO MOBILE FIRST)
+   ========================================================================== */
+
+:root {
+    --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+    --font-club: 'Syncopate', 'Arial', sans-serif;
+    --club-neon-cyan: #00f3ff;
+    --club-neon-cyan-glow: rgba(0, 243, 255, 0.3);
+    --club-neon-pink: #ff0055;
+    --club-neon-pink-glow: rgba(255, 0, 85, 0.3);
+    --text-light: #ffffff;
+    --text-muted: #888;
+    --border-cyan-dim: rgba(0, 243, 255, 0.2);
+    --transition-supreme: cubic-bezier(0.16, 1, 0.3, 1);
+    --sidebar-width: 220px;
+}
+
+/* ==================== GAME PANEL ==================== */
+#game-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #030407;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+#game-panel.visivel {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* Scanlines (mais leve para celular) */
+#game-panel::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,0.08) 0px, rgba(0,0,0,0.08) 2px, transparent 2px, transparent 4px);
+    pointer-events: none;
+    z-index: 10010;
+}
+
+/* ==================== CENTRO ==================== */
+.hud-center {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+}
+
+/* ==================== MAPA (CELULAR) ==================== */
+#mapa-container {
+    width: 100%;
+    height: 100%;
+    background: #030407;
+    position: relative;
+    overflow: hidden;
+    touch-action: pan-x pan-y pinch-zoom; /* Melhor toque no celular */
+}
+
+#mapa-container canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    outline: none;
+    touch-action: none; /* Para interação com o globo */
+}
+
+/* ==================== BOTÃO MENU (TOQUE) ==================== */
+#btn-toggle-menu {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10020;
+    width: 32px;
+    height: 64px;
+    background: rgba(4, 5, 9, 0.95);
+    border: none;
+    border-right: 2px solid var(--club-neon-cyan);
+    color: var(--club-neon-cyan);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 8px 8px 0;
+    transition: left 0.3s ease;
+    touch-action: manipulation;
+}
+
+#btn-toggle-menu:active {
+    background: rgba(0, 243, 255, 0.2);
+}
+
+#game-panel.menu-aberto #btn-toggle-menu {
+    left: var(--sidebar-width);
+}
+
+/* ==================== OVERLAY ==================== */
+#menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 10014;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+}
+
+#game-panel.menu-aberto #menu-overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ==================== SIDEBAR (MENU LATERAL) ==================== */
+.hud-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: 100%;
+    background: rgba(4, 5, 9, 0.98);
+    backdrop-filter: blur(15px);
+    border-right: 2px solid var(--club-neon-cyan);
+    padding: 60px 20px 30px 20px;
+    z-index: 10015;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+}
+
+#game-panel.menu-aberto .hud-sidebar {
+    transform: translateX(0);
+}
+
+.sidebar-brand {
+    font-family: var(--font-club);
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 40px;
+    text-align: center;
+    letter-spacing: 3px;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu li {
+    color: #888;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 28px;
+    cursor: pointer;
+    padding: 10px 0 10px 12px;
+    border-left: 2px solid transparent;
+    transition: all 0.2s;
+    touch-action: manipulation;
+}
+
+.sidebar-menu li:active {
+    color: var(--club-neon-cyan);
+    border-left-color: var(--club-neon-cyan);
+    background: rgba(0, 243, 255, 0.05);
+}
+
+.sidebar-menu li.ativo {
+    color: var(--club-neon-cyan);
+    border-left-color: var(--club-neon-cyan);
+}
+
+/* ==================== PAINEL DE CONTEÚDO (CELULAR) ==================== */
+#painel-ativo {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 85vh;
+    max-height: 85vh;
+    background: #030407 !important;
+    border-top: 2px solid var(--club-neon-cyan);
+    border-radius: 20px 20px 0 0;
+    z-index: 10005;
+    display: none;
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+
+#painel-ativo.visivel {
+    display: block;
+    transform: translateY(0);
+}
+
+/* Indicador de que pode deslizar (opcional) */
+#painel-ativo::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 4px;
+    background: #00f3ff;
+    border-radius: 2px;
+    opacity: 0.5;
+}
+
+/* Scroll personalizado (leve) */
+#painel-ativo::-webkit-scrollbar {
+    width: 3px;
+}
+#painel-ativo::-webkit-scrollbar-track {
+    background: #111;
+}
+#painel-ativo::-webkit-scrollbar-thumb {
+    background: var(--club-neon-cyan);
+}
+
+/* Conteúdo do painel */
+.painel-conteudo {
+    background: #030407;
+    color: #fff;
+    padding: 20px;
+    min-height: 100%;
+}
+
+/* ==================== INFO PAÍS (POPUP CELULAR) ==================== */
+#info-pais-globo {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    background: rgba(3, 4, 7, 0.98);
+    border: 2px solid var(--club-neon-cyan);
+    border-radius: 12px;
+    padding: 16px;
+    z-index: 20000;
+    font-family: monospace;
+    backdrop-filter: blur(15px);
+}
+
+/* ==================== RESPONSIVO ==================== */
+@media (max-width: 768px) {
+    .sidebar-menu li {
+        font-size: 0.7rem;
+        margin-bottom: 20px;
+    }
+    
+    #painel-ativo {
+        width: 80%;
+    }
+    
+    .painel-conteudo {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --sidebar-width: 200px;
+    }
+    
+    #painel-ativo {
+        width: 75%;
+    }
+    
+    .sidebar-brand {
+        font-size: 0.9rem;
+    }
+}
+
+brazil-component {
+    --brazil-bg-color: #030407;
+    --brazil-stroke-color: #00f3ff;
+    --brazil-stroke-width: 1.5;
+    --brazil-bg-hover-color: rgba(0, 243, 255, 0.15);
+    --brazil-stroke-hover-color: #ff0055;
+    --brazil-acronym-color: #00f3ff;
+    --brazil-acronym-hover-color: #ff0055;
+    --brazil-acronym-font-family: 'JetBrains Mono', monospace;
+    --brazil-acronym-font-size: 10px;
+}

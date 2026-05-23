@@ -1,0 +1,457 @@
+/* ==========================================================================
+   REDE CIVIL & BIOMETRIA - MIAMI CYBER NOIR // SUPREMO NIGHT CLUB
+   Versão corrigida para Android / Mobile WebView
+   ========================================================================== */
+
+/* CORREÇÃO 1: Sintaxe correta do Google Fonts (wght@ ao invés de wght=) */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;900&family=JetBrains+Mono:wght@500;700&family=Syncopate:wght@700;800&family=Montserrat:wght@900&display=swap');
+
+:root {
+    --club-neon-pink: #ff0055;
+    --club-neon-pink-glow: rgba(255, 0, 85, 0.6);
+    --club-neon-cyan: #00f3ff;
+    --club-neon-cyan-glow: rgba(0, 243, 255, 0.6);
+    --club-purple: #13021f;
+    --bg-night-wet: #030407;
+
+    --bg-card-glass: rgba(6, 7, 13, 0.65);
+    --border-neon-dim: rgba(255, 0, 85, 0.35);
+    --border-cyan-dim: rgba(0, 243, 255, 0.2);
+
+    --text-light: #ffffff;
+    --text-muted: #626a7a;
+
+    --font-club: 'Syncopate', sans-serif;
+    --font-impact: 'Montserrat', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --transition-supreme: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* --------------------------------------------------------------------------
+   ANIMAÇÕES
+   -------------------------------------------------------------------------- */
+@keyframes neon-pulse-pink {
+    0%, 100% { text-shadow: 0 0 6px #fff, 0 0 15px var(--club-neon-pink), 0 0 30px var(--club-neon-pink); }
+    50%       { text-shadow: 0 0 2px rgba(255,255,255,0.6), 0 0 8px var(--club-neon-pink); }
+}
+
+@keyframes scanline-move {
+    0%   { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+}
+
+/* --------------------------------------------------------------------------
+   TELA DE SELEÇÃO DE PERSONAGEM
+   -------------------------------------------------------------------------- */
+
+/* CORREÇÃO 6: max-height responsivo com dvh para não travar em telas pequenas */
+.scroll-personagens {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-height: 38dvh;  /* responsivo à altura real da tela */
+    max-height: 38vh;   /* fallback */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-right: 8px;
+    margin-bottom: 22px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--club-neon-pink) rgba(0,0,0,0.6);
+}
+
+.scroll-personagens::-webkit-scrollbar       { width: 3px; }
+.scroll-personagens::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.6); }
+.scroll-personagens::-webkit-scrollbar-thumb { background: var(--club-neon-pink); border-radius: 0px; }
+
+/* Card do Personagem */
+.card-personagem {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background-color: var(--bg-card-glass);
+    backdrop-filter: blur(15px) saturate(180%);
+    -webkit-backdrop-filter: blur(15px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 4px solid var(--club-neon-pink);
+    padding: 14px;
+    border-radius: 0px !important;
+    cursor: pointer;
+    box-shadow: 6px 6px 0px #000000;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.25s var(--transition-supreme);
+    touch-action: manipulation;               /* CORREÇÃO 2 */
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.card-personagem:hover {
+    border-color: var(--club-neon-cyan);
+    border-left: 4px solid var(--club-neon-cyan);
+    background-color: rgba(0, 0, 0, 0.85);
+    box-shadow: 9px 9px 0px #000000, 0 0 25px rgba(0, 243, 255, 0.2);
+    transform: translateX(6px);
+}
+
+.card-personagem::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--club-neon-cyan), transparent);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+.card-personagem:hover::after {
+    opacity: 1;
+    animation: scanline-move 1.5s linear infinite;
+}
+
+/* CORREÇÃO 3: -o-object-fit para WebViews antigas */
+.avatar-selecao {
+    width: 60px;
+    height: 60px;
+    -o-object-fit: cover;
+    object-fit: cover;
+    flex-shrink: 0;          /* impede o avatar de encolher no card */
+    border-radius: 0px !important;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 4px 4px 0px #000000;
+    filter: grayscale(40%) contrast(1.1);
+    transition: all 0.25s var(--transition-supreme);
+}
+
+.card-personagem:hover .avatar-selecao {
+    border-color: var(--club-neon-cyan);
+    filter: grayscale(0%) contrast(1);
+    box-shadow: 4px 4px 0px var(--club-neon-cyan);
+}
+
+.info-personagem {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: left;
+    font-family: var(--font-impact);
+    min-width: 0;            /* permite que o texto corte com ellipsis se necessário */
+    flex: 1;
+}
+
+/* CORREÇÃO 7: font-size responsivo no nome do personagem */
+.info-personagem h3 {
+    color: var(--text-light);
+    font-size: clamp(0.85rem, 3vw, 1.1rem);
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 2px rgba(255, 255, 255, 0.2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.info-personagem p {
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: clamp(0.65rem, 2vw, 0.75rem);
+    font-weight: 700;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.info-personagem .tag-faceclaim {
+    color: var(--club-neon-cyan);
+    font-family: var(--font-mono);
+    font-size: clamp(0.65rem, 2vw, 0.75rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 5px rgba(0, 243, 255, 0.4);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Botão Nova Identidade */
+.btn-novo-cyber {
+    background: rgba(6, 7, 13, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--text-light) !important;
+    font-family: var(--font-club);
+    font-weight: 800;
+    font-size: clamp(0.65rem, 2.2vw, 0.8rem);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 16px;
+    border: 2px solid var(--club-neon-pink) !important;
+    border-radius: 0px !important;
+    cursor: pointer;
+    box-shadow: 5px 5px 0px #000000, 0 0 15px rgba(255, 0, 85, 0.2);
+    transition: all 0.2s var(--transition-supreme);
+    width: 100%;
+    touch-action: manipulation;               /* CORREÇÃO 2 */
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.btn-novo-cyber:hover {
+    background-color: var(--club-neon-pink);
+    color: #ffffff !important;
+    box-shadow: 8px 8px 0px #000000, 0 0 25px var(--club-neon-pink);
+    transform: translate(-3px, -3px);
+}
+
+.btn-novo-cyber:active {
+    transform: translate(3px, 3px);
+    box-shadow: 1px 1px 0px #000000;
+}
+
+/* --------------------------------------------------------------------------
+   TELA DE CRIAÇÃO & BUSCA DE FACECLAIM
+   -------------------------------------------------------------------------- */
+
+/* CORREÇÃO 4: flex-wrap para não espreme input+botão em 360px */
+.busca-faceclaim-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+}
+
+.busca-faceclaim-box input {
+    flex: 2 1 160px;          /* cresce, mas quebra linha se não couber */
+    min-width: 0;
+    background-color: rgba(0, 0, 0, 0.85) !important;
+    color: #ffffff !important;
+    font-family: var(--font-mono) !important;
+    font-weight: 700 !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-left: 4px solid var(--text-muted) !important;
+    border-radius: 0px !important;
+    padding: 14px 16px !important;
+    font-size: clamp(0.85rem, 2.5vw, 1rem) !important;
+    outline: none !important;
+    box-sizing: border-box !important;
+    transition: all 0.25s var(--transition-supreme) !important;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.busca-faceclaim-box input:focus {
+    border-color: var(--club-neon-cyan) !important;
+    border-left: 4px solid var(--club-neon-cyan) !important;
+    background-color: #000000 !important;
+    box-shadow: 0 0 25px rgba(0, 243, 255, 0.2) !important;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Botão de Busca Biométrica */
+.btn-busca-bio {
+    flex: 1 1 100px;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    color: var(--text-light);
+    font-family: var(--font-impact);
+    font-weight: 900;
+    font-size: clamp(0.7rem, 2.2vw, 0.8rem);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: 2px solid var(--club-neon-cyan);
+    border-radius: 0px !important;
+    cursor: pointer;
+    padding: 14px 10px;
+    box-shadow: 5px 5px 0px #000000, 0 0 15px rgba(0, 243, 255, 0.1);
+    transition: all 0.15s var(--transition-supreme);
+    touch-action: manipulation;               /* CORREÇÃO 2 */
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.btn-busca-bio:hover {
+    background-color: var(--club-neon-cyan);
+    color: #000000;
+    box-shadow: 8px 8px 0px #000000, 0 0 25px var(--club-neon-cyan);
+    transform: translate(-3px, -3px);
+}
+
+.btn-busca-bio:active {
+    transform: translate(3px, 3px);
+    box-shadow: 1px 1px 0px #000000;
+}
+
+/* Galeria de fotos */
+.galeria-fotos-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 14px;
+    max-height: 28dvh;
+    max-height: 28vh; /* fallback */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-right: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--club-neon-cyan) rgba(0,0,0,0.4);
+}
+
+.galeria-fotos-grid::-webkit-scrollbar       { width: 3px; }
+.galeria-fotos-grid::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.4); }
+.galeria-fotos-grid::-webkit-scrollbar-thumb { background: var(--club-neon-cyan); border-radius: 0px; }
+
+.opcao-foto {
+    position: relative;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.opcao-foto input[type="radio"] { display: none; }
+
+/* CORREÇÃO 3: -o-object-fit nas fotos da galeria */
+.opcao-foto img {
+    width: 100%;
+    height: 110px;
+    -o-object-fit: cover;
+    object-fit: cover;
+    border-radius: 0px !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-sizing: border-box;
+    box-shadow: 4px 4px 0px #000000;
+    filter: grayscale(100%) brightness(0.5) contrast(1.2);
+    transition: all 0.25s var(--transition-supreme);
+    display: block;
+}
+
+.opcao-foto img:hover {
+    filter: grayscale(30%) brightness(0.8) contrast(1.1);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.opcao-foto input[type="radio"]:checked ~ label img,
+.opcao-foto input[type="radio"]:checked + label img {
+    filter: grayscale(0%) brightness(1.1) contrast(1) !important;
+    border: 2px solid var(--club-neon-cyan, #00f3ff) !important;
+    box-shadow: 5px 5px 0px #000000, 0 0 20px var(--club-neon-cyan) !important;
+    transform: scale(0.98);
+}
+
+/* Botão Finalizar */
+.btn-finalizar {
+    background: linear-gradient(135deg, #cc0044 0%, var(--club-neon-pink) 100%) !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-family: var(--font-impact) !important;
+    font-size: clamp(1rem, 3.5vw, 1.5rem) !important; /* CORREÇÃO 5 */
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    padding: 16px !important;
+    border-radius: 0px !important;
+    box-shadow: 6px 6px 0px #000000, 0 0 20px rgba(255, 0, 85, 0.3) !important;
+    transition: all 0.2s var(--transition-supreme) !important;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    touch-action: manipulation !important;    /* CORREÇÃO 2 */
+    -webkit-tap-highlight-color: transparent !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+}
+
+.btn-finalizar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: 0.4s;
+}
+
+.btn-finalizar:hover::before { left: 100%; }
+
+.btn-finalizar:hover {
+    transform: translate(-3px, -3px) !important;
+    box-shadow: 9px 9px 0px #000000, 0 0 35px var(--club-neon-pink) !important;
+    background: var(--club-neon-pink) !important;
+}
+
+.btn-finalizar:active {
+    transform: translate(3px, 3px) !important;
+    box-shadow: 2px 2px 0px #000000 !important;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+.input-container label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--club-neon-cyan);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 0 0 5px rgba(0, 243, 255, 0.3);
+}
+
+/* Estilização dos selects */
+.input-container select {
+    background-color: rgba(0, 0, 0, 0.85);
+    color: #ffffff;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: clamp(0.85rem, 2.5vw, 1rem);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-left: 4px solid var(--club-neon-cyan);
+    border-radius: 0px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.25s var(--transition-supreme);
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2300f3ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+}
+
+.input-container select:hover {
+    border-color: var(--club-neon-cyan);
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+}
+
+.input-container select:focus {
+    outline: none;
+    border-color: var(--club-neon-cyan);
+    border-left: 4px solid var(--club-neon-cyan);
+    background-color: #000000;
+    box-shadow: 0 0 25px rgba(0, 243, 255, 0.3);
+}
+
+/* Estilo das opções dentro do select */
+.input-container select option {
+    background-color: #030407;
+    color: #ffffff;
+    font-family: var(--font-mono);
+    padding: 10px;
+}
+
+.input-container select option:hover {
+    background-color: var(--club-neon-cyan);
+    color: #000000;
+}
+
+/* Placeholder/disabled dos selects */
+.input-container select:disabled,
+.input-container select option:first-child {
+    color: var(--text-muted);
+}

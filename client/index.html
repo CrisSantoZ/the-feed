@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Feed - Simulador de Vida</title>
+    
+    <script src="https://isolated-sarah-thefeedgroup-cd4e5861.koyeb.app/socket.io/socket.io.js"></script>
+<script>
+    window.socket = io('https://isolated-sarah-thefeedgroup-cd4e5861.koyeb.app');
+</script>
+    
+    <!-- Import map para Three.js (obrigatório) -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module" src="https://cdn.jsdelivr.net/npm/brazil-map/dist/brazil-map.umd.min.js"></script>
+    
+    <link rel="stylesheet" href="css/intro.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/personagem.css"> 
+    <link rel="stylesheet" href="css/transicao.css">
+    <link rel="stylesheet" href="css/hud.css">
+    <link rel="stylesheet" href="css/mapa.css">
+</head>
+<body>
+
+    <audio id="som-chuva" src="assets/chuva.mp3" loop></audio>
+    <audio id="som-lofi" src="assets/lofi.mp3" loop></audio>
+
+    <div id="tela-intro" class="transicao-video">
+        <video id="video-intro" src="assets/1000909288.mp4" autoplay loop muted playsinline></video>
+        <button id="btn-som" class="btn-controle" onclick="alternarSom()">🔇</button>
+        <button class="btn-pular" onclick="irParaLogin()">Entrar no Universo ➡️</button>
+    </div>
+
+    <div id="autenticacao-container" class="login-box" style="display: none;">
+        <button type="button" class="btn-fechar-painel" onclick="fecharAutenticacao()">✖</button>
+        
+        <div class="login-title">THE FEED</div>
+        
+        <div class="auth-tabs">
+            <button id="tab-login" class="tab-button active" onclick="alternarAba('login')">Conectar</button>
+            <button id="tab-cadastro" class="tab-button" onclick="alternarAba('cadastro')">Registrar</button>
+        </div>
+
+        <div id="form-login" class="auth-form">
+            <div class="login-subtitle">Insira suas credenciais de acesso à matriz urbana.</div>
+            <div class="form-group">
+                <input type="text" id="login-usuario" placeholder="USUÁRIO...">
+                <input type="password" id="login-senha" placeholder="SENHA SECRETA...">
+                <button onclick="executarLogin()">Acessar Cidade</button>
+            </div>
+        </div>
+
+        <div id="form-cadastro" class="auth-form" style="display: none;">
+            <div class="login-subtitle">Registro Civil Obrigatório. Perímetro restrito (+18).</div>
+            <div class="form-group grid-cadastro">
+                <input type="text" id="cad-nome" placeholder="NOME...">
+                <input type="text" id="cad-sobrenome" placeholder="SOBRENOME...">
+                
+                <div class="input-container-data">
+                    <label for="cad-data">DATA DE NASCIMENTO:</label>
+                    <input type="date" id="cad-data">
+                </div>
+
+                <input type="email" id="cad-email" placeholder="E-MAIL DE CONTATO...">
+                <input type="text" id="cad-usuario" placeholder="CRIE UM USUÁRIO...">
+                <input type="password" id="cad-senha" placeholder="CRIE UMA SENHA...">
+                
+                <button onclick="executarCadastro()">Inicializar Vida</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="selecao-container" class="login-box" style="display: none;">
+        <div class="login-title">REDE CIVIL</div>
+        <div class="login-subtitle">Selecione uma identidade ativa para carregar na matriz.</div>
+        
+        <div id="lista-personagens" class="scroll-personagens"></div>
+
+        <button type="button" class="btn-voltar-terminal" onclick="voltarParaLogin()">⬅ Desconectar Terminal</button>
+    </div>
+
+    <div id="criacao-container" class="login-box" style="display: none;">
+        <div class="login-title">NOVA IDENTIDADE</div>
+        <div class="login-subtitle">Molde as características civis e biométricas do seu avatar.</div>
+        
+        <div class="auth-form form-group">
+            <input type="text" id="personagem-nome" placeholder="NOME DO CIDADÃO...">
+            <input type="text" id="personagem-sobrenome" placeholder="SOBRENOME DO CIDADÃO...">
+            
+            <div class="input-container-data">
+                <label for="personagem-data">NASCIMENTO DO PERSONAGEM:</label>
+                <input type="date" id="personagem-data">
+            </div>
+
+            <div class="input-container">
+                <label for="pais-origem">🌍 PAÍS DE ORIGEM:</label>
+                <select id="pais-origem" onchange="carregarCidades()">
+                    <option value="">Carregando países...</option>
+                </select>
+            </div>
+
+            <div class="input-container">
+                <label for="cidade-origem">🏙️ CIDADE DE ORIGEM:</label>
+                <select id="cidade-origem">
+                    <option value="">Primeiro selecione um país</option>
+                </select>
+            </div>
+
+            <div class="busca-faceclaim-box">
+                <input type="text" id="criacao-faceclaim" placeholder="NOME DO FAMOSO / MODELO (FACECLAIM)...">
+                <button type="button" class="btn-busca-bio" onclick="buscarIdentidadeVisual()">Verificar Biometria</button>
+            </div>
+
+            <div id="galeria-faceclaim-resultados" class="galeria-fotos-grid"></div>
+
+            <button class="btn-finalizar" onclick="finalizarCriacao()">Confirmar e Entrar no Universo</button>
+            
+            <button type="button" class="btn-cancelar-criacao" onclick="voltarParaSelecao()">⬅ Cancelar Operação</button>
+        </div>
+    </div>
+
+    <div id="transicao-container">
+        <img id="imagem-transicao" src="" alt="Sincronizando...">
+        <div class="laser-scanner-linha"></div>
+    </div>
+
+    <div id="game-panel">
+        <button id="btn-toggle-menu" onclick="toggleMenu()">☰</button>
+        <div id="menu-overlay" onclick="fecharMenu()"></div>
+
+        <nav class="hud-sidebar">
+            <div class="sidebar-brand">THE FEED</div>
+            <ul class="sidebar-menu">
+    <li data-aba="mundo" onclick="mudarCategoria('mundo')">🌍 Mundo</li>
+    <li data-aba="personagem" onclick="mudarCategoria('personagem')">👤 Personagem</li>
+    <li data-aba="social" onclick="mudarCategoria('social')">👥 Social</li>
+    <li data-aba="loja" onclick="mudarCategoria('loja')">🛒 Loja</li>
+</ul>
+        </nav>
+
+        <main id="main-content" class="hud-center">
+            <div id="mapa-container"></div>
+            <div id="painel-ativo"></div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/intro.js"></script>
+    <script src="js/countries.js"></script>
+    <script src="js/login.js"></script> 
+    <script src="js/transicao.js"></script>
+    <script type="module" src="js/game.js"></script>
+</body>
+</html>
