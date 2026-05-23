@@ -296,6 +296,36 @@ window.selecionarLocal = async function(tipo, id, nome, cidade, estado, pais) {
     }
 };
 
+window.abrirPersonagem = async function() {
+    // Fecha o menu principal (opcional)
+    // toggleMenu();
+    
+    // Carrega o dashboard
+    const { renderizarPerfil } = await import('./personagem/perfil.js');
+    const dashboardHtml = renderizarPerfil();
+    
+    const dashboardContainer = document.getElementById('personagem-dashboard');
+    if (dashboardContainer) {
+        dashboardContainer.innerHTML = dashboardHtml;
+        dashboardContainer.style.display = 'block';
+    }
+    
+    // Mostra os submenus (Atributos, Inventário, etc.)
+    const submenuContainer = document.getElementById('submenu-container');
+    const submenu = document.getElementById('submenu');
+    
+    if (submenu && submenuContainer) {
+        submenu.innerHTML = `
+            <li onclick="selecionarItem('atributos')">📊 Atributos</li>
+            <li onclick="selecionarItem('inventario')">🎒 Inventário</li>
+            <li onclick="selecionarItem('habilidades')">⚡ Habilidades</li>
+            <li onclick="selecionarItem('estatisticas')">📈 Estatísticas</li>
+            <li onclick="selecionarItem('idiomas')">🗣️ Idiomas</li>
+        `;
+        submenuContainer.style.display = 'block';
+    }
+};
+
 window.voltarParaCidade = async function(cidade, estado, pais) {
     const { renderizarMapaCidade } = await import('./mundo/mapaCidade.js');
     const container = document.getElementById('mapa-container');

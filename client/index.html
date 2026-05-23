@@ -139,14 +139,26 @@
         <div id="menu-overlay" onclick="fecharMenu()"></div>
 
         <nav class="hud-sidebar">
-            <div class="sidebar-brand">THE FEED</div>
-            <ul class="sidebar-menu">
-    <li data-aba="mundo" onclick="mudarCategoria('mundo')">🌍 Mundo</li>
-    <li data-aba="personagem" onclick="mudarCategoria('personagem')">👤 Personagem</li>
-    <li data-aba="social" onclick="mudarCategoria('social')">👥 Social</li>
-    <li data-aba="loja" onclick="mudarCategoria('loja')">🛒 Loja</li>
-</ul>
-        </nav>
+    <div class="sidebar-brand">THE FEED</div>
+    
+    <!-- Menu principal (Mundo, Personagem, Social, Loja) -->
+    <ul class="sidebar-menu" id="main-menu">
+        <li data-aba="mundo" onclick="mudarCategoria('mundo')">🌍 Mundo</li>
+        <li data-aba="personagem" onclick="abrirPersonagem()">👤 Personagem</li>
+        <li data-aba="social" onclick="mudarCategoria('social')">👥 Social</li>
+        <li data-aba="loja" onclick="mudarCategoria('loja')">🛒 Loja</li>
+    </ul>
+    
+    <!-- Container para o dashboard do personagem (aparece quando clica em Personagem) -->
+    <div id="personagem-dashboard" style="display: none; margin-top: 20px; border-top: 1px solid #00f3ff; padding-top: 15px;">
+        <!-- O dashboard será injetado aqui -->
+    </div>
+    
+    <!-- Container para os submenus (Atributos, Inventário, etc.) -->
+    <div id="submenu-container" style="display: none; margin-top: 10px;">
+        <ul class="sidebar-menu" id="submenu"></ul>
+    </div>
+</nav>
 
         <main id="main-content" class="hud-center">
             <div id="mapa-container"></div>
