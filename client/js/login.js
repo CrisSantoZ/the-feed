@@ -482,7 +482,7 @@ window.socket.on('jogoIniciadoSucesso', (dadosIniciais) => {
         console.log(`[THE FEED] Personagem logado: ${dadosIniciais.nome} (ID: ${dadosIniciais.id})`);
     }
 
- sessionStorage.setItem('playerPais', 'Brasil');
+ sessionStorage.setItem('playerPais', 'brasil');
         sessionStorage.setItem('playerEstado', 'São Paulo');
         sessionStorage.setItem('playerCidade', 'São Paulo');
         sessionStorage.setItem('playerDinheiro', 150);

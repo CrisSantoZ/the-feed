@@ -204,7 +204,7 @@ export function initMundo() {
         point.userData = { id: pais.id, nome: pais.nome, cor: pais.cor, bandeira: pais.bandeira };
         pontosGroup.add(point);
 
-        const playerPais = sessionStorage.getItem('playerPais') || 'brasil';
+        const playerPais = (sessionStorage.getItem('playerPais') || 'brasil').toLowerCase();
 
 if (pais.id === playerPais) {
     // Aumenta o ponto do país atual
