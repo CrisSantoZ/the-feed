@@ -137,28 +137,61 @@ function calcularXPProximo() {
     return nivel * 1000;
 }
 
-function mostrarMenu(menuId) {
-    menuAtual = menuId;
-    const itens = menus[menuId];
-    if (!itens) return;
+// Versão para o sidebar (mais compacta)
+export function renderizarPerfilSidebar() {
+    const playerNome = sessionStorage.getItem('playerNome') || 'Carregando...';
+    const playerSobrenome = sessionStorage.getItem('playerSobrenome') || '';
+    const avatarUrl = sessionStorage.getItem('avatarUrl') || '';
+    const dinheiro = sessionStorage.getItem('playerDinheiro') || 0;
+    const playerCidade = sessionStorage.getItem('playerCidade') || 'São Paulo';
     
-    const sidebarMenu = document.querySelector('.sidebar-menu');
-    if (sidebarMenu) {
-        // Se for o menu personagem, renderiza o dashboard + links
-        if (menuId === 'personagem') {
-            import('./personagem/perfil.js').then(module => {
-                const dashboardHtml = module.renderizarPerfilSidebar();
-                sidebarMenu.innerHTML = `
-                    <div class="personagem-dashboard" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #00f3ff;">
-                        ${dashboardHtml}
-                    </div>
-                    ${itens.map(item => `<li onclick="selecionarItem('${item.id}')">${item.nome}</li>`).join('')}
-                `;
-            });
-        } else {
-            sidebarMenu.innerHTML = itens.map(item => `
-                <li onclick="selecionarItem('${item.id}')">${item.nome}</li>
-            `).join('');
-        }
-    }
+    // Dados mock (depois você conecta com o backend)
+    const fome = 30;
+    const sede = 45;
+    const energia = 80;
+    
+    return `
+        <div style="text-align: center; padding: 5px;">
+            <div style="width: 60px; height: 60px; border-radius: 50%; overflow: hidden; border: 2px solid #00f3ff; margin: 0 auto 10px auto;">
+                <img src="${avatarUrl}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://via.placeholder.com/60'">
+            </div>
+            <h3 style="color: #fff; margin: 0 0 5px 0; font-size: 14px;">${playerNome} ${playerSobrenome}</h3>
+            <p style="color: #888; margin: 0 0 10px 0; font-size: 11px;">⭐ Nível 5</p>
+            
+            <div style="margin-bottom: 8px; text-align: left;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                    <span style="color: #888; font-size: 10px;">🍔 Fome</span>
+                    <span style="color: #fff; font-size: 10px;">${fome}%</span>
+                </div>
+                <div style="width: 100%; height: 4px; background: #1a1a2a; border-radius: 2px;">
+                    <div style="width: ${fome}%; height: 100%; background: #ff0055; border-radius: 2px;"></div>
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 8px; text-align: left;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                    <span style="color: #888; font-size: 10px;">💧 Sede</span>
+                    <span style="color: #fff; font-size: 10px;">${sede}%</span>
+                </div>
+                <div style="width: 100%; height: 4px; background: #1a1a2a; border-radius: 2px;">
+                    <div style="width: ${sede}%; height: 100%; background: #00f3ff; border-radius: 2px;"></div>
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 8px; text-align: left;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+                    <span style="color: #888; font-size: 10px;">⚡ Energia</span>
+                    <span style="color: #fff; font-size: 10px;">${energia}%</span>
+                </div>
+                <div style="width: 100%; height: 4px; background: #1a1a2a; border-radius: 2px;">
+                    <div style="width: ${energia}%; height: 100%; background: #00ff66; border-radius: 2px;"></div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #333;">
+                <p style="color: #00f3ff; margin: 5px 0; font-size: 11px;">💰 C$$ ${dinheiro}</p>
+                <p style="color: #888; margin: 5px 0; font-size: 10px;">📍 ${playerCidade}</p>
+            </div>
+        </div>
+    `;
 }

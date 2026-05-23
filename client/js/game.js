@@ -183,10 +183,8 @@ function mostrarMenu(menuId) {
     if (sidebarMenu) {
         // Se for o menu personagem, renderiza o dashboard + links
         if (menuId === 'personagem') {
-            // Renderiza o dashboard diretamente no sidebar
             import('./personagem/perfil.js').then(module => {
                 const dashboardHtml = module.renderizarPerfilSidebar();
-                // Insere o dashboard no topo do sidebar
                 sidebarMenu.innerHTML = `
                     <div class="personagem-dashboard" style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #00f3ff;">
                         ${dashboardHtml}
