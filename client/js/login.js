@@ -474,22 +474,24 @@ socket.on('exibirCriacaoForcado', () => {
 window.socket.on('jogoIniciadoSucesso', (dadosIniciais) => {
     console.log("[THE FEED] SINAL RECEBIDO: Abrindo HUD de jogo...");
     
-    // ========== SALVAR ID DO PERSONAGEM ==========
+    // ========== SALVAR DADOS DO PERSONAGEM ==========
     if (dadosIniciais && dadosIniciais.id) {
         sessionStorage.setItem('playerId', dadosIniciais.id);
         sessionStorage.setItem('playerNome', dadosIniciais.nome);
         sessionStorage.setItem('playerSobrenome', dadosIniciais.sobrenome);
+        sessionStorage.setItem('avatarUrl', dadosIniciais.avatarUrl);  // ← LINHA ADICIONADA!
         console.log(`[THE FEED] Personagem logado: ${dadosIniciais.nome} (ID: ${dadosIniciais.id})`);
+        console.log(`[THE FEED] Avatar URL: ${dadosIniciais.avatarUrl}`);
     }
 
- sessionStorage.setItem('playerPais', 'Brasil');
-        sessionStorage.setItem('playerEstado', 'São Paulo');
-        sessionStorage.setItem('playerCidade', 'São Paulo');
-        sessionStorage.setItem('playerDinheiro', 150);
+    sessionStorage.setItem('playerPais', 'Brasil');
+    sessionStorage.setItem('playerEstado', 'São Paulo');
+    sessionStorage.setItem('playerCidade', 'São Paulo');
+    sessionStorage.setItem('playerDinheiro', 150);
 
-         if (window.socket) {
-            window.socket.emit('setPlayerName', dadosIniciais.nome);
-        }
+    if (window.socket) {
+        window.socket.emit('setPlayerName', dadosIniciais.nome);
+    }
 
     const containers = ['selecao-container', 'autenticacao-container', 'criacao-container', 'transicao-container'];
     containers.forEach(id => {
