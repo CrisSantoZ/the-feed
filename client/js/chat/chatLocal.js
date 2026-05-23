@@ -33,6 +33,10 @@ export function iniciarChatLocal(localId, localNome, localTipo) {
 }
 
 function criarChatContainer() {
+    // Remove container antigo se existir
+    const oldContainer = document.getElementById('chat-local-container');
+    if (oldContainer) oldContainer.remove();
+    
     const chatContainer = document.createElement('div');
     chatContainer.id = 'chat-local-container';
     chatContainer.style.cssText = `
@@ -50,7 +54,6 @@ function criarChatContainer() {
         backdrop-filter: blur(10px);
         font-family: 'JetBrains Mono', monospace;
         box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
-        transition: all 0.3s ease;
     `;
     
     chatContainer.innerHTML = `
@@ -68,8 +71,8 @@ function criarChatContainer() {
                 <span style="color: #888; font-size: 10px; margin-left: 8px;">${localNomeCache}</span>
             </div>
             <div>
-                <button id="minimizar-chat" style="background: none; border: none; color: #00f3ff; cursor: pointer; font-size: 16px; margin-right: 8px;">−</button>
-                <button id="fechar-chat" style="background: none; border: none; color: #ff0055; cursor: pointer;">✖</button>
+                <button id="minimizar-chat" style="background: none; border: none; color: #00f3ff; cursor: pointer; font-size: 18px; font-weight: bold; padding: 4px 8px;">−</button>
+                <button id="fechar-chat" style="background: none; border: none; color: #ff0055; cursor: pointer; font-size: 16px; padding: 4px 8px;">✖</button>
             </div>
         </div>
         
@@ -126,56 +129,77 @@ function criarChatContainer() {
 
 function minimizarChat() {
     const container = document.getElementById('chat-local-container');
+    if (!container) return;
     
-    // Minimizar
-    container.style.width = '60px';
-    container.style.height = '60px';
-    container.style.right = '20px';
-    container.style.bottom = '20px';
-    container.style.borderRadius = '30px';
-    container.style.overflow = 'hidden';
-    container.style.cursor = 'pointer';
-    
-    // Esconder todo o conteúdo interno
-    container.innerHTML = `
-        <div id="chat-mini" style="
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: rgba(0, 243, 255, 0.15);
-            border-radius: 30px;
-            transition: all 0.3s;
-        ">
-            <span style="color: #00f3ff; font-size: 28px;">💬</span>
-            <span id="chat-mini-contador" style="color: #fff; font-size: 11px; margin-top: 2px;">0</span>
-        </div>
-    `;
-    
-    document.getElementById('chat-mini').onclick = () => restaurarChat();
-    
-    chatMinimizado = true;
+    if (!chatMinimizado) {
+        // Salvar o conteúdo atual para restaurar depois
+        const conteudoSalvo = container.innerHTML;
+        container.setAttribute('data-conteudo', conteudoSalvo);
+        
+        // Minimizar
+        container.style.width = '60px';
+        container.style.height = '60px';
+        container.style.right = '20px';
+        container.style.bottom = '20px';
+        container.style.borderRadius = '30px';
+        container.style.overflow = 'hidden';
+        
+        container.innerHTML = `
+            <div id="chat-mini" style="
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                background: rgba(0, 243, 255, 0.15);
+                border-radius: 30px;
+                cursor: pointer;
+            ">
+                <span style="color: #00f3ff; font-size: 28px;">💬</span>
+                <span id="chat-mini-contador" style="color: #fff; font-size: 11px; margin-top: 2px;">0</span>
+            </div>
+        `;
+        
+        document.getElementById('chat-mini').onclick = () => restaurarChat();
+        
+        chatMinimizado = true;
+    }
 }
 
 function restaurarChat() {
     const container = document.getElementById('chat-local-container');
-    container.style.width = '320px';
-    container.style.height = '400px';
-    container.style.right = '20px';
-    container.style.bottom = '80px';
-    container.style.borderRadius = '12px';
-    container.style.cursor = 'default';
-    container.style.overflow = 'visible';
+    if (!container) return;
     
-    // Recriar o chat completo
-    criarChatContainer();
-    
-    // Reentrar na sala
-    const socket = window.socket;
-    if (socket && salaAtual) {
-        socket.emit('entrarSala', salaAtual);
+    const conteudoSalvo = container.getAttribute('data-conteudo');
+    if (conteudoSalvo) {
+        container.style.width = '320px';
+        container.style.height = '400px';
+        container.style.right = '20px';
+        container.style.bottom = '80px';
+        container.style.borderRadius = '12px';
+        container.style.overflow = 'visible';
+        
+        container.innerHTML = conteudoSalvo;
+        container.removeAttribute('data-conteudo');
+        
+        // Reconectar eventos
+        document.getElementById('minimizar-chat').onclick = () => minimizarChat();
+        document.getElementById('fechar-chat').onclick = () => fecharChatLocal();
+        document.getElementById('enviar-mensagem').onclick = () => enviarMensagem();
+        
+        const input = document.getElementById('chat-input');
+        if (input) {
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') enviarMensagem();
+            });
+        }
+        
+        // Reentrar na sala para restaurar contador
+        const socket = window.socket;
+        if (socket && salaAtual) {
+            socket.emit('entrarSala', salaAtual);
+        }
     }
     
     chatMinimizado = false;
@@ -185,7 +209,7 @@ function notificarNovaMensagem() {
     if (chatMinimizado) {
         const miniDiv = document.getElementById('chat-mini');
         if (miniDiv) {
-            miniDiv.style.background = 'rgba(255, 0, 85, 0.5)';
+            miniDiv.style.background = 'rgba(255, 0, 85, 0.6)';
             setTimeout(() => {
                 if (chatMinimizado && miniDiv) {
                     miniDiv.style.background = 'rgba(0, 243, 255, 0.15)';
