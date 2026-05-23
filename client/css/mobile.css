@@ -424,3 +424,43 @@
         font-size: 9px !important;
     }
 }
+
+/* Ajustes para tela de estado (cidades) no mobile */
+@media (max-width: 768px) {
+    .estado-container {
+        padding: 10px !important;
+    }
+    
+    .estado-header {
+        margin-bottom: 12px !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+    
+    .estado-btn-voltar {
+        padding: 4px 10px !important;
+        font-size: 11px !important;
+    }
+    
+    .estado-titulo {
+        font-size: 14px !important;
+        text-align: center !important;
+        flex: 1 !important;
+    }
+    
+    .estado-btn-fechar {
+        font-size: 16px !important;
+        padding: 4px 8px !important;
+    }
+    
+    .cidades-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important;
+        gap: 8px !important;
+        margin-top: 15px !important;
+    }
+    
+    .cidade-card {
+        padding: 8px !important;
+        font-size: 11px !important;
+    }
+}
