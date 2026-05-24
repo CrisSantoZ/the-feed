@@ -4,6 +4,11 @@
 
 let modalViagemAberto = false;
 
+// Função para obter o símbolo da moeda atual
+function getSimboloMoeda() {
+    return sessionStorage.getItem('simboloMoeda') || 'R$';
+}
+
 /**
  * Abre o modal de viagem para um destino
  * @param {string} tipo - 'pais', 'estado', 'cidade'
@@ -23,6 +28,7 @@ export function abrirModalViagem(tipo, nomeDestino, dados = {}) {
     
     // Opções de transporte baseado no tipo
     const opcoesTransporte = getOpcoesTransporte(tipo);
+    const simbolo = getSimboloMoeda();
     
     // Criar modal
     const modal = document.createElement('div');
@@ -81,7 +87,7 @@ export function abrirModalViagem(tipo, nomeDestino, dados = {}) {
                 ">
                     ${opcoesTransporte.map(op => `
                         <option value="${op.valor}" data-custo="${op.custo}" data-duracao="${op.duracao}">
-                            ${op.icone} ${op.nome} - C$${op.custo} - ${op.duracao}
+                            ${op.icone} ${op.nome} - ${simbolo} ${op.custo} - ${op.duracao}
                         </option>
                     `).join('')}
                 </select>
@@ -93,9 +99,9 @@ export function abrirModalViagem(tipo, nomeDestino, dados = {}) {
                 border-radius: 8px;
                 margin-bottom: 20px;
             ">
-                <p style="color: #888; margin: 5px 0;">💰 Custo: <span id="custo-viagem">0</span> C$</p>
+                <p style="color: #888; margin: 5px 0;">💰 Custo: <span id="custo-viagem">0</span> ${simbolo}</p>
                 <p style="color: #888; margin: 5px 0;">⏱️ Duração: <span id="duracao-viagem">0</span></p>
-                <p style="color: #888; margin: 5px 0;">💵 Seu saldo: <span id="saldo-atual">0</span> C$</p>
+                <p style="color: #888; margin: 5px 0;">💵 Seu saldo: <span id="saldo-atual">0</span> ${simbolo}</p>
             </div>
             
             <button id="confirmar-viagem" style="
@@ -191,7 +197,7 @@ export function abrirModalViagem(tipo, nomeDestino, dados = {}) {
             // Fallback mock (para teste sem backend)
             modal.remove();
             modalViagemAberto = false;
-            alert(`✈️ Viajando para ${nomeDestino} de ${transporte}! (Custo: C$${custo})`);
+            alert(`✈️ Viajando para ${nomeDestino} de ${transporte}! (Custo: ${simbolo} ${custo})`);
         }
     };
     
@@ -228,6 +234,7 @@ function getOpcoesTransporte(tipo) {
 
 function iniciarBarraProgresso(destino, duracaoHoras, custo, aoConcluir) {
     const duracaoSegundos = Math.min(10, Math.max(3, Math.floor(duracaoHoras * 2))); // Mock: 3-10 segundos
+    const simbolo = getSimboloMoeda();
     
     const modal = document.createElement('div');
     modal.style.cssText = `
@@ -249,7 +256,7 @@ function iniciarBarraProgresso(destino, duracaoHoras, custo, aoConcluir) {
             <div style="font-size: 48px; margin-bottom: 20px;">✈️</div>
             <h2 style="color: #00f3ff;">Viajando...</h2>
             <p style="color: #fff;">Destino: <strong style="color: #ff0055;">${destino}</strong></p>
-            <p style="color: #888;">Custo: C$${custo}</p>
+            <p style="color: #888;">Custo: ${simbolo} ${custo}</p>
             <div style="width: 100%; height: 8px; background: #1a1a2a; border-radius: 4px; overflow: hidden; margin: 20px 0;">
                 <div id="barra-viagem" style="width: 0%; height: 100%; background: linear-gradient(90deg, #00f3ff, #ff0055); transition: width 1s linear;"></div>
             </div>
@@ -461,4 +468,3 @@ export function mostrarModalConfirmacao(titulo, mensagem) {
         };
     });
 }
-
