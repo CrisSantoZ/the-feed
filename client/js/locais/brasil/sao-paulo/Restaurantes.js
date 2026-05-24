@@ -17,7 +17,7 @@ export const restaurantesSP = {
                 { id: "virado", nome: "🥘 Virado à Paulista", descricao: "Arroz, feijão, bisteca suína, ovo frito, couve refogada, farofa de banana e banana à milanesa. O prato mais tradicional de SP!", preco: 45, recuperacao: { fome: 50, energia: 15, felicidade: 10 }, calorias: 850 },
                 { id: "feijoada", nome: "🍲 Feijoada Completa", descricao: "Feijoada com carnes nobres, servida com arroz, couve, farofa, laranja e torresmo. Serve 2 pessoas.", preco: 55, recuperacao: { fome: 60, energia: 20, felicidade: 15 }, calorias: 1200 },
                 { id: "pastel", nome: "🥟 Pastel de Feira", descricao: "Pastel crocante recheado a escolha.", preco: 12, recuperacao: { fome: 20, felicidade: 5 }, sabores: ["carne", "queijo", "pizza", "palmito"] },
-                { id: "caldo-cana", nome: "🥤 Caldo de Cana", descricao: "Caldo de cana natural com limão.", preco: 8, recuperacao: { sede: 25, energia: 5 } }
+                { id: "caldo-cana", nome: "🥤 Caldo de Cana", descricao: "Caldo de cana natural com limão.", preco: 8, recuperacao: { sede: 25, energia: 5, fome: 0 } }
             ]
         },
         "jardins-ristorante": {
