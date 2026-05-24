@@ -7,7 +7,7 @@ export async function processarPedido(playerId, restaurante, pratoId) {
         return { sucesso: false, mensagem: "Prato não encontrado!" };
     }
     
-    const simbolo = getSimboloMoeda();
+    const simbolo = window.getSimboloMoeda();
     
     // Verificar dinheiro (via socket)
     const saldo = await verificarSaldo(playerId);
@@ -66,8 +66,29 @@ async function processarCompraEfeitos(playerId, pratoNome, preco, recuperacao) {
         
         socket.once('comidaConsumida', (data) => {
             console.log('[COMER] Efeitos aplicados:', data);
-            // Atualizar interface se houver elementos
-            atualizarInterface(data);
+            
+            // Atualiza o sessionStorage
+            if (data.saldoRestante !== undefined) {
+                sessionStorage.setItem('playerDinheiro', data.saldoRestante);
+            }
+            if (data.novaFome !== undefined) {
+                sessionStorage.setItem('playerFome', data.novaFome);
+            }
+            if (data.novaSede !== undefined) {
+                sessionStorage.setItem('playerSede', data.novaSede);
+            }
+            if (data.novaEnergia !== undefined) {
+                sessionStorage.setItem('playerEnergia', data.novaEnergia);
+            }
+            
+            // Atualiza a interface usando a função global do dashboard
+            if (typeof window.atualizarDashboard === 'function') {
+                window.atualizarDashboard(data);
+            } else {
+                // Fallback: tenta atualizar diretamente
+                atualizarInterface(data);
+            }
+            
             resolve({ sucesso: true, saldoRestante: data.saldoRestante });
         });
         
@@ -81,16 +102,16 @@ async function processarCompraEfeitos(playerId, pratoNome, preco, recuperacao) {
 }
 
 function atualizarInterface(data) {
-    // Atualiza elementos de status se existirem
+    // Fallback: atualiza elementos diretamente se existirem
     const fomeElement = document.getElementById('player-fome');
+    const sedeElement = document.getElementById('player-sede');
     const energiaElement = document.getElementById('player-energia');
-    const felicidadeElement = document.getElementById('player-felicidade');
     const saldoElement = document.getElementById('player-dinheiro');
     
-    if (fomeElement) fomeElement.textContent = data.novaFome || '?';
-    if (energiaElement) energiaElement.textContent = data.novaEnergia || '?';
-    if (felicidadeElement) felicidadeElement.textContent = data.novaFelicidade || '?';
-    if (saldoElement) saldoElement.textContent = data.saldoRestante || '?';
+    if (fomeElement && data.novaFome !== undefined) fomeElement.textContent = data.novaFome + '%';
+    if (sedeElement && data.novaSede !== undefined) sedeElement.textContent = data.novaSede + '%';
+    if (energiaElement && data.novaEnergia !== undefined) energiaElement.textContent = data.novaEnergia + '%';
+    if (saldoElement && data.saldoRestante !== undefined) saldoElement.textContent = data.saldoRestante;
     
     // Disparar evento para atualizar outros componentes
     window.dispatchEvent(new CustomEvent('statusAtualizado', { detail: data }));
