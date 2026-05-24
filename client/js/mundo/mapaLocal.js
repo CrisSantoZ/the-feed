@@ -2,9 +2,9 @@
    MAPA LOCAL - EXIBE INTERAÇÕES DO LOCAL
    ========================================================================== */
 
-function getSimboloMoeda() {
+window.getSimboloMoeda = function() {
     return sessionStorage.getItem('simboloMoeda') || 'R$';
-}
+};
 
    export async function renderizarMapaLocal(paisNome, estadoNome, cidadeNome, localTipo, localId, localNome) {
     let localData = null;
