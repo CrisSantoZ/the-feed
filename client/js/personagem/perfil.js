@@ -125,10 +125,8 @@ export function renderizarPerfil() {
     }
 
     // Agendar sincronização após o DOM carregar
-    setTimeout(() => {
-        sincronizarStatus();
-        configurarEventosSocket();
-    }, 500);
+    sincronizarStatus();
+    configurarEventosSocket();
 
     return `
         <div style="padding: 10px;">
@@ -198,10 +196,8 @@ export function renderizarPerfilSidebar() {
         urlFinal = gerarFallbackAvatar(playerNome, playerSobrenome);
     }
 
-    setTimeout(() => {
-        sincronizarStatus();
-        configurarEventosSocket();
-    }, 500);
+    sincronizarStatus();
+    configurarEventosSocket();
 
     return `
         <div style="text-align: center; padding: 5px;">
