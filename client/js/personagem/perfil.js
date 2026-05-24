@@ -25,6 +25,7 @@ export function renderizarPerfil() {
     const playerEstado = sessionStorage.getItem('playerEstado') || 'São Paulo';
     const playerCidade = sessionStorage.getItem('playerCidade') || 'São Paulo';
     const simboloMoeda = sessionStorage.getItem('simboloMoeda') || 'R$';
+    
     // Valida a URL do avatar
     let urlFinal = avatarUrl;
     if (!isUrlValida(avatarUrl)) {
@@ -75,7 +76,7 @@ export function renderizarPerfil() {
             </div>
             
             <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #333;">
-                <p style="color: #00f3ff; margin: 5px 0; font-size: 11px;">💰 C$ ${dinheiro}</p>
+                <p style="color: #00f3ff; margin: 5px 0; font-size: 11px;">💰 ${simboloMoeda} ${dinheiro}</p>
                 <p style="color: #888; margin: 5px 0; font-size: 10px;">📍 ${escapeHtml(playerCidade)}, ${escapeHtml(playerEstado)}</p>
             </div>
         </div>
@@ -89,6 +90,7 @@ export function renderizarPerfilSidebar() {
     let avatarUrl = sessionStorage.getItem('avatarUrl') || '';
     const dinheiro = sessionStorage.getItem('playerDinheiro') || 0;
     const playerCidade = sessionStorage.getItem('playerCidade') || 'São Paulo';
+    const simboloMoeda = sessionStorage.getItem('simboloMoeda') || 'R$';
     
     // Valida a URL do avatar
     let urlFinal = avatarUrl;
@@ -141,7 +143,7 @@ export function renderizarPerfilSidebar() {
             </div>
             
             <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #333;">
-                <p style="color: #00f3ff; margin: 5px 0; font-size: 11px;">💰 C$ ${dinheiro}</p>
+                <p style="color: #00f3ff; margin: 5px 0; font-size: 11px;">💰 ${simboloMoeda} ${dinheiro}</p>
                 <p style="color: #888; margin: 5px 0; font-size: 10px;">📍 ${escapeHtml(playerCidade)}</p>
             </div>
         </div>
