@@ -174,6 +174,9 @@ function exibirTelaSelecao(personagens) {
         listaHtml.innerHTML = '';
 
         personagens.forEach(p => {
+            // Tenta pegar o símbolo da moeda do personagem ou usa R$ como fallback
+            const simbolo = p.simboloMoeda || 'R$';
+            
             listaHtml.innerHTML += `
                 <div class="card-personagem-wrapper" style="position: relative; display: flex; align-items: center; margin-bottom: 10px;">
                     <div class="card-personagem" onclick="selecionarParaJogar('${p._id}')" style="flex: 1;">
@@ -181,7 +184,7 @@ function exibirTelaSelecao(personagens) {
                         <div class="info-personagem">
                             <h3>${p.nome} ${p.sobrenome}</h3>
                             <p class="tag-faceclaim">Faceclaim: @${p.faceclaim}</p>
-                            <p>Emprego: ${p.emprego} | Carteira: C$ ${p.dinheiro}</p>
+                            <p>Emprego: ${p.emprego} | Carteira: ${simbolo} ${p.dinheiro}</p>
                         </div>
                     </div>
                     
