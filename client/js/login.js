@@ -7,6 +7,44 @@ const socket = window.socket;
 // ==================== DADOS DE PAÍSES ====================
 let paisesData = [];
 
+// ==================== GERENCIAMENTO DE SESSÃO ====================
+
+// Salvar apenas o playerId no localStorage (para reconexão)
+function salvarPlayerId(playerId) {
+    if (playerId) {
+        localStorage.setItem('playerId', playerId);
+        console.log('[SESSAO] PlayerId salvo no localStorage:', playerId);
+    }
+}
+
+// Limpar sessão (logout)
+function limparSessao() {
+    localStorage.removeItem('playerId');
+    sessionStorage.clear();
+    console.log('[SESSAO] Sessão limpa');
+}
+
+// Verificar se existe sessão salva
+function verificarSessaoSalva() {
+    const playerId = localStorage.getItem('playerId');
+    if (playerId) {
+        console.log('[SESSAO] PlayerId encontrado no localStorage:', playerId);
+        return playerId;
+    }
+    return null;
+}
+
+// Tentar reconexão automática
+function tentarReconexao() {
+    const playerId = verificarSessaoSalva();
+    if (playerId && socket) {
+        console.log('[SESSAO] Tentando reconexão automática...');
+        socket.emit('entrarNoJogo', { playerId: playerId });
+        return true;
+    }
+    return false;
+}
+
 /* ==========================================================================
    FUNÇÕES DE AUTENTICAÇÃO
    ========================================================================== */
@@ -284,9 +322,8 @@ function fecharAutenticacao() {
 }
 
 function voltarParaLogin() {
-    sessionStorage.removeItem('accountId');
-    sessionStorage.removeItem('username');
-
+    limparSessao();
+    
     document.getElementById('selecao-container').style.display = 'none';
     document.getElementById('selecao-container').classList.remove('mostrar');
     document.getElementById('autenticacao-container').style.display = 'block';
@@ -484,15 +521,18 @@ window.socket.on('jogoIniciadoSucesso', (dadosIniciais) => {
         sessionStorage.setItem('playerSobrenome', dadosIniciais.sobrenome);
         sessionStorage.setItem('avatarUrl', dadosIniciais.avatarUrl);
         
-        // ========== NOVO: SALVAR INFORMAÇÕES DE MOEDA ==========
+        // ========== SALVAR INFORMAÇÕES DE MOEDA ==========
         sessionStorage.setItem('simboloMoeda', dadosIniciais.simboloMoeda || 'R$');
         sessionStorage.setItem('moeda', dadosIniciais.moeda || 'BRL');
         sessionStorage.setItem('playerDinheiro', dadosIniciais.dinheiro || 150);
         
+        // ========== SALVAR APENAS O PLAYERID NO LOCALSTORAGE (RECONEXÃO) ==========
+        salvarPlayerId(dadosIniciais.id);
+        
         console.log(`[THE FEED] Personagem logado: ${dadosIniciais.nome} (ID: ${dadosIniciais.id})`);
         console.log(`[THE FEED] Avatar URL: ${dadosIniciais.avatarUrl}`);
         console.log(`[THE FEED] Moeda: ${dadosIniciais.simboloMoeda} (${dadosIniciais.moeda})`);
-        console.log(`[THE FEED} Dinheiro: ${dadosIniciais.simboloMoeda} ${dadosIniciais.dinheiro}`);
+        console.log(`[THE FEED] Dinheiro: ${dadosIniciais.simboloMoeda} ${dadosIniciais.dinheiro}`);
     }
 
     // Mantém os valores padrão para localização (depois virão do backend)
@@ -559,4 +599,11 @@ socket.on('erroServidor', (mensagemDeErro) => {
     alert(`🚨 ALERTA DO SISTEMA:\n${mensagemDeErro}`);
     alternarBloqueioCampos('cadastro', false);
     alternarBloqueioCampos('login', false);
+});
+
+// ==================== INICIALIZAÇÃO ====================
+// Tentar reconexão automática ao carregar a página
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('[THE FEED] Página carregada, verificando sessão...');
+    tentarReconexao();
 });
