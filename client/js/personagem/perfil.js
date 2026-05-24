@@ -315,11 +315,18 @@ window.atualizarDashboard = function(dados) {
         if (fomeSpan) fomeSpan.textContent = Math.round(dados.novaFome) + '%';
         if (fomeSidebar) fomeSidebar.textContent = Math.round(dados.novaFome) + '%';
         
-        // ✅ CORREÇÃO: Atualiza a barra de progresso pelo ID correto
+        // ✅ CORREÇÃO: Atualiza a barra de progresso do SIDEBAR
+        const barraFomeSidebar = document.getElementById('barra-fome-sidebar');
+        if (barraFomeSidebar) {
+            barraFomeSidebar.style.width = dados.novaFome + '%';
+            console.log(`[DASHBOARD] Barra fome SIDEBAR atualizada para ${dados.novaFome}%`);
+        }
+        
+        // ✅ CORREÇÃO: Atualiza a barra de progresso principal (se existir)
         const barraFome = document.getElementById('barra-fome');
         if (barraFome) {
             barraFome.style.width = dados.novaFome + '%';
-            console.log(`[DASHBOARD] Barra fome atualizada para ${dados.novaFome}%`);
+            console.log(`[DASHBOARD] Barra fome PRINCIPAL atualizada para ${dados.novaFome}%`);
         }
         
         sessionStorage.setItem('playerFome', dados.novaFome);
@@ -331,10 +338,16 @@ window.atualizarDashboard = function(dados) {
         if (sedeSpan) sedeSpan.textContent = Math.round(dados.novaSede) + '%';
         if (sedeSidebar) sedeSidebar.textContent = Math.round(dados.novaSede) + '%';
         
+        const barraSedeSidebar = document.getElementById('barra-sede-sidebar');
+        if (barraSedeSidebar) {
+            barraSedeSidebar.style.width = dados.novaSede + '%';
+            console.log(`[DASHBOARD] Barra sede SIDEBAR atualizada para ${dados.novaSede}%`);
+        }
+        
         const barraSede = document.getElementById('barra-sede');
         if (barraSede) {
             barraSede.style.width = dados.novaSede + '%';
-            console.log(`[DASHBOARD] Barra sede atualizada para ${dados.novaSede}%`);
+            console.log(`[DASHBOARD] Barra sede PRINCIPAL atualizada para ${dados.novaSede}%`);
         }
         
         sessionStorage.setItem('playerSede', dados.novaSede);
@@ -346,10 +359,16 @@ window.atualizarDashboard = function(dados) {
         if (energiaSpan) energiaSpan.textContent = Math.round(dados.novaEnergia) + '%';
         if (energiaSidebar) energiaSidebar.textContent = Math.round(dados.novaEnergia) + '%';
         
+        const barraEnergiaSidebar = document.getElementById('barra-energia-sidebar');
+        if (barraEnergiaSidebar) {
+            barraEnergiaSidebar.style.width = dados.novaEnergia + '%';
+            console.log(`[DASHBOARD] Barra energia SIDEBAR atualizada para ${dados.novaEnergia}%`);
+        }
+        
         const barraEnergia = document.getElementById('barra-energia');
         if (barraEnergia) {
             barraEnergia.style.width = dados.novaEnergia + '%';
-            console.log(`[DASHBOARD] Barra energia atualizada para ${dados.novaEnergia}%`);
+            console.log(`[DASHBOARD] Barra energia PRINCIPAL atualizada para ${dados.novaEnergia}%`);
         }
         
         sessionStorage.setItem('playerEnergia', dados.novaEnergia);
