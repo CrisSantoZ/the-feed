@@ -297,6 +297,8 @@ function configurarEventosSocket() {
 
 // Função para atualizar o dashboard em tempo real (chamada pelo comer.js)
 window.atualizarDashboard = function(dados) {
+    console.log('[DASHBOARD] Atualizando com dados:', dados);
+    
     if (dados.saldoRestante !== undefined) {
         const dinheiroSpan = document.getElementById('player-dinheiro');
         const dinheiroSidebar = document.getElementById('player-dinheiro-sidebar');
@@ -305,17 +307,53 @@ window.atualizarDashboard = function(dados) {
         sessionStorage.setItem('playerDinheiro', dados.saldoRestante);
     }
     
-    // Atualiza necessidades
-    atualizarInterfaceNecessidades({
-        fome: dados.novaFome,
-        sede: dados.novaSede,
-        energia: dados.novaEnergia
-    });
+    // ✅ CORREÇÃO: Atualiza os spans de texto E as barras
+    if (dados.novaFome !== undefined) {
+        // Atualiza texto
+        const fomeSpan = document.getElementById('player-fome');
+        const fomeSidebar = document.getElementById('player-fome-sidebar');
+        if (fomeSpan) fomeSpan.textContent = Math.round(dados.novaFome) + '%';
+        if (fomeSidebar) fomeSidebar.textContent = Math.round(dados.novaFome) + '%';
+        
+        // ✅ CORREÇÃO: Atualiza a barra de progresso pelo ID correto
+        const barraFome = document.getElementById('barra-fome');
+        if (barraFome) {
+            barraFome.style.width = dados.novaFome + '%';
+            console.log(`[DASHBOARD] Barra fome atualizada para ${dados.novaFome}%`);
+        }
+        
+        sessionStorage.setItem('playerFome', dados.novaFome);
+    }
     
-    // Salva no sessionStorage
-    if (dados.novaFome !== undefined) sessionStorage.setItem('playerFome', dados.novaFome);
-    if (dados.novaSede !== undefined) sessionStorage.setItem('playerSede', dados.novaSede);
-    if (dados.novaEnergia !== undefined) sessionStorage.setItem('playerEnergia', dados.novaEnergia);
+    if (dados.novaSede !== undefined) {
+        const sedeSpan = document.getElementById('player-sede');
+        const sedeSidebar = document.getElementById('player-sede-sidebar');
+        if (sedeSpan) sedeSpan.textContent = Math.round(dados.novaSede) + '%';
+        if (sedeSidebar) sedeSidebar.textContent = Math.round(dados.novaSede) + '%';
+        
+        const barraSede = document.getElementById('barra-sede');
+        if (barraSede) {
+            barraSede.style.width = dados.novaSede + '%';
+            console.log(`[DASHBOARD] Barra sede atualizada para ${dados.novaSede}%`);
+        }
+        
+        sessionStorage.setItem('playerSede', dados.novaSede);
+    }
+    
+    if (dados.novaEnergia !== undefined) {
+        const energiaSpan = document.getElementById('player-energia');
+        const energiaSidebar = document.getElementById('player-energia-sidebar');
+        if (energiaSpan) energiaSpan.textContent = Math.round(dados.novaEnergia) + '%';
+        if (energiaSidebar) energiaSidebar.textContent = Math.round(dados.novaEnergia) + '%';
+        
+        const barraEnergia = document.getElementById('barra-energia');
+        if (barraEnergia) {
+            barraEnergia.style.width = dados.novaEnergia + '%';
+            console.log(`[DASHBOARD] Barra energia atualizada para ${dados.novaEnergia}%`);
+        }
+        
+        sessionStorage.setItem('playerEnergia', dados.novaEnergia);
+    }
 };
 
 // ==================== FUNÇÕES AUXILIARES ====================
