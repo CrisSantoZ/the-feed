@@ -64,11 +64,23 @@ function mostrarTelaLogin() {
     }
 }
 
+function esconderIntro() {
+    const telaIntro = document.getElementById('tela-intro');
+    if (telaIntro) {
+        telaIntro.style.display = 'none';
+        const video = document.getElementById('video-intro');
+        if (video) {
+            video.pause();
+        }
+    }
+}
+
 // Tentar reconexão automática
 function tentarReconexao() {
     const playerId = verificarSessaoSalva();
     if (playerId && socket) {
         console.log('[SESSAO] Tentando reconexão automática...');
+        esconderIntro();
         mostrarCarregamento();
         socket.emit('entrarNoJogo', { playerId: playerId });
         
