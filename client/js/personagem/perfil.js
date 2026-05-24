@@ -1,5 +1,5 @@
 // js/personagem/perfil.js
-// Dashboard do personagem (versão compacta para o sidebar)
+// Dashboard do personagem - VERSÃO CORRIGIDA COM SINCronização REAL
 
 // Fallback confiável (ui-avatars.com com as iniciais do nome)
 function gerarFallbackAvatar(nome, sobrenome) {
@@ -11,12 +11,100 @@ function gerarFallbackAvatar(nome, sobrenome) {
 function isUrlValida(url) {
     if (!url || url === 'null' || url === 'undefined') return false;
     if (!url.startsWith('http')) return false;
-    // Evita URLs quebradas do TMDB
     if (url.includes('image.tmdb.org') && !url.includes('w342')) return false;
     return true;
 }
 
+// ==================== FUNÇÕES PRINCIPAIS ====================
+
+// Sincronizar status com o backend
+async function sincronizarStatus() {
+    const playerId = sessionStorage.getItem('playerId');
+    if (!playerId) {
+        console.warn('[PERFIL] PlayerId não encontrado');
+        return false;
+    }
+    
+    const socket = window.socket;
+    if (!socket || !socket.connected) {
+        console.warn('[PERFIL] Socket não conectado');
+        return false;
+    }
+    
+    return new Promise((resolve) => {
+        socket.emit('getResumo', playerId);
+        
+        socket.once('resumoPlayer', (resumo) => {
+            if (resumo && resumo.necessidades) {
+                // Atualiza sessionStorage com valores reais do backend
+                sessionStorage.setItem('playerFome', resumo.necessidades.fome ?? 30);
+                sessionStorage.setItem('playerSede', resumo.necessidades.sede ?? 45);
+                sessionStorage.setItem('playerEnergia', resumo.necessidades.energia ?? 80);
+                
+                // Atualiza UI
+                atualizarInterfaceNecessidades({
+                    fome: resumo.necessidades.fome,
+                    sede: resumo.necessidades.sede,
+                    energia: resumo.necessidades.energia
+                });
+                
+                console.log('[PERFIL] Status sincronizado:', {
+                    fome: resumo.necessidades.fome,
+                    sede: resumo.necessidades.sede,
+                    energia: resumo.necessidades.energia
+                });
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        });
+        
+        setTimeout(() => {
+            console.warn('[PERFIL] Timeout na sincronização');
+            resolve(false);
+        }, 5000);
+    });
+}
+
+// Atualizar a interface com novos valores
+function atualizarInterfaceNecessidades(dados) {
+    // Atualiza spans de texto
+    if (dados.fome !== undefined) {
+        const fomeSpan = document.getElementById('player-fome');
+        const fomeSidebar = document.getElementById('player-fome-sidebar');
+        if (fomeSpan) fomeSpan.textContent = Math.round(dados.fome) + '%';
+        if (fomeSidebar) fomeSidebar.textContent = Math.round(dados.fome) + '%';
+        
+        // Atualiza barra de progresso corretamente
+        const barraFome = document.querySelector('#player-fome')?.closest('div')?.parentElement?.querySelector('div > div');
+        if (barraFome) barraFome.style.width = dados.fome + '%';
+    }
+    
+    if (dados.sede !== undefined) {
+        const sedeSpan = document.getElementById('player-sede');
+        const sedeSidebar = document.getElementById('player-sede-sidebar');
+        if (sedeSpan) sedeSpan.textContent = Math.round(dados.sede) + '%';
+        if (sedeSidebar) sedeSidebar.textContent = Math.round(dados.sede) + '%';
+        
+        const barraSede = document.querySelector('#player-sede')?.closest('div')?.parentElement?.querySelector('div > div');
+        if (barraSede) barraSede.style.width = dados.sede + '%';
+    }
+    
+    if (dados.energia !== undefined) {
+        const energiaSpan = document.getElementById('player-energia');
+        const energiaSidebar = document.getElementById('player-energia-sidebar');
+        if (energiaSpan) energiaSpan.textContent = Math.round(dados.energia) + '%';
+        if (energiaSidebar) energiaSidebar.textContent = Math.round(dados.energia) + '%';
+        
+        const barraEnergia = document.querySelector('#player-energia')?.closest('div')?.parentElement?.querySelector('div > div');
+        if (barraEnergia) barraEnergia.style.width = dados.energia + '%';
+    }
+}
+
+// ==================== FUNÇÃO PRINCIPAL DE RENDERIZAÇÃO ====================
+
 export function renderizarPerfil() {
+    // Busca valores do sessionStorage (ou usa fallback)
     const playerNome = sessionStorage.getItem('playerNome') || 'Carregando...';
     const playerSobrenome = sessionStorage.getItem('playerSobrenome') || '';
     let avatarUrl = sessionStorage.getItem('avatarUrl') || '';
@@ -29,11 +117,16 @@ export function renderizarPerfil() {
     const sede = sessionStorage.getItem('playerSede') || 45;
     const energia = sessionStorage.getItem('playerEnergia') || 80;
     
-    // Valida a URL do avatar
     let urlFinal = avatarUrl;
     if (!isUrlValida(avatarUrl)) {
         urlFinal = gerarFallbackAvatar(playerNome, playerSobrenome);
     }
+    
+    // Agendar sincronização após o DOM carregar
+    setTimeout(() => {
+        sincronizarStatus();
+        configurarEventosSocket();
+    }, 500);
     
     return `
         <div style="padding: 10px;">
@@ -54,7 +147,7 @@ export function renderizarPerfil() {
                     <span id="player-fome" style="color: #fff; font-size: 10px;">${fome}%</span>
                 </div>
                 <div style="width: 100%; height: 4px; background: #1a1a2a; border-radius: 2px;">
-                    <div style="width: ${fome}%; height: 100%; background: #ff0055; border-radius: 2px;"></div>
+                    <div id="barra-fome" style="width: ${fome}%; height: 100%; background: #ff0055; border-radius: 2px; transition: width 0.3s ease;"></div>
                 </div>
             </div>
             
@@ -64,7 +157,7 @@ export function renderizarPerfil() {
                     <span id="player-sede" style="color: #fff; font-size: 10px;">${sede}%</span>
                 </div>
                 <div style="width: 100%; height: 4px; background: #1a1a2a; border-radius: 2px;">
-                    <div style="width: ${sede}%; height: 100%; background: #00f3ff; border-radius: 2px;"></div>
+                    <div id="barra-sede" style="width: ${sede}%; height: 100%; background: #00f3ff; border-radius: 2px; transition: width 0.3s ease;"></div>
                 </div>
             </div>
             
@@ -74,7 +167,7 @@ export function renderizarPerfil() {
                     <span id="player-energia" style="color: #fff; font-size: 10px;">${energia}%</span>
                 </div>
                 <div style="width: 100%; height: 4px; background: #1a1a2a; border-radius: 2px;">
-                    <div style="width: ${energia}%; height: 100%; background: #00ff66; border-radius: 2px;"></div>
+                    <div id="barra-energia" style="width: ${energia}%; height: 100%; background: #00ff66; border-radius: 2px; transition: width 0.3s ease;"></div>
                 </div>
             </div>
             
@@ -86,7 +179,7 @@ export function renderizarPerfil() {
     `;
 }
 
-// Versão para o sidebar (mais compacta)
+// Versão para o sidebar
 export function renderizarPerfilSidebar() {
     const playerNome = sessionStorage.getItem('playerNome') || 'Carregando...';
     const playerSobrenome = sessionStorage.getItem('playerSobrenome') || '';
@@ -98,11 +191,15 @@ export function renderizarPerfilSidebar() {
     const sede = sessionStorage.getItem('playerSede') || 45;
     const energia = sessionStorage.getItem('playerEnergia') || 80;
     
-    // Valida a URL do avatar
     let urlFinal = avatarUrl;
     if (!isUrlValida(avatarUrl)) {
         urlFinal = gerarFallbackAvatar(playerNome, playerSobrenome);
     }
+    
+    setTimeout(() => {
+        sincronizarStatus();
+        configurarEventosSocket();
+    }, 500);
     
     return `
         <div style="text-align: center; padding: 5px;">
@@ -119,7 +216,7 @@ export function renderizarPerfilSidebar() {
                     <span id="player-fome-sidebar" style="color: #fff; font-size: 10px;">${fome}%</span>
                 </div>
                 <div style="width: 100%; height: 4px; background: #1a1a2a; border-radius: 2px;">
-                    <div style="width: ${fome}%; height: 100%; background: #ff0055; border-radius: 2px;"></div>
+                    <div id="barra-fome-sidebar" style="width: ${fome}%; height: 100%; background: #ff0055; border-radius: 2px; transition: width 0.3s ease;"></div>
                 </div>
             </div>
             
@@ -129,7 +226,7 @@ export function renderizarPerfilSidebar() {
                     <span id="player-sede-sidebar" style="color: #fff; font-size: 10px;">${sede}%</span>
                 </div>
                 <div style="width: 100%; height: 4px; background: #1a1a2a; border-radius: 2px;">
-                    <div style="width: ${sede}%; height: 100%; background: #00f3ff; border-radius: 2px;"></div>
+                    <div id="barra-sede-sidebar" style="width: ${sede}%; height: 100%; background: #00f3ff; border-radius: 2px; transition: width 0.3s ease;"></div>
                 </div>
             </div>
             
@@ -139,7 +236,7 @@ export function renderizarPerfilSidebar() {
                     <span id="player-energia-sidebar" style="color: #fff; font-size: 10px;">${energia}%</span>
                 </div>
                 <div style="width: 100%; height: 4px; background: #1a1a2a; border-radius: 2px;">
-                    <div style="width: ${energia}%; height: 100%; background: #00ff66; border-radius: 2px;"></div>
+                    <div id="barra-energia-sidebar" style="width: ${energia}%; height: 100%; background: #00ff66; border-radius: 2px; transition: width 0.3s ease;"></div>
                 </div>
             </div>
             
@@ -151,7 +248,76 @@ export function renderizarPerfilSidebar() {
     `;
 }
 
-// Função auxiliar para escapar HTML (previne XSS)
+// ==================== EVENTOS DE SOCKET ====================
+
+function configurarEventosSocket() {
+    const socket = window.socket;
+    if (!socket) return;
+    
+    // Remove listeners antigos para evitar duplicação
+    socket.off('tickAtualizacao');
+    socket.off('statusAtualizado');
+    
+    // Escuta atualizações do tick service
+    socket.on('tickAtualizacao', (data) => {
+        if (data.necessidades) {
+            const { fome, sede, energia } = data.necessidades;
+            
+            if (fome !== undefined) sessionStorage.setItem('playerFome', fome);
+            if (sede !== undefined) sessionStorage.setItem('playerSede', sede);
+            if (energia !== undefined) sessionStorage.setItem('playerEnergia', energia);
+            
+            atualizarInterfaceNecessidades({ fome, sede, energia });
+            
+            // Mostra alertas se houver
+            if (data.alertas && data.alertas.length > 0) {
+                const ultimoAlerta = data.alertas[data.alertas.length - 1];
+                if (ultimoAlerta && window.mostrarNotificacao) {
+                    window.mostrarNotificacao(ultimoAlerta.mensagem, 'warning');
+                }
+            }
+        }
+    });
+    
+    // Escuta atualizações gerais de status
+    socket.on('statusAtualizado', (data) => {
+        atualizarInterfaceNecessidades({
+            fome: data.fome,
+            sede: data.sede,
+            energia: data.energia
+        });
+    });
+    
+    console.log('[PERFIL] Eventos de socket configurados');
+}
+
+// ==================== FUNÇÃO DE ATUALIZAÇÃO GLOBAL ====================
+
+// Função para atualizar o dashboard em tempo real (chamada pelo comer.js)
+window.atualizarDashboard = function(dados) {
+    if (dados.saldoRestante !== undefined) {
+        const dinheiroSpan = document.getElementById('player-dinheiro');
+        const dinheiroSidebar = document.getElementById('player-dinheiro-sidebar');
+        if (dinheiroSpan) dinheiroSpan.textContent = dados.saldoRestante;
+        if (dinheiroSidebar) dinheiroSidebar.textContent = dados.saldoRestante;
+        sessionStorage.setItem('playerDinheiro', dados.saldoRestante);
+    }
+    
+    // Atualiza necessidades
+    atualizarInterfaceNecessidades({
+        fome: dados.novaFome,
+        sede: dados.novaSede,
+        energia: dados.novaEnergia
+    });
+    
+    // Salva no sessionStorage
+    if (dados.novaFome !== undefined) sessionStorage.setItem('playerFome', dados.novaFome);
+    if (dados.novaSede !== undefined) sessionStorage.setItem('playerSede', dados.novaSede);
+    if (dados.novaEnergia !== undefined) sessionStorage.setItem('playerEnergia', dados.novaEnergia);
+};
+
+// ==================== FUNÇÕES AUXILIARES ====================
+
 function escapeHtml(str) {
     if (!str) return '';
     return str
@@ -167,20 +333,7 @@ function calcularNivel() {
     return Math.floor(xp / 1000) + 1;
 }
 
-function criarBarraProgresso(label, valor, cor) {
-    const porcentagem = Math.min(100, Math.max(0, valor));
-    return `
-        <div style="margin-bottom: 15px;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                <span style="color: #888; font-size: 12px;">${escapeHtml(label)}</span>
-                <span style="color: #fff; font-size: 12px;">${porcentagem}%</span>
-            </div>
-            <div style="width: 100%; height: 8px; background: rgba(0,0,0,0.5); border-radius: 4px; overflow: hidden;">
-                <div style="width: ${porcentagem}%; height: 100%; background: linear-gradient(90deg, ${cor}, ${cor}88); border-radius: 4px;"></div>
-            </div>
-        </div>
-    `;
-}
+// ==================== FUNÇÕES DE BUSCA (para uso externo) ====================
 
 async function buscarNecessidades(playerId) {
     return new Promise((resolve) => {
@@ -229,61 +382,5 @@ async function buscarFinanceiro(playerId) {
     });
 }
 
-function calcularXP() {
-    return parseInt(sessionStorage.getItem('playerXP')) || 0;
-}
-
-function calcularXPProximo() {
-    const xp = parseInt(sessionStorage.getItem('playerXP')) || 0;
-    const nivel = Math.floor(xp / 1000) + 1;
-    return nivel * 1000;
-}
-
-// Função para atualizar o dashboard em tempo real (será chamada pelo comer.js)
-window.atualizarDashboard = function(dados) {
-    if (dados.saldoRestante !== undefined) {
-        const dinheiroSpan = document.getElementById('player-dinheiro');
-        const dinheiroSidebar = document.getElementById('player-dinheiro-sidebar');
-        if (dinheiroSpan) dinheiroSpan.textContent = dados.saldoRestante;
-        if (dinheiroSidebar) dinheiroSidebar.textContent = dados.saldoRestante;
-        sessionStorage.setItem('playerDinheiro', dados.saldoRestante);
-    }
-    
-    if (dados.novaFome !== undefined) {
-        const fomeSpan = document.getElementById('player-fome');
-        const fomeSidebar = document.getElementById('player-fome-sidebar');
-        if (fomeSpan) fomeSpan.textContent = dados.novaFome + '%';
-        if (fomeSidebar) fomeSidebar.textContent = dados.novaFome + '%';
-        sessionStorage.setItem('playerFome', dados.novaFome);
-    }
-    
-    if (dados.novaSede !== undefined) {
-        const sedeSpan = document.getElementById('player-sede');
-        const sedeSidebar = document.getElementById('player-sede-sidebar');
-        if (sedeSpan) sedeSpan.textContent = dados.novaSede + '%';
-        if (sedeSidebar) sedeSidebar.textContent = dados.novaSede + '%';
-        sessionStorage.setItem('playerSede', dados.novaSede);
-    }
-    
-    if (dados.novaEnergia !== undefined) {
-        const energiaSpan = document.getElementById('player-energia');
-        const energiaSidebar = document.getElementById('player-energia-sidebar');
-        if (energiaSpan) energiaSpan.textContent = dados.novaEnergia + '%';
-        if (energiaSidebar) energiaSidebar.textContent = dados.novaEnergia + '%';
-        sessionStorage.setItem('playerEnergia', dados.novaEnergia);
-    }
-    
-    // Atualiza as barras de progresso
-    if (dados.novaFome !== undefined) {
-        const barraFome = document.querySelector('#player-fome')?.parentElement?.parentElement?.querySelector('div > div');
-        if (barraFome) barraFome.style.width = dados.novaFome + '%';
-    }
-    if (dados.novaSede !== undefined) {
-        const barraSede = document.querySelector('#player-sede')?.parentElement?.parentElement?.querySelector('div > div');
-        if (barraSede) barraSede.style.width = dados.novaSede + '%';
-    }
-    if (dados.novaEnergia !== undefined) {
-        const barraEnergia = document.querySelector('#player-energia')?.parentElement?.parentElement?.querySelector('div > div');
-        if (barraEnergia) barraEnergia.style.width = dados.novaEnergia + '%';
-    }
-};
+// Exportar funções para uso externo
+export { sincronizarStatus, buscarNecessidades, buscarSaude, buscarFinanceiro };

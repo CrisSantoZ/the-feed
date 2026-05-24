@@ -1,5 +1,5 @@
 // js/actions/comer.js
-// Sistema de alimentação - processa pedidos de restaurantes
+// Sistema de alimentação - processa pedidos de restaurantes (VERSÃO CORRIGIDA)
 
 export async function processarPedido(playerId, restaurante, pratoId) {
     const prato = restaurante.cardapio.find(p => p.id === pratoId);
@@ -7,7 +7,7 @@ export async function processarPedido(playerId, restaurante, pratoId) {
         return { sucesso: false, mensagem: "Prato não encontrado!" };
     }
     
-    const simbolo = window.getSimboloMoeda();
+    const simbolo = window.getSimboloMoeda ? window.getSimboloMoeda() : (sessionStorage.getItem('simboloMoeda') || 'R$');
     
     // Verificar dinheiro (via socket)
     const saldo = await verificarSaldo(playerId);
@@ -31,12 +31,58 @@ export async function processarPedido(playerId, restaurante, pratoId) {
         return { sucesso: false, mensagem: resultado.erro };
     }
     
+    // ✅ FORÇA UMA SINCronização após comer
+    await forcarSincronizacaoStatus(playerId);
+    
     return { 
         sucesso: true, 
         mensagem: `🍽️ Você comeu ${prato.nome} e pagou ${simbolo} ${prato.preco}!`,
         recuperacao: prato.recuperacao,
         novoSaldo: resultado.saldoRestante
     };
+}
+
+// ✅ NOVA FUNÇÃO: Forçar sincronização do status após ação
+async function forcarSincronizacaoStatus(playerId) {
+    const socket = window.socket;
+    if (!socket) return;
+    
+    // Primeiro, tenta usar o resumo do jogador
+    socket.emit('getResumo', playerId);
+    socket.once('resumoPlayer', (resumo) => {
+        if (resumo && resumo.necessidades) {
+            // Atualiza sessionStorage
+            if (resumo.necessidades.fome !== undefined) {
+                sessionStorage.setItem('playerFome', resumo.necessidades.fome);
+            }
+            if (resumo.necessidades.sede !== undefined) {
+                sessionStorage.setItem('playerSede', resumo.necessidades.sede);
+            }
+            if (resumo.necessidades.energia !== undefined) {
+                sessionStorage.setItem('playerEnergia', resumo.necessidades.energia);
+            }
+            
+            // Atualiza UI se a função existir
+            if (typeof window.atualizarDashboard === 'function') {
+                window.atualizarDashboard({
+                    novaFome: resumo.necessidades.fome,
+                    novaSede: resumo.necessidades.sede,
+                    novaEnergia: resumo.necessidades.energia
+                });
+            }
+            
+            console.log('[COMER] Status sincronizado:', {
+                fome: resumo.necessidades.fome,
+                sede: resumo.necessidades.sede,
+                energia: resumo.necessidades.energia
+            });
+        }
+    });
+    
+    // Fallback: tenta o tick manual
+    setTimeout(() => {
+        socket.emit('tick', playerId);
+    }, 500);
 }
 
 async function verificarSaldo(playerId) {
@@ -57,6 +103,8 @@ async function processarCompraEfeitos(playerId, pratoNome, preco, recuperacao) {
         const socket = window.socket;
         if (!socket) return resolve({ sucesso: false, erro: "Sem conexão com o servidor" });
         
+        console.log('[COMER] Enviando pedido:', { playerId, prato: pratoNome, preco, recuperacao });
+        
         socket.emit('comerDireto', {
             playerId: playerId,
             prato: pratoNome,
@@ -65,7 +113,7 @@ async function processarCompraEfeitos(playerId, pratoNome, preco, recuperacao) {
         });
         
         socket.once('comidaConsumida', (data) => {
-            console.log('[COMER] Efeitos aplicados:', data);
+            console.log('[COMER] Efeitos aplicados pelo backend:', data);
             
             // Atualiza o sessionStorage
             if (data.saldoRestante !== undefined) {
@@ -73,18 +121,22 @@ async function processarCompraEfeitos(playerId, pratoNome, preco, recuperacao) {
             }
             if (data.novaFome !== undefined) {
                 sessionStorage.setItem('playerFome', data.novaFome);
+                console.log(`[COMER] Nova fome: ${data.novaFome}%`);
             }
             if (data.novaSede !== undefined) {
                 sessionStorage.setItem('playerSede', data.novaSede);
+                console.log(`[COMER] Nova sede: ${data.novaSede}%`);
             }
             if (data.novaEnergia !== undefined) {
                 sessionStorage.setItem('playerEnergia', data.novaEnergia);
+                console.log(`[COMER] Nova energia: ${data.novaEnergia}%`);
             }
             
             // Atualiza a interface usando a função global do dashboard
             if (typeof window.atualizarDashboard === 'function') {
                 window.atualizarDashboard(data);
             } else {
+                console.warn('[COMER] window.atualizarDashboard não encontrada');
                 // Fallback: tenta atualizar diretamente
                 atualizarInterface(data);
             }
@@ -93,11 +145,14 @@ async function processarCompraEfeitos(playerId, pratoNome, preco, recuperacao) {
         });
         
         socket.once('erroServidor', (erro) => {
-            console.error('[COMER] Erro:', erro);
+            console.error('[COMER] Erro do servidor:', erro);
             resolve({ sucesso: false, erro: erro });
         });
         
-        setTimeout(() => resolve({ sucesso: false, erro: "Timeout" }), 5000);
+        setTimeout(() => {
+            console.error('[COMER] Timeout - servidor não respondeu');
+            resolve({ sucesso: false, erro: "Timeout - servidor não respondeu" });
+        }, 10000);
     });
 }
 
@@ -108,10 +163,24 @@ function atualizarInterface(data) {
     const energiaElement = document.getElementById('player-energia');
     const saldoElement = document.getElementById('player-dinheiro');
     
-    if (fomeElement && data.novaFome !== undefined) fomeElement.textContent = data.novaFome + '%';
-    if (sedeElement && data.novaSede !== undefined) sedeElement.textContent = data.novaSede + '%';
-    if (energiaElement && data.novaEnergia !== undefined) energiaElement.textContent = data.novaEnergia + '%';
+    if (fomeElement && data.novaFome !== undefined) fomeElement.textContent = Math.round(data.novaFome) + '%';
+    if (sedeElement && data.novaSede !== undefined) sedeElement.textContent = Math.round(data.novaSede) + '%';
+    if (energiaElement && data.novaEnergia !== undefined) energiaElement.textContent = Math.round(data.novaEnergia) + '%';
     if (saldoElement && data.saldoRestante !== undefined) saldoElement.textContent = data.saldoRestante;
+    
+    // Atualiza barras de progresso
+    if (data.novaFome !== undefined) {
+        const barraFome = document.getElementById('barra-fome');
+        if (barraFome) barraFome.style.width = data.novaFome + '%';
+    }
+    if (data.novaSede !== undefined) {
+        const barraSede = document.getElementById('barra-sede');
+        if (barraSede) barraSede.style.width = data.novaSede + '%';
+    }
+    if (data.novaEnergia !== undefined) {
+        const barraEnergia = document.getElementById('barra-energia');
+        if (barraEnergia) barraEnergia.style.width = data.novaEnergia + '%';
+    }
     
     // Disparar evento para atualizar outros componentes
     window.dispatchEvent(new CustomEvent('statusAtualizado', { detail: data }));
