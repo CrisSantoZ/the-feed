@@ -34,12 +34,54 @@ function verificarSessaoSalva() {
     return null;
 }
 
+// Mostrar tela de carregamento
+function mostrarCarregamento() {
+    const telaCarregamento = document.getElementById('tela-carregamento');
+    if (telaCarregamento) {
+        telaCarregamento.style.display = 'flex';
+    }
+    // Esconde as outras telas
+    const telaAuth = document.getElementById('autenticacao-container');
+    const telaSelecao = document.getElementById('selecao-container');
+    const telaCriacao = document.getElementById('criacao-container');
+    if (telaAuth) telaAuth.style.display = 'none';
+    if (telaSelecao) telaSelecao.style.display = 'none';
+    if (telaCriacao) telaCriacao.style.display = 'none';
+}
+
+function esconderCarregamento() {
+    const telaCarregamento = document.getElementById('tela-carregamento');
+    if (telaCarregamento) {
+        telaCarregamento.style.display = 'none';
+    }
+}
+
+function mostrarTelaLogin() {
+    const telaAuth = document.getElementById('autenticacao-container');
+    if (telaAuth) {
+        telaAuth.style.display = 'block';
+        telaAuth.classList.add('mostrar');
+    }
+}
+
 // Tentar reconexão automática
 function tentarReconexao() {
     const playerId = verificarSessaoSalva();
     if (playerId && socket) {
         console.log('[SESSAO] Tentando reconexão automática...');
+        mostrarCarregamento();
         socket.emit('entrarNoJogo', { playerId: playerId });
+        
+        // Timeout de segurança: se demorar mais que 5 segundos, volta para login
+        setTimeout(() => {
+            const telaCarregamento = document.getElementById('tela-carregamento');
+            if (telaCarregamento && telaCarregamento.style.display === 'flex') {
+                console.log('[SESSAO] Timeout, voltando para login');
+                esconderCarregamento();
+                mostrarTelaLogin();
+            }
+        }, 5000);
+        
         return true;
     }
     return false;
@@ -454,6 +496,7 @@ socket.on('listaVazia', (conta) => {
 });
 
 socket.on('loginSucesso', (conta) => {
+    esconderCarregamento();
     alternarBloqueioCampos('login', false);
 
     sessionStorage.setItem('accountId', conta._id);
@@ -513,6 +556,7 @@ socket.on('exibirCriacaoForcado', () => {
 
 window.socket.on('jogoIniciadoSucesso', (dadosIniciais) => {
     console.log("[THE FEED] SINAL RECEBIDO: Abrindo HUD de jogo...");
+    esconderCarregamento();
     
     // ========== SALVAR DADOS DO PERSONAGEM ==========
     if (dadosIniciais && dadosIniciais.id) {
@@ -596,6 +640,7 @@ function mudarPainel(aba) {
 }
 
 socket.on('erroServidor', (mensagemDeErro) => {
+    esconderCarregamento();
     alert(`🚨 ALERTA DO SISTEMA:\n${mensagemDeErro}`);
     alternarBloqueioCampos('cadastro', false);
     alternarBloqueioCampos('login', false);
