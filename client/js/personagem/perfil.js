@@ -25,6 +25,9 @@ export function renderizarPerfil() {
     const playerEstado = sessionStorage.getItem('playerEstado') || 'São Paulo';
     const playerCidade = sessionStorage.getItem('playerCidade') || 'São Paulo';
     const simboloMoeda = sessionStorage.getItem('simboloMoeda') || 'R$';
+    const fome = sessionStorage.getItem('playerFome') || 30;
+    const sede = sessionStorage.getItem('playerSede') || 45;
+    const energia = sessionStorage.getItem('playerEnergia') || 80;
     
     // Valida a URL do avatar
     let urlFinal = avatarUrl;
@@ -48,35 +51,35 @@ export function renderizarPerfil() {
             <div style="margin-bottom: 10px;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
                     <span style="color: #888; font-size: 10px;">🍔 Fome</span>
-                    <span style="color: #fff; font-size: 10px;">30%</span>
+                    <span id="player-fome" style="color: #fff; font-size: 10px;">${fome}%</span>
                 </div>
                 <div style="width: 100%; height: 4px; background: #1a1a2a; border-radius: 2px;">
-                    <div style="width: 30%; height: 100%; background: #ff0055; border-radius: 2px;"></div>
+                    <div style="width: ${fome}%; height: 100%; background: #ff0055; border-radius: 2px;"></div>
                 </div>
             </div>
             
             <div style="margin-bottom: 10px;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
                     <span style="color: #888; font-size: 10px;">💧 Sede</span>
-                    <span style="color: #fff; font-size: 10px;">45%</span>
+                    <span id="player-sede" style="color: #fff; font-size: 10px;">${sede}%</span>
                 </div>
                 <div style="width: 100%; height: 4px; background: #1a1a2a; border-radius: 2px;">
-                    <div style="width: 45%; height: 100%; background: #00f3ff; border-radius: 2px;"></div>
+                    <div style="width: ${sede}%; height: 100%; background: #00f3ff; border-radius: 2px;"></div>
                 </div>
             </div>
             
             <div style="margin-bottom: 10px;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 3px;">
                     <span style="color: #888; font-size: 10px;">⚡ Energia</span>
-                    <span style="color: #fff; font-size: 10px;">80%</span>
+                    <span id="player-energia" style="color: #fff; font-size: 10px;">${energia}%</span>
                 </div>
                 <div style="width: 100%; height: 4px; background: #1a1a2a; border-radius: 2px;">
-                    <div style="width: 80%; height: 100%; background: #00ff66; border-radius: 2px;"></div>
+                    <div style="width: ${energia}%; height: 100%; background: #00ff66; border-radius: 2px;"></div>
                 </div>
             </div>
             
             <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #333;">
-                <p style="color: #00f3ff; margin: 5px 0; font-size: 11px;">💰 ${simboloMoeda} ${dinheiro}</p>
+                <p style="color: #00f3ff; margin: 5px 0; font-size: 11px;">💰 ${simboloMoeda} <span id="player-dinheiro">${dinheiro}</span></p>
                 <p style="color: #888; margin: 5px 0; font-size: 10px;">📍 ${escapeHtml(playerCidade)}, ${escapeHtml(playerEstado)}</p>
             </div>
         </div>
@@ -91,17 +94,15 @@ export function renderizarPerfilSidebar() {
     const dinheiro = sessionStorage.getItem('playerDinheiro') || 0;
     const playerCidade = sessionStorage.getItem('playerCidade') || 'São Paulo';
     const simboloMoeda = sessionStorage.getItem('simboloMoeda') || 'R$';
+    const fome = sessionStorage.getItem('playerFome') || 30;
+    const sede = sessionStorage.getItem('playerSede') || 45;
+    const energia = sessionStorage.getItem('playerEnergia') || 80;
     
     // Valida a URL do avatar
     let urlFinal = avatarUrl;
     if (!isUrlValida(avatarUrl)) {
         urlFinal = gerarFallbackAvatar(playerNome, playerSobrenome);
     }
-    
-    // Dados mock (depois conecta com backend)
-    const fome = 30;
-    const sede = 45;
-    const energia = 80;
     
     return `
         <div style="text-align: center; padding: 5px;">
@@ -115,7 +116,7 @@ export function renderizarPerfilSidebar() {
             <div style="margin-bottom: 8px; text-align: left;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
                     <span style="color: #888; font-size: 10px;">🍔 Fome</span>
-                    <span style="color: #fff; font-size: 10px;">${fome}%</span>
+                    <span id="player-fome-sidebar" style="color: #fff; font-size: 10px;">${fome}%</span>
                 </div>
                 <div style="width: 100%; height: 4px; background: #1a1a2a; border-radius: 2px;">
                     <div style="width: ${fome}%; height: 100%; background: #ff0055; border-radius: 2px;"></div>
@@ -125,7 +126,7 @@ export function renderizarPerfilSidebar() {
             <div style="margin-bottom: 8px; text-align: left;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
                     <span style="color: #888; font-size: 10px;">💧 Sede</span>
-                    <span style="color: #fff; font-size: 10px;">${sede}%</span>
+                    <span id="player-sede-sidebar" style="color: #fff; font-size: 10px;">${sede}%</span>
                 </div>
                 <div style="width: 100%; height: 4px; background: #1a1a2a; border-radius: 2px;">
                     <div style="width: ${sede}%; height: 100%; background: #00f3ff; border-radius: 2px;"></div>
@@ -135,7 +136,7 @@ export function renderizarPerfilSidebar() {
             <div style="margin-bottom: 8px; text-align: left;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
                     <span style="color: #888; font-size: 10px;">⚡ Energia</span>
-                    <span style="color: #fff; font-size: 10px;">${energia}%</span>
+                    <span id="player-energia-sidebar" style="color: #fff; font-size: 10px;">${energia}%</span>
                 </div>
                 <div style="width: 100%; height: 4px; background: #1a1a2a; border-radius: 2px;">
                     <div style="width: ${energia}%; height: 100%; background: #00ff66; border-radius: 2px;"></div>
@@ -143,7 +144,7 @@ export function renderizarPerfilSidebar() {
             </div>
             
             <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #333;">
-                <p style="color: #00f3ff; margin: 5px 0; font-size: 11px;">💰 ${simboloMoeda} ${dinheiro}</p>
+                <p style="color: #00f3ff; margin: 5px 0; font-size: 11px;">💰 ${simboloMoeda} <span id="player-dinheiro-sidebar">${dinheiro}</span></p>
                 <p style="color: #888; margin: 5px 0; font-size: 10px;">📍 ${escapeHtml(playerCidade)}</p>
             </div>
         </div>
@@ -166,7 +167,6 @@ function calcularNivel() {
     return Math.floor(xp / 1000) + 1;
 }
 
-// Função auxiliar para criar barras de progresso
 function criarBarraProgresso(label, valor, cor) {
     const porcentagem = Math.min(100, Math.max(0, valor));
     return `
@@ -238,3 +238,52 @@ function calcularXPProximo() {
     const nivel = Math.floor(xp / 1000) + 1;
     return nivel * 1000;
 }
+
+// Função para atualizar o dashboard em tempo real (será chamada pelo comer.js)
+window.atualizarDashboard = function(dados) {
+    if (dados.saldoRestante !== undefined) {
+        const dinheiroSpan = document.getElementById('player-dinheiro');
+        const dinheiroSidebar = document.getElementById('player-dinheiro-sidebar');
+        if (dinheiroSpan) dinheiroSpan.textContent = dados.saldoRestante;
+        if (dinheiroSidebar) dinheiroSidebar.textContent = dados.saldoRestante;
+        sessionStorage.setItem('playerDinheiro', dados.saldoRestante);
+    }
+    
+    if (dados.novaFome !== undefined) {
+        const fomeSpan = document.getElementById('player-fome');
+        const fomeSidebar = document.getElementById('player-fome-sidebar');
+        if (fomeSpan) fomeSpan.textContent = dados.novaFome + '%';
+        if (fomeSidebar) fomeSidebar.textContent = dados.novaFome + '%';
+        sessionStorage.setItem('playerFome', dados.novaFome);
+    }
+    
+    if (dados.novaSede !== undefined) {
+        const sedeSpan = document.getElementById('player-sede');
+        const sedeSidebar = document.getElementById('player-sede-sidebar');
+        if (sedeSpan) sedeSpan.textContent = dados.novaSede + '%';
+        if (sedeSidebar) sedeSidebar.textContent = dados.novaSede + '%';
+        sessionStorage.setItem('playerSede', dados.novaSede);
+    }
+    
+    if (dados.novaEnergia !== undefined) {
+        const energiaSpan = document.getElementById('player-energia');
+        const energiaSidebar = document.getElementById('player-energia-sidebar');
+        if (energiaSpan) energiaSpan.textContent = dados.novaEnergia + '%';
+        if (energiaSidebar) energiaSidebar.textContent = dados.novaEnergia + '%';
+        sessionStorage.setItem('playerEnergia', dados.novaEnergia);
+    }
+    
+    // Atualiza as barras de progresso
+    if (dados.novaFome !== undefined) {
+        const barraFome = document.querySelector('#player-fome')?.parentElement?.parentElement?.querySelector('div > div');
+        if (barraFome) barraFome.style.width = dados.novaFome + '%';
+    }
+    if (dados.novaSede !== undefined) {
+        const barraSede = document.querySelector('#player-sede')?.parentElement?.parentElement?.querySelector('div > div');
+        if (barraSede) barraSede.style.width = dados.novaSede + '%';
+    }
+    if (dados.novaEnergia !== undefined) {
+        const barraEnergia = document.querySelector('#player-energia')?.parentElement?.parentElement?.querySelector('div > div');
+        if (barraEnergia) barraEnergia.style.width = dados.novaEnergia + '%';
+    }
+};
