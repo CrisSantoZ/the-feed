@@ -42,6 +42,11 @@ export async function renderizarMapaCidade(paisNome, estadoNome, cidadeNome) {
         `;
     }
 
+    // Função para obter símbolo da moeda
+    function getSimboloMoeda() {
+        return sessionStorage.getItem('simboloMoeda') || 'R$';
+    }
+
     // Gera o HTML das categorias (inicialmente recolhidas)
     const categoriasHtml = Object.entries(categorias).map(([catNome, itens]) => {
         const total = Object.keys(itens).length;
@@ -59,7 +64,9 @@ export async function renderizarMapaCidade(paisNome, estadoNome, cidadeNome) {
             transportes: { icone: "🚗", titulo: "TRANSPORTES", cor: "#ff0055" }
         }[catNome] || { icone: "📍", titulo: catNome.toUpperCase(), cor: "#888" };
 
-        const itensHtml = Object.values(itens).map(item => `
+        const itensHtml = Object.values(itens).map(item => {
+            const simbolo = getSimboloMoeda();
+            return `
             <div class="categoria-item" onclick="window.confirmarLocal('${catNome}', '${item.id}', '${item.nome}', '${cidadeNome}', '${estadoNome}', '${paisNome}', '${item.descricao.replace(/'/g, "\\'")}', '${(item.endereco || '').replace(/'/g, "\\'")}', '${(item.horario || '').replace(/'/g, "\\'")}')" style="
                 background: rgba(0, 243, 255, 0.05);
                 border: 1px solid rgba(0, 243, 255, 0.3);
@@ -74,9 +81,9 @@ export async function renderizarMapaCidade(paisNome, estadoNome, cidadeNome) {
                     <span style="color: #00f3ff; font-size: 11px;">✨ clique</span>
                 </div>
                 <p style="color: #888; font-size: 12px; margin: 5px 0 0 0;">${item.descricao}</p>
-                ${item.preco_medio ? `<p style="color: #ff0055; font-size: 11px; margin: 8px 0 0 0;">💰 Preço médio: C$${item.preco_medio}</p>` : ''}
+                ${item.preco_medio ? `<p style="color: #ff0055; font-size: 11px; margin: 8px 0 0 0;">💰 Preço médio: ${simbolo} ${item.preco_medio}</p>` : ''}
             </div>
-        `).join('');
+        `}).join('');
 
         return `
             <div class="categoria-card" style="margin-bottom: 20px; border: 1px solid ${config.cor}; border-radius: 12px; overflow: hidden;">
