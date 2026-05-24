@@ -75,8 +75,8 @@ function atualizarInterfaceNecessidades(dados) {
         if (fomeSpan) fomeSpan.textContent = Math.round(dados.fome) + '%';
         if (fomeSidebar) fomeSidebar.textContent = Math.round(dados.fome) + '%';
         
-        // Atualiza barra de progresso corretamente
-        const barraFome = document.querySelector('#player-fome')?.closest('div')?.parentElement?.querySelector('div > div');
+        // ✅ CORREÇÃO: usar getElementById diretamente
+        const barraFome = document.getElementById('barra-fome');
         if (barraFome) barraFome.style.width = dados.fome + '%';
     }
     
@@ -86,7 +86,8 @@ function atualizarInterfaceNecessidades(dados) {
         if (sedeSpan) sedeSpan.textContent = Math.round(dados.sede) + '%';
         if (sedeSidebar) sedeSidebar.textContent = Math.round(dados.sede) + '%';
         
-        const barraSede = document.querySelector('#player-sede')?.closest('div')?.parentElement?.querySelector('div > div');
+        // ✅ CORREÇÃO
+        const barraSede = document.getElementById('barra-sede');
         if (barraSede) barraSede.style.width = dados.sede + '%';
     }
     
@@ -96,7 +97,8 @@ function atualizarInterfaceNecessidades(dados) {
         if (energiaSpan) energiaSpan.textContent = Math.round(dados.energia) + '%';
         if (energiaSidebar) energiaSidebar.textContent = Math.round(dados.energia) + '%';
         
-        const barraEnergia = document.querySelector('#player-energia')?.closest('div')?.parentElement?.querySelector('div > div');
+        // ✅ CORREÇÃO
+        const barraEnergia = document.getElementById('barra-energia');
         if (barraEnergia) barraEnergia.style.width = dados.energia + '%';
     }
 }
