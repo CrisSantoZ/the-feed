@@ -2,7 +2,11 @@
    MAPA LOCAL - EXIBE INTERAÇÕES DO LOCAL
    ========================================================================== */
 
-export async function renderizarMapaLocal(paisNome, estadoNome, cidadeNome, localTipo, localId, localNome) {
+function getSimboloMoeda() {
+    return sessionStorage.getItem('simboloMoeda') || 'R$';
+}
+
+   export async function renderizarMapaLocal(paisNome, estadoNome, cidadeNome, localTipo, localId, localNome) {
     let localData = null;
 
     // CONVERTE 'restaurantes' PARA 'alimentacao'
@@ -153,7 +157,7 @@ function renderizarResidencial(local) {
         <div style="margin-top: 20px;">
             <h3 style="color: #00f3ff; margin-bottom: 15px;">🏠 OPÇÕES</h3>
             <div style="display: flex; flex-direction: column; gap: 12px;">
-                <button onclick="alert('Comprar por C$${local.preco_compra}')" style="
+                <button onclick="alert('Comprar por ${getSimboloMoeda()} ${local.preco_compra}')" style="
                     background: rgba(0, 243, 255, 0.1);
                     border: 1px solid #00f3ff;
                     border-radius: 8px;
@@ -161,9 +165,9 @@ function renderizarResidencial(local) {
                     cursor: pointer;
                     text-align: left;
                 ">
-                    💰 Comprar - C$${local.preco_compra}
-                </button>
-                <button onclick="alert('Alugar por C$${local.preco_aluguel}/mês')" style="
+                    💰 Comprar - ${getSimboloMoeda()} ${local.preco_compra}
+</button>
+                <button onclick="alert('Alugar por ${getSimboloMoeda()} ${local.preco_aluguel}/mês')" style="
                     background: rgba(255, 0, 85, 0.1);
                     border: 1px solid #ff0055;
                     border-radius: 8px;
@@ -171,8 +175,8 @@ function renderizarResidencial(local) {
                     cursor: pointer;
                     text-align: left;
                 ">
-                    🔑 Alugar - C$${local.preco_aluguel}/mês
-                </button>
+                    🔑 Alugar - ${getSimboloMoeda()} ${local.preco_aluguel}/mês
+</button>
                 <button onclick="alert('Visitando ${local.nome}...')" style="
                     background: rgba(0, 243, 255, 0.05);
                     border: 1px solid #888;
@@ -246,7 +250,7 @@ function renderizarAlimentacao(local) {
                         <div class="cardapio-item" style="background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.3); border-radius: 12px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                                 <h4 style="color: #fff; margin: 0;">${prato.nome}</h4>
-                                <span style="color: #ff0055; font-weight: bold;">C$${prato.preco}</span>
+                                <span style="color: #ff0055; font-weight: bold;">${getSimboloMoeda()} ${prato.preco}</span>
                             </div>
                             <p style="color: #888; font-size: 12px; margin-bottom: 10px;">${prato.descricao}</p>
                             <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
@@ -281,7 +285,7 @@ function renderizarAlimentacao(local) {
                 <h3 style="color: #00f3ff; margin-bottom: 15px;">🍽️ CARDÁPIO</h3>
                 <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
                     <p><span style="color: #00f3ff;">🍔 Tipo:</span> ${local.tipo_comida?.join(', ') || 'Variado'}</p>
-                    <p><span style="color: #00f3ff;">💰 Preço médio:</span> C$${local.preco_medio || 30}</p>
+                    <p><span style="color: #00f3ff;">💰 Preço médio:</span> ${getSimboloMoeda()} ${local.preco_medio || 30}</p>
                     <button onclick="alert('Comer em ${local.nome}')" style="margin-top: 15px; background: linear-gradient(135deg, #00f3ff, #ff0055); border: none; color: #fff; padding: 10px 20px; border-radius: 8px; cursor: pointer;">🍽️ Comer Agora</button>
                 </div>
             </div>
@@ -299,7 +303,7 @@ function renderizarEmprego(local) {
                 ${local.vagas?.map(vaga => `
                     <div style="background: rgba(0, 243, 255, 0.05); border: 1px solid #00f3ff; border-radius: 8px; padding: 15px;">
                         <h4 style="color: #fff; margin: 0 0 5px 0;">${vaga.cargo}</h4>
-                        <p style="color: #888; margin: 0;">💰 Salário: C$${vaga.salario}</p>
+                        <p style="color: #888; margin: 0;">💰 Salário: ${getSimboloMoeda()} ${vaga.salario}</p>
                         <p style="color: #888; margin: 0;">⭐ Experiência: ${vaga.experiencia}</p>
                         <button onclick="alert('Candidatar para ${vaga.cargo}')" style="margin-top: 10px; background: #00f3ff; color: #000; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer;">📄 Candidatar-se</button>
                     </div>
@@ -310,30 +314,31 @@ function renderizarEmprego(local) {
 }
 
 function renderizarSaude(local) {
+    const simbolo = getSimboloMoeda();
     return `
         <div style="margin-top: 20px;">
             <h3 style="color: #00f3ff; margin-bottom: 15px;">🏥 SERVIÇOS</h3>
             <div style="display: flex; flex-direction: column; gap: 12px;">
                 ${local.servicos?.map(servico => `
-                    <div onclick="alert('${servico.tipo}: C$${servico.preco}')" style="
+                    <div onclick="alert('${servico.tipo}: ${simbolo} ${servico.preco}')" style="
                         background: rgba(0, 243, 255, 0.1);
                         border: 1px solid #00f3ff;
                         border-radius: 8px;
                         padding: 15px;
                         cursor: pointer;
                     ">
-                        💊 ${servico.tipo} - C$${servico.preco}
+                        💊 ${servico.tipo} - ${simbolo} ${servico.preco}
                     </div>
                 `).join('') || ''}
                 ${local.remedios?.map(remedio => `
-                    <div onclick="alert('Comprar ${remedio.nome}: C$${remedio.preco}')" style="
+                    <div onclick="alert('Comprar ${remedio.nome}: ${simbolo} ${remedio.preco}')" style="
                         background: rgba(255, 0, 85, 0.1);
                         border: 1px solid #ff0055;
                         border-radius: 8px;
                         padding: 15px;
                         cursor: pointer;
                     ">
-                        💊 ${remedio.nome} - C$${remedio.preco}
+                        💊 ${remedio.nome} - ${simbolo} ${remedio.preco}
                     </div>
                 `).join('') || ''}
             </div>
@@ -342,11 +347,12 @@ function renderizarSaude(local) {
 }
 
 function renderizarCultural(local) {
+    const simbolo = getSimboloMoeda();
     return `
         <div style="margin-top: 20px;">
             <h3 style="color: #00f3ff; margin-bottom: 15px;">🎨 INFORMAÇÕES</h3>
             <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
-                <p><span style="color: #00f3ff;">🎟️ Entrada:</span> C$${local.entrada || 0}</p>
+                <p><span style="color: #00f3ff;">🎟️ Entrada:</span> ${simbolo} ${local.entrada || 0}</p>
                 <p><span style="color: #00f3ff;">🎭 Diversão:</span> +${local.diversao || 0}</p>
                 <p><span style="color: #00f3ff;">📚 Cultura:</span> +${local.cultura || 0}</p>
                 <button onclick="alert('Visitar ${local.nome}')" style="margin-top: 15px; background: linear-gradient(135deg, #00f3ff, #ff0055); border: none; color: #fff; padding: 10px 20px; border-radius: 8px; cursor: pointer;">🎫 Visitar</button>
@@ -356,11 +362,12 @@ function renderizarCultural(local) {
 }
 
 function renderizarNatureza(local) {
+    const simbolo = getSimboloMoeda();
     return `
         <div style="margin-top: 20px;">
             <h3 style="color: #00f3ff; margin-bottom: 15px;">🌳 INFORMAÇÕES</h3>
             <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
-                <p><span style="color: #00f3ff;">🎟️ Entrada:</span> C$${local.entrada || 0}</p>
+                <p><span style="color: #00f3ff;">🎟️ Entrada:</span> ${simbolo} ${local.entrada || 0}</p>
                 <p><span style="color: #00f3ff;">⚡ Energia recuperada:</span> +${local.energia_recuperada || 0}</p>
                 <button onclick="alert('Visitar ${local.nome}')" style="margin-top: 15px; background: linear-gradient(135deg, #00f3ff, #ff0055); border: none; color: #fff; padding: 10px 20px; border-radius: 8px; cursor: pointer;">🌿 Visitar</button>
             </div>
@@ -369,6 +376,7 @@ function renderizarNatureza(local) {
 }
 
 function renderizarBanco(local) {
+    // Bancos geralmente não têm preços, apenas serviços
     return `
         <div style="margin-top: 20px;">
             <h3 style="color: #00f3ff; margin-bottom: 15px;">🏦 SERVIÇOS BANCÁRIOS</h3>
@@ -390,11 +398,12 @@ function renderizarBanco(local) {
 }
 
 function renderizarEntretenimento(local) {
+    const simbolo = getSimboloMoeda();
     return `
         <div style="margin-top: 20px;">
             <h3 style="color: #00f3ff; margin-bottom: 15px;">🎮 OPÇÕES</h3>
             <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px;">
-                <p><span style="color: #00f3ff;">🎟️ Ingresso:</span> C$${local.preco_ingresso || local.preco_medio || 0}</p>
+                <p><span style="color: #00f3ff;">🎟️ Ingresso:</span> ${simbolo} ${local.preco_ingresso || local.preco_medio || 0}</p>
                 <p><span style="color: #00f3ff;">🎭 Diversão:</span> +${local.diversao || 0}</p>
                 <button onclick="alert('Ir para ${local.nome}')" style="margin-top: 15px; background: linear-gradient(135deg, #00f3ff, #ff0055); border: none; color: #fff; padding: 10px 20px; border-radius: 8px; cursor: pointer;">🎫 Ir Agora</button>
             </div>

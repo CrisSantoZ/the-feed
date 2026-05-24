@@ -479,15 +479,23 @@ window.socket.on('jogoIniciadoSucesso', (dadosIniciais) => {
         sessionStorage.setItem('playerId', dadosIniciais.id);
         sessionStorage.setItem('playerNome', dadosIniciais.nome);
         sessionStorage.setItem('playerSobrenome', dadosIniciais.sobrenome);
-        sessionStorage.setItem('avatarUrl', dadosIniciais.avatarUrl);  // ← LINHA ADICIONADA!
+        sessionStorage.setItem('avatarUrl', dadosIniciais.avatarUrl);
+        
+        // ========== NOVO: SALVAR INFORMAÇÕES DE MOEDA ==========
+        sessionStorage.setItem('simboloMoeda', dadosIniciais.simboloMoeda || 'R$');
+        sessionStorage.setItem('moeda', dadosIniciais.moeda || 'BRL');
+        sessionStorage.setItem('playerDinheiro', dadosIniciais.dinheiro || 150);
+        
         console.log(`[THE FEED] Personagem logado: ${dadosIniciais.nome} (ID: ${dadosIniciais.id})`);
         console.log(`[THE FEED] Avatar URL: ${dadosIniciais.avatarUrl}`);
+        console.log(`[THE FEED] Moeda: ${dadosIniciais.simboloMoeda} (${dadosIniciais.moeda})`);
+        console.log(`[THE FEED} Dinheiro: ${dadosIniciais.simboloMoeda} ${dadosIniciais.dinheiro}`);
     }
 
-    sessionStorage.setItem('playerPais', 'Brasil');
-    sessionStorage.setItem('playerEstado', 'São Paulo');
-    sessionStorage.setItem('playerCidade', 'São Paulo');
-    sessionStorage.setItem('playerDinheiro', 150);
+    // Mantém os valores padrão para localização (depois virão do backend)
+    sessionStorage.setItem('playerPais', dadosIniciais.pais || 'Brasil');
+    sessionStorage.setItem('playerEstado', dadosIniciais.estado || 'São Paulo');
+    sessionStorage.setItem('playerCidade', dadosIniciais.cidade || 'São Paulo');
 
     if (window.socket) {
         window.socket.emit('setPlayerName', dadosIniciais.nome);

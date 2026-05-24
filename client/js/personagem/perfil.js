@@ -24,7 +24,7 @@ export function renderizarPerfil() {
     const playerPais = sessionStorage.getItem('playerPais') || 'Brasil';
     const playerEstado = sessionStorage.getItem('playerEstado') || 'São Paulo';
     const playerCidade = sessionStorage.getItem('playerCidade') || 'São Paulo';
-    
+    const simboloMoeda = sessionStorage.getItem('simboloMoeda') || 'R$';
     // Valida a URL do avatar
     let urlFinal = avatarUrl;
     if (!isUrlValida(avatarUrl)) {

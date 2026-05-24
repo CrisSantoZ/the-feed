@@ -7,10 +7,12 @@ export async function processarPedido(playerId, restaurante, pratoId) {
         return { sucesso: false, mensagem: "Prato não encontrado!" };
     }
     
+    const simbolo = getSimboloMoeda();
+    
     // Verificar dinheiro (via socket)
     const saldo = await verificarSaldo(playerId);
     if (saldo < prato.preco) {
-        return { sucesso: false, mensagem: `Saldo insuficiente! Você tem C$${saldo}, precisa de C$${prato.preco}` };
+        return { sucesso: false, mensagem: `Saldo insuficiente! Você tem ${simbolo} ${saldo}, precisa de ${simbolo} ${prato.preco}` };
     }
     
     // Mostrar animação de preparo
@@ -31,7 +33,7 @@ export async function processarPedido(playerId, restaurante, pratoId) {
     
     return { 
         sucesso: true, 
-        mensagem: `🍽️ Você comeu ${prato.nome} e pagou C$${prato.preco}!`,
+        mensagem: `🍽️ Você comeu ${prato.nome} e pagou ${simbolo} ${prato.preco}!`,
         recuperacao: prato.recuperacao,
         novoSaldo: resultado.saldoRestante
     };
