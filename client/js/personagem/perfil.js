@@ -187,15 +187,18 @@ export function renderizarPerfilSidebar() {
     const dinheiro = sessionStorage.getItem('playerDinheiro') || 0;
     const playerCidade = sessionStorage.getItem('playerCidade') || 'São Paulo';
     const simboloMoeda = sessionStorage.getItem('simboloMoeda') || 'R$';
-    const fome = Math.round(sessionStorage.getItem('playerFome') || 30);
-    const sede = Math.round(sessionStorage.getItem('playerSede') || 45);
-    const energia = Math.round(sessionStorage.getItem('playerEnergia') || 80);
+    
+    // ✅ MUDE AQUI: valores reais OU 0 (não usar fallback 30/45)
+    const fome = Math.round(sessionStorage.getItem('playerFome') || 0);
+    const sede = Math.round(sessionStorage.getItem('playerSede') || 0);
+    const energia = Math.round(sessionStorage.getItem('playerEnergia') || 100);
 
     let urlFinal = avatarUrl;
     if (!isUrlValida(avatarUrl)) {
         urlFinal = gerarFallbackAvatar(playerNome, playerSobrenome);
     }
 
+    // ✅ FORÇA SINCRONIZAÇÃO IMEDIATA
     sincronizarStatus();
     configurarEventosSocket();
 
