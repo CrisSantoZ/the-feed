@@ -257,25 +257,42 @@ function configurarEventosSocket() {
     socket.off('statusAtualizado');
 
     // Escuta atualizações do tick service
-    socket.on('tickAtualizacao', (data) => {
-        if (data.necessidades) {
-            const { fome, sede, energia } = data.necessidades;
-
-            if (fome !== undefined) sessionStorage.setItem('playerFome', fome);
-            if (sede !== undefined) sessionStorage.setItem('playerSede', sede);
-            if (energia !== undefined) sessionStorage.setItem('playerEnergia', energia);
-
-            atualizarInterfaceNecessidades({ fome, sede, energia });
-
-            // Mostra alertas se houver
-            if (data.alertas && data.alertas.length > 0) {
-                const ultimoAlerta = data.alertas[data.alertas.length - 1];
-                if (ultimoAlerta && window.mostrarNotificacao) {
-                    window.mostrarNotificacao(ultimoAlerta.mensagem, 'warning');
-                }
+   socket.on('tickAtualizacao', (data) => {
+    if (data.necessidades) {
+        const { fome, sede, energia } = data.necessidades;
+        
+        // Atualiza sessionStorage
+        if (fome !== undefined) sessionStorage.setItem('playerFome', fome);
+        if (sede !== undefined) sessionStorage.setItem('playerSede', sede);
+        if (energia !== undefined) sessionStorage.setItem('playerEnergia', energia);
+        
+        // ✅ Atualiza dashboard principal
+        atualizarInterfaceNecessidades({ fome, sede, energia });
+        
+        // ✅ Atualiza as BARRAS DO SIDEBAR
+        const barraFomeSidebar = document.getElementById('barra-fome-sidebar');
+        const barraSedeSidebar = document.getElementById('barra-sede-sidebar');
+        const barraEnergiaSidebar = document.getElementById('barra-energia-sidebar');
+        
+        if (barraFomeSidebar && fome !== undefined) {
+            barraFomeSidebar.style.width = fome + '%';
+        }
+        if (barraSedeSidebar && sede !== undefined) {
+            barraSedeSidebar.style.width = sede + '%';
+        }
+        if (barraEnergiaSidebar && energia !== undefined) {
+            barraEnergiaSidebar.style.width = energia + '%';
+        }
+        
+        // Mostra alertas se houver
+        if (data.alertas && data.alertas.length > 0) {
+            const ultimoAlerta = data.alertas[data.alertas.length - 1];
+            if (ultimoAlerta && window.mostrarNotificacao) {
+                window.mostrarNotificacao(ultimoAlerta.mensagem, 'warning');
             }
         }
-    });
+    }
+});
 
     // Escuta atualizações gerais de status
     socket.on('statusAtualizado', (data) => {
