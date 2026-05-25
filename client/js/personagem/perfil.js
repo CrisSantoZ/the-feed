@@ -294,6 +294,10 @@ function configurarEventosSocket() {
     }
 });
 
+socket.on('tickAtualizacao', (data) => {
+    console.log('✅ TICK RECEBIDO NO FRONTEND!', data);
+});
+
     // Escuta atualizações gerais de status
     socket.on('statusAtualizado', (data) => {
         atualizarInterfaceNecessidades({
