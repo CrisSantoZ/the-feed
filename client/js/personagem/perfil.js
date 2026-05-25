@@ -36,23 +36,34 @@ async function sincronizarStatus() {
 
         socket.once('resumoPlayer', (resumo) => {
             if (resumo && resumo.necessidades) {
-                // Atualiza sessionStorage com valores reais do backend
-                sessionStorage.setItem('playerFome', Math.round(resumo.necessidades.fome ?? 30));
-                sessionStorage.setItem('playerSede', Math.round(resumo.necessidades.sede ?? 45));
-                sessionStorage.setItem('playerEnergia', Math.round(resumo.necessidades.energia ?? 80));
+                const fome = Math.round(resumo.necessidades.fome ?? 0);
+                const sede = Math.round(resumo.necessidades.sede ?? 0);
+                const energia = Math.round(resumo.necessidades.energia ?? 100);
 
-                // Atualiza UI
-                atualizarInterfaceNecessidades({
-                    fome: resumo.necessidades.fome,
-                    sede: resumo.necessidades.sede,
-                    energia: resumo.necessidades.energia
-                });
+                // Atualiza sessionStorage
+                sessionStorage.setItem('playerFome', fome);
+                sessionStorage.setItem('playerSede', sede);
+                sessionStorage.setItem('playerEnergia', energia);
 
-                console.log('[PERFIL] Status sincronizado:', {
-                    fome: resumo.necessidades.fome,
-                    sede: resumo.necessidades.sede,
-                    energia: resumo.necessidades.energia
-                });
+                // ✅ ATUALIZA UI PRINCIPAL
+                atualizarInterfaceNecessidades({ fome, sede, energia });
+
+                // ✅ ✅ ✅ ATUALIZA AS BARRAS DO SIDEBAR IMEDIATAMENTE
+                const barraFomeSidebar = document.getElementById('barra-fome-sidebar');
+                const barraSedeSidebar = document.getElementById('barra-sede-sidebar');
+                const barraEnergiaSidebar = document.getElementById('barra-energia-sidebar');
+                const fomeSidebar = document.getElementById('player-fome-sidebar');
+                const sedeSidebar = document.getElementById('player-sede-sidebar');
+                const energiaSidebar = document.getElementById('player-energia-sidebar');
+
+                if (barraFomeSidebar) barraFomeSidebar.style.width = fome + '%';
+                if (barraSedeSidebar) barraSedeSidebar.style.width = sede + '%';
+                if (barraEnergiaSidebar) barraEnergiaSidebar.style.width = energia + '%';
+                if (fomeSidebar) fomeSidebar.textContent = fome + '%';
+                if (sedeSidebar) sedeSidebar.textContent = sede + '%';
+                if (energiaSidebar) energiaSidebar.textContent = energia + '%';
+
+                console.log('[PERFIL] Sidebar atualizado imediatamente:', { fome, sede, energia });
                 resolve(true);
             } else {
                 resolve(false);
