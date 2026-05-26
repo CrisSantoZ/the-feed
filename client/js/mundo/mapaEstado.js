@@ -1,15 +1,30 @@
 /* ==========================================================================
-   MAPA DO ESTADO - LISTA DE CIDADES
+   MAPA DO ESTADO - LISTA DE CIDADES (CORRIGIDO)
    ========================================================================== */
 
 export function renderizarMapaEstado(paisNome, estadoNome) {
     const paises = window.paisesDataGlobal || [];
-    const pais = paises.find(p => p.nome === paisNome);
+    
+    // ✅ NORMALIZA OS NOMES PARA COMPARAÇÃO
+    const paisNomeNormalizado = paisNome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    
+    // Busca o país comparando nomes normalizados
+    const pais = paises.find(p => {
+        const pNome = p.nome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        return pNome === paisNomeNormalizado;
+    });
     
     let cidades = [];
     
     if (pais && pais.regioes) {
-        const regiao = pais.regioes.find(r => r.nome === estadoNome);
+        // ✅ NORMALIZA O NOME DO ESTADO
+        const estadoNomeNormalizado = estadoNome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        
+        const regiao = pais.regioes.find(r => {
+            const rNome = r.nome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+            return rNome === estadoNomeNormalizado;
+        });
+        
         if (regiao && regiao.cidades) {
             cidades = regiao.cidades;
             console.log(`[MAPA] Encontradas ${cidades.length} cidades para ${estadoNome}`);
