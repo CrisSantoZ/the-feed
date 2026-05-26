@@ -769,3 +769,5 @@ export const restaurantesSP = {
         }
     }
 }
+
+export default restaurantesSP;
