@@ -346,39 +346,10 @@ window.abrirModalTransporte = async function(tipo, destino, pais, cidade) {
 window.voltarParaEstado = async function(estadoNome) {
     const paisNome = sessionStorage.getItem('playerPais') || 'Brasil';
     
-    console.log('[VOLTAR_ESTADO] Recriando país e estado:', estadoNome);
+    console.log('[VOLTAR_ESTADO] Voltando para estado diretamente:', estadoNome);
     
-    if (mapaInicializado) {
-        destroyMundo();
-        mapaInicializado = false;
-    }
-    
-    renderizarConteudoCentral('mapa', { nivel: 'pais', pais: paisNome });
-    
-    // ✅ ESPERA O MAPA MANAGER CONFIGURAR O SVG COMPLETAMENTE
-    await new Promise((resolve) => {
-        let tentativas = 0;
-        const interval = setInterval(() => {
-            const mapa = document.getElementById('mapa-brasil');
-            const svg = mapa?.shadowRoot?.querySelector('svg');
-            if (svg && mapa._cssInjetado) {
-                console.log('[VOLTAR_ESTADO] SVG pronto, continuando...');
-                clearInterval(interval);
-                resolve();
-            }
-            tentativas++;
-            if (tentativas > 50) {
-                console.warn('[VOLTAR_ESTADO] Timeout esperando SVG');
-                clearInterval(interval);
-                resolve();
-            }
-        }, 100);
-    });
-    
-    // Seleciona o estado
-    if (window.selecionarEstado) {
-        window.selecionarEstado(paisNome, estadoNome);
-    }
+    // ✅ NÃO RECRIA O PAÍS - VAI DIRETO PARA O ESTADO (lista de cidades)
+    renderizarConteudoCentral('mapa', { nivel: 'estado', pais: paisNome, estado: estadoNome });
 };
 
 window.voltarParaMundo = function() {
