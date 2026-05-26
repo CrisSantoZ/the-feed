@@ -343,9 +343,21 @@ window.abrirModalTransporte = async function(tipo, destino, pais, cidade) {
     abrirModalViagem(tipo, destino, { pais: pais, cidade: cidade });
 };
 
-window.voltarParaEstado = function(estadoNome) {
+window.voltarParaEstado = async function(estadoNome) {
     const paisNome = sessionStorage.getItem('playerPais') || 'Brasil';
-    renderizarConteudoCentral('mapa', { nivel: 'estado', pais: paisNome, estado: estadoNome });
+    
+    console.log('[VOLTAR_ESTADO] Voltando para o país e selecionando estado:', estadoNome);
+    
+    // ✅ VOLTA PARA O PAÍS (recria o SVG do Brasil)
+    renderizarConteudoCentral('mapa', { nivel: 'pais', pais: paisNome });
+    
+    // Aguarda o SVG carregar e depois seleciona o estado
+    setTimeout(() => {
+        // Dispara o clique no estado para mostrar as cidades
+        if (window.selecionarEstado) {
+            window.selecionarEstado(paisNome, estadoNome);
+        }
+    }, 500);
 };
 
 window.voltarParaMundo = function() {
