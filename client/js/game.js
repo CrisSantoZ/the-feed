@@ -361,15 +361,18 @@ window.voltarParaMundo = function() {
 };
 
 window.voltarParaPais = async function(paisNome) {
+    // ✅ NORMALIZA O NOME DO PAÍS (primeira letra maiúscula)
+    const paisNormalizado = paisNome.charAt(0).toUpperCase() + paisNome.slice(1).toLowerCase();
+    
     const container = document.getElementById('mapa-container');
     if (container) {
         container.innerHTML = '';
     }
-    renderizarConteudoCentral('mapa', { nivel: 'pais', pais: paisNome });
+    renderizarConteudoCentral('mapa', { nivel: 'pais', pais: paisNormalizado });
     
     setTimeout(async () => {
         const { initMapaPais } = await import('./mundo/mapaManager.js');
-        if (paisNome === 'Brasil') {
+        if (paisNormalizado === 'Brasil') {
             initMapaPais('brasil');
         }
     }, 500);
