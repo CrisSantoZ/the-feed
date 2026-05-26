@@ -237,14 +237,16 @@ window.selecionarEstado = async function(paisNome, estadoNome) {
     const playerEstado = sessionStorage.getItem('playerEstado') || '';
     const playerPais = sessionStorage.getItem('playerPais') || 'Brasil';
     
-    // ✅ NORMALIZAR (remover acentos e comparar sem case)
+    // ✅ NORMALIZAR APENAS PARA COMPARAÇÃO (mantém nome original para renderizar)
     const estadoNormalizado = estadoNome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     const playerEstadoNormalizado = playerEstado.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     const paisNormalizado = paisNome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     const playerPaisNormalizado = playerPais.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     
+    // ✅ USA O NOME ORIGINAL PARA RENDERIZAR
     renderizarConteudoCentral('mapa', { nivel: 'estado', pais: paisNome, estado: estadoNome });
     
+    // ✅ COMPARAÇÃO USANDO NORMALIZADO
     if (playerEstadoNormalizado !== estadoNormalizado || playerPaisNormalizado !== paisNormalizado) {
         const { mostrarNotificacaoViagem } = await import('./transporte/transporteUI.js');
         mostrarNotificacaoViagem(estadoNome, 'estado', async () => {
@@ -259,7 +261,7 @@ window.selecionarCidade = async function(paisNome, estadoNome, cidadeNome) {
     const playerEstado = sessionStorage.getItem('playerEstado') || '';
     const playerPais = sessionStorage.getItem('playerPais') || 'Brasil';
     
-    // ✅ NORMALIZAR
+    // ✅ NORMALIZAR APENAS PARA COMPARAÇÃO
     const cidadeNormalizada = cidadeNome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     const playerCidadeNormalizada = playerCidade.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     const estadoNormalizado = estadoNome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
@@ -267,6 +269,7 @@ window.selecionarCidade = async function(paisNome, estadoNome, cidadeNome) {
     const paisNormalizado = paisNome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     const playerPaisNormalizado = playerPais.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     
+    // ✅ USA OS NOMES ORIGINAIS PARA RENDERIZAR
     const container = document.getElementById('mapa-container');
     if (container) {
         const { renderizarMapaCidade } = await import('./mundo/mapaCidade.js');
@@ -274,7 +277,7 @@ window.selecionarCidade = async function(paisNome, estadoNome, cidadeNome) {
         container.innerHTML = html;
     }
     
-    // ✅ COMPARAR NORMALIZADO
+    // ✅ COMPARAÇÃO USANDO NORMALIZADO
     if (playerCidadeNormalizada !== cidadeNormalizada || playerEstadoNormalizado !== estadoNormalizado) {
         const { mostrarNotificacaoViagem } = await import('./transporte/transporteUI.js');
         
