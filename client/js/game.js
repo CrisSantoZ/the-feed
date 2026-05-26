@@ -78,9 +78,7 @@ const renderizadores = {
     },
     feed: () => renderizarFeed(),
     pessoas: () => renderizarPessoas(),
-    // "personagem" agora chama o PERFIL (dashboard)
     personagem: () => renderizarPerfil(),
-    // Mantém as outras abas
     atributos: () => renderizarAtributos(),
     inventario: () => renderizarInventario(),
     habilidades: () => renderizarHabilidades(),
@@ -97,16 +95,13 @@ const renderizadores = {
 function renderizarConteudoCentral(tipo, dados = {}) {
     const mapaContainer = document.getElementById('mapa-container');
     
-    // Fechar popup se existir
     const popupPais = document.getElementById('info-pais-globo');
     if (popupPais) popupPais.remove();
     
-    // Garantir que o container do mapa está visível
     if (mapaContainer) {
         mapaContainer.style.display = 'block';
     }
     
-    // CASO 1: MAPA MUNDIAL (GLOBO 3D)
     if (tipo === 'mapa' && (!dados || !dados.nivel || dados.nivel === 'mundo')) {
         if (mapaInicializado) {
             destroyMundo();
@@ -117,31 +112,28 @@ function renderizarConteudoCentral(tipo, dados = {}) {
         return;
     }
     
-  // CASO 2: MAPA DE PAÍS (nível = 'pais')
-if (tipo === 'mapa' && dados?.nivel === 'pais') {
-    if (mapaInicializado) {
-        destroyMundo();
-        mapaInicializado = false;
+    if (tipo === 'mapa' && dados?.nivel === 'pais') {
+        if (mapaInicializado) {
+            destroyMundo();
+            mapaInicializado = false;
+        }
+        
+        const paisNome = dados.pais;
+        
+        if (mapaContainer) {
+            mapaContainer.innerHTML = renderizarMapaPais(paisNome);
+        }
+        
+        if (paisNome === 'Brasil') {
+            setTimeout(async () => {
+                const { initMapaPais } = await import('./mundo/mapaManager.js');
+                initMapaPais('brasil');
+            }, 200);
+        }
+        
+        return;
     }
     
-    const paisNome = dados.pais;
-    
-    if (mapaContainer) {
-        // USA O MAPAPAIS.JS
-        mapaContainer.innerHTML = renderizarMapaPais(paisNome);
-    }
-    
-    if (paisNome === 'Brasil') {
-        setTimeout(async () => {
-            const { initMapaPais } = await import('./mundo/mapaManager.js');
-            initMapaPais('brasil');
-        }, 200);
-    }
-    
-    return;
-}
-    
-    // CASO 3: MAPA DE ESTADO (nível = 'estado')
     if (tipo === 'mapa' && dados?.nivel === 'estado') {
         const html = renderizarMapaEstado(dados.pais, dados.estado);
         if (mapaContainer) {
@@ -150,7 +142,6 @@ if (tipo === 'mapa' && dados?.nivel === 'pais') {
         return;
     }
     
-    // Para outros tipos (feed, pessoas, atributos)
     const renderizador = renderizadores[tipo];
     if (renderizador) {
         const html = renderizador(dados);
@@ -181,7 +172,6 @@ function mostrarMenu(menuId) {
     
     const sidebarMenu = document.querySelector('.sidebar-menu');
     if (sidebarMenu) {
-        // Se for o menu personagem, renderiza o dashboard + links
         if (menuId === 'personagem') {
             import('./personagem/perfil.js').then(module => {
                 const dashboardHtml = module.renderizarPerfilSidebar();
@@ -215,20 +205,15 @@ function selecionarItem(itemId) {
     renderizarConteudoCentral(itemId);
 }
 
-// ==================== COMPATIBILIDADE ====================
-
 function carregarMapa() {
     renderizarConteudoCentral('mapa');
 }
-
-// ==================== EXPORTS ====================
 
 window.toggleMenu = toggleMenu;
 window.fecharMenu = fecharMenu;
 window.selecionarItem = selecionarItem;
 window.carregarMapa = carregarMapa;
 
-// Funções de navegação do mapa
 window.selecionarPais = function(paisNome) {
     renderizarConteudoCentral('mapa', { nivel: 'pais', pais: paisNome });
 };
@@ -237,16 +222,13 @@ window.selecionarEstado = async function(paisNome, estadoNome) {
     const playerEstado = sessionStorage.getItem('playerEstado') || '';
     const playerPais = sessionStorage.getItem('playerPais') || 'Brasil';
     
-    // ✅ NORMALIZAR APENAS PARA COMPARAÇÃO (mantém nome original para renderizar)
     const estadoNormalizado = estadoNome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     const playerEstadoNormalizado = playerEstado.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     const paisNormalizado = paisNome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     const playerPaisNormalizado = playerPais.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     
-    // ✅ USA O NOME ORIGINAL PARA RENDERIZAR
     renderizarConteudoCentral('mapa', { nivel: 'estado', pais: paisNome, estado: estadoNome });
     
-    // ✅ COMPARAÇÃO USANDO NORMALIZADO
     if (playerEstadoNormalizado !== estadoNormalizado || playerPaisNormalizado !== paisNormalizado) {
         const { mostrarNotificacaoViagem } = await import('./transporte/transporteUI.js');
         mostrarNotificacaoViagem(estadoNome, 'estado', async () => {
@@ -261,7 +243,6 @@ window.selecionarCidade = async function(paisNome, estadoNome, cidadeNome) {
     const playerEstado = sessionStorage.getItem('playerEstado') || '';
     const playerPais = sessionStorage.getItem('playerPais') || 'Brasil';
     
-    // ✅ NORMALIZAR APENAS PARA COMPARAÇÃO
     const cidadeNormalizada = cidadeNome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     const playerCidadeNormalizada = playerCidade.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     const estadoNormalizado = estadoNome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
@@ -269,7 +250,6 @@ window.selecionarCidade = async function(paisNome, estadoNome, cidadeNome) {
     const paisNormalizado = paisNome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     const playerPaisNormalizado = playerPais.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     
-    // ✅ USA OS NOMES ORIGINAIS PARA RENDERIZAR
     const container = document.getElementById('mapa-container');
     if (container) {
         const { renderizarMapaCidade } = await import('./mundo/mapaCidade.js');
@@ -277,7 +257,6 @@ window.selecionarCidade = async function(paisNome, estadoNome, cidadeNome) {
         container.innerHTML = html;
     }
     
-    // ✅ COMPARAÇÃO USANDO NORMALIZADO
     if (playerCidadeNormalizada !== cidadeNormalizada || playerEstadoNormalizado !== estadoNormalizado) {
         const { mostrarNotificacaoViagem } = await import('./transporte/transporteUI.js');
         
@@ -299,6 +278,7 @@ window.selecionarCidade = async function(paisNome, estadoNome, cidadeNome) {
         }
     }
 };
+
 window.selecionarLocal = async function(tipo, id, nome, cidade, estado, pais) {
     const { renderizarMapaLocal } = await import('./mundo/mapaLocal.js');
     const container = document.getElementById('mapa-container');
@@ -309,10 +289,6 @@ window.selecionarLocal = async function(tipo, id, nome, cidade, estado, pais) {
 };
 
 window.abrirPersonagem = async function() {
-    // Fecha o menu principal (opcional)
-    // toggleMenu();
-    
-    // Carrega o dashboard
     const { renderizarPerfil } = await import('./personagem/perfil.js');
     const dashboardHtml = renderizarPerfil();
     
@@ -322,7 +298,6 @@ window.abrirPersonagem = async function() {
         dashboardContainer.style.display = 'block';
     }
     
-    // Mostra os submenus (Atributos, Inventário, etc.)
     const submenuContainer = document.getElementById('submenu-container');
     const submenu = document.getElementById('submenu');
     
@@ -338,14 +313,34 @@ window.abrirPersonagem = async function() {
     }
 };
 
+// ✅ FUNÇÃO CORRIGIDA - VOLTAR PARA CIDADE
 window.voltarParaCidade = async function(cidade, estado, pais) {
-    const { renderizarMapaCidade } = await import('./mundo/mapaCidade.js');
-    const container = document.getElementById('mapa-container');
-    if (container) {
-        // Gera o HTML antes de limpar (evita pisca)
-        const html = await renderizarMapaCidade(pais, estado, cidade);
-        container.innerHTML = html;
+    // Verifica e corrige valores inválidos
+    if (!cidade || cidade === 'undefined' || cidade === 'null' || cidade === 'Carregando...') {
+        console.warn('[VOLTAR] Cidade inválida, usando fallback:', cidade);
+        cidade = sessionStorage.getItem('playerCidade') || 'São Paulo';
     }
+    if (!estado || estado === 'undefined' || estado === 'null' || estado === 'Carregando...') {
+        estado = sessionStorage.getItem('playerEstado') || 'São Paulo';
+    }
+    if (!pais || pais === 'undefined' || pais === 'null' || pais === 'Carregando...') {
+        pais = sessionStorage.getItem('playerPais') || 'Brasil';
+    }
+    
+    console.log('[VOLTAR] Recarregando cidade:', { cidade, estado, pais });
+    
+    // Recria o estado primeiro
+    renderizarConteudoCentral('mapa', { nivel: 'estado', pais: pais, estado: estado });
+    
+    // Aguarda e depois mostra a cidade
+    setTimeout(async () => {
+        const container = document.getElementById('mapa-container');
+        if (container) {
+            const { renderizarMapaCidade } = await import('./mundo/mapaCidade.js');
+            const html = await renderizarMapaCidade(pais, estado, cidade);
+            container.innerHTML = html;
+        }
+    }, 300);
 };
 
 window.abrirModalTransporte = async function(tipo, destino, pais, cidade) {
@@ -359,12 +354,10 @@ window.voltarParaEstado = function(estadoNome) {
 };
 
 window.voltarParaMundo = function() {
-    // Limpa o container
     const container = document.getElementById('mapa-container');
     if (container) {
         container.innerHTML = '';
     }
-    // Recria o globo
     renderizarConteudoCentral('mapa', { nivel: 'mundo' });
 };
 
@@ -383,7 +376,7 @@ window.voltarParaPais = async function(paisNome) {
     }, 500);
 };
 
-// ==================== SISTEMA DE PEDIDOS (APENAS CHAMADA) ====================
+// ==================== SISTEMA DE PEDIDOS ====================
 window.fazerPedido = async function(restauranteId, pratoId) {
     const playerId = sessionStorage.getItem('playerId');
     const cidade = sessionStorage.getItem('playerCidade');
@@ -396,15 +389,12 @@ window.fazerPedido = async function(restauranteId, pratoId) {
     }
     
     try {
-        // CAMINHO DINÂMICO para qualquer país/estado
         const paisSlug = pais.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
         const estadoSlug = estado.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ /g, '-');
         
-        // Importa o arquivo de restaurantes do estado específico
         const modulo = await import(`/js/locais/${paisSlug}/${estadoSlug}/Restaurantes.js`);
         const dadosRestaurantes = modulo.default || modulo;
         
-        // Busca o restaurante pela cidade e ID
         const restaurante = dadosRestaurantes[cidade]?.[restauranteId];
         
         if (!restaurante) {
@@ -429,16 +419,13 @@ window.fazerPedido = async function(restauranteId, pratoId) {
 
 // ==================== CONFIRMAR ENTRADA NO LOCAL ====================
 window.confirmarLocal = async function(tipo, id, nome, cidade, estado, pais, descricao, endereco, horario) {
-    // Verifica se já está neste local
     const playerLocal = sessionStorage.getItem('playerLocal');
     
     if (playerLocal === id) {
-        // Já está aqui, mostra o local diretamente
         window.selecionarLocal(tipo, id, nome, cidade, estado, pais);
         return;
     }
     
-    // Se não está, pergunta se quer ir
     const { mostrarModalConfirmacao } = await import('./transporte/transporteUI.js');
     
     const conteudo = `
@@ -451,7 +438,6 @@ window.confirmarLocal = async function(tipo, id, nome, cidade, estado, pais, des
     const confirmar = await mostrarModalConfirmacao(nome, conteudo);
     
     if (confirmar) {
-        // Salva a nova localização
         sessionStorage.setItem('playerLocal', id);
         sessionStorage.setItem('playerLocalNome', nome);
         sessionStorage.setItem('playerLocalTipo', tipo);
@@ -463,21 +449,35 @@ window.confirmarLocal = async function(tipo, id, nome, cidade, estado, pais, des
     }
 };
 
+// ✅ FUNÇÃO CORRIGIDA - SAIR DO LOCAL
 window.sairDoLocal = async function() {
     try {
         const { fecharChatLocal } = await import('./chat/chatLocal.js');
         fecharChatLocal();
     } catch(e) {}
     
-    // Limpa o local atual
     sessionStorage.removeItem('playerLocal');
     sessionStorage.removeItem('playerLocalNome');
     sessionStorage.removeItem('playerLocalTipo');
     
-    // Volta para a cidade
-    const cidade = sessionStorage.getItem('playerCidade');
-    const estado = sessionStorage.getItem('playerEstado');
-    const pais = sessionStorage.getItem('playerPais');
+    // ✅ BUSCA OS VALORES COM FALLBACK
+    let cidade = sessionStorage.getItem('playerCidade');
+    let estado = sessionStorage.getItem('playerEstado');
+    let pais = sessionStorage.getItem('playerPais');
+    
+    // ✅ FALLBACK SE ESTIVEREM VAZIOS
+    if (!cidade || cidade === 'undefined' || cidade === 'null' || cidade === 'Carregando...') {
+        cidade = 'São Paulo';
+        console.log('[SAIR] Cidade fallback para São Paulo');
+    }
+    if (!estado || estado === 'undefined' || estado === 'null' || estado === 'Carregando...') {
+        estado = 'São Paulo';
+    }
+    if (!pais || pais === 'undefined' || pais === 'null' || pais === 'Carregando...') {
+        pais = 'Brasil';
+    }
+    
+    console.log('[SAIR] Voltando para:', { cidade, estado, pais });
     
     window.voltarParaCidade(cidade, estado, pais);
 };
@@ -492,33 +492,27 @@ window.fecharPainel = function() {
         }, 300);
     }
     
-    // Destroi o globo se existir
     if (mapaInicializado) {
         destroyMundo();
         mapaInicializado = false;
     }
     
-    // VOLTA PARA O MAPA MUNDIAL (GLOBO)
     const container = document.getElementById('mapa-container');
     if (container) {
         container.innerHTML = '';
     }
     
-    // Recria o globo 3D
     initMundo();
     mapaInicializado = true;
     
-    // Reseta a localização visual (mantém a localização real do personagem)
     console.log('[FECHAR] Painel fechado, voltando ao globo mundial');
 };
 
-// Compatibilidade com login.js
 window.mudarCategoria = selecionarItem;
 window.carregarMapaGame = carregarMapa;
 window.mostrarSubmenu = selecionarItem;
 window.selecionarSubmenu = selecionarItem;
 
-// Inicializar
 setTimeout(() => {
     mostrarMenu('principal');
     renderizarConteudoCentral('mapa');
@@ -531,7 +525,6 @@ if (window.socket) {
             sessionStorage.setItem('playerPais', pais);
             sessionStorage.setItem('playerCidade', cidade);
             
-            // Recarrega o mapa apropriado
             if (data.destino.includes('/')) {
                 renderizarConteudoCentral('mapa', { nivel: 'pais', pais: pais });
             }
