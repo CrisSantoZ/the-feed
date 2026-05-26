@@ -348,27 +348,37 @@ window.voltarParaEstado = async function(estadoNome) {
     
     console.log('[VOLTAR_ESTADO] Recriando país e estado:', estadoNome);
     
-    // Destroi o globo se existir
     if (mapaInicializado) {
         destroyMundo();
         mapaInicializado = false;
     }
     
-    // Recria o SVG do Brasil
     renderizarConteudoCentral('mapa', { nivel: 'pais', pais: paisNome });
     
-    // ✅ FORÇA O MAPA MANAGER A REINICIAR (CRÍTICO!)
-    setTimeout(async () => {
-        const { initMapaPais } = await import('./mundo/mapaManager.js');
-        initMapaPais('brasil');
-        
-        // Depois seleciona o estado
-        setTimeout(() => {
-            if (window.selecionarEstado) {
-                window.selecionarEstado(paisNome, estadoNome);
+    // ✅ ESPERA O MAPA MANAGER CONFIGURAR O SVG COMPLETAMENTE
+    await new Promise((resolve) => {
+        let tentativas = 0;
+        const interval = setInterval(() => {
+            const mapa = document.getElementById('mapa-brasil');
+            const svg = mapa?.shadowRoot?.querySelector('svg');
+            if (svg && mapa._cssInjetado) {
+                console.log('[VOLTAR_ESTADO] SVG pronto, continuando...');
+                clearInterval(interval);
+                resolve();
             }
-        }, 300);
-    }, 300);
+            tentativas++;
+            if (tentativas > 50) {
+                console.warn('[VOLTAR_ESTADO] Timeout esperando SVG');
+                clearInterval(interval);
+                resolve();
+            }
+        }, 100);
+    });
+    
+    // Seleciona o estado
+    if (window.selecionarEstado) {
+        window.selecionarEstado(paisNome, estadoNome);
+    }
 };
 
 window.voltarParaMundo = function() {
