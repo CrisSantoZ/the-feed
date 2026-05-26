@@ -237,11 +237,15 @@ window.selecionarEstado = async function(paisNome, estadoNome) {
     const playerEstado = sessionStorage.getItem('playerEstado') || '';
     const playerPais = sessionStorage.getItem('playerPais') || 'Brasil';
     
-    // SEMPRE mostra o estado (visualização)
+    // ✅ NORMALIZAR (remover acentos e comparar sem case)
+    const estadoNormalizado = estadoNome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const playerEstadoNormalizado = playerEstado.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const paisNormalizado = paisNome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const playerPaisNormalizado = playerPais.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    
     renderizarConteudoCentral('mapa', { nivel: 'estado', pais: paisNome, estado: estadoNome });
     
-    // Se não está neste estado, mostra notificação flutuante (não trava)
-    if (playerEstado !== estadoNome || playerPais !== paisNome) {
+    if (playerEstadoNormalizado !== estadoNormalizado || playerPaisNormalizado !== paisNormalizado) {
         const { mostrarNotificacaoViagem } = await import('./transporte/transporteUI.js');
         mostrarNotificacaoViagem(estadoNome, 'estado', async () => {
             const { abrirModalViagem } = await import('./transporte/transporteUI.js');
@@ -255,7 +259,14 @@ window.selecionarCidade = async function(paisNome, estadoNome, cidadeNome) {
     const playerEstado = sessionStorage.getItem('playerEstado') || '';
     const playerPais = sessionStorage.getItem('playerPais') || 'Brasil';
     
-    // SEMPRE mostra a cidade (visualização)
+    // ✅ NORMALIZAR
+    const cidadeNormalizada = cidadeNome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const playerCidadeNormalizada = playerCidade.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const estadoNormalizado = estadoNome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const playerEstadoNormalizado = playerEstado.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const paisNormalizado = paisNome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const playerPaisNormalizado = playerPais.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    
     const container = document.getElementById('mapa-container');
     if (container) {
         const { renderizarMapaCidade } = await import('./mundo/mapaCidade.js');
@@ -263,24 +274,21 @@ window.selecionarCidade = async function(paisNome, estadoNome, cidadeNome) {
         container.innerHTML = html;
     }
     
-    // Se não está nesta cidade, mostra notificação flutuante
-    if (playerCidade !== cidadeNome || playerEstado !== estadoNome) {
+    // ✅ COMPARAR NORMALIZADO
+    if (playerCidadeNormalizada !== cidadeNormalizada || playerEstadoNormalizado !== estadoNormalizado) {
         const { mostrarNotificacaoViagem } = await import('./transporte/transporteUI.js');
         
-        if (playerEstado === estadoNome && playerPais === paisNome) {
-            // Mesmo estado, pode ir direto para a cidade
+        if (playerEstadoNormalizado === estadoNormalizado && playerPaisNormalizado === paisNormalizado) {
             mostrarNotificacaoViagem(cidadeNome, 'cidade', async () => {
                 const { abrirModalViagem } = await import('./transporte/transporteUI.js');
                 abrirModalViagem('cidade', cidadeNome, { pais: paisNome, estado: estadoNome, cidade: cidadeNome });
             });
-        } else if (playerPais === paisNome) {
-            // Mesmo país, estado diferente
+        } else if (playerPaisNormalizado === paisNormalizado) {
             mostrarNotificacaoViagem(estadoNome, 'estado', async () => {
                 const { abrirModalViagem } = await import('./transporte/transporteUI.js');
                 abrirModalViagem('estado', estadoNome, { pais: paisNome, estado: estadoNome });
             });
         } else {
-            // País diferente
             mostrarNotificacaoViagem(paisNome, 'pais', async () => {
                 const { abrirModalViagem } = await import('./transporte/transporteUI.js');
                 abrirModalViagem('pais', paisNome, { pais: paisNome });
@@ -288,7 +296,6 @@ window.selecionarCidade = async function(paisNome, estadoNome, cidadeNome) {
         }
     }
 };
-
 window.selecionarLocal = async function(tipo, id, nome, cidade, estado, pais) {
     const { renderizarMapaLocal } = await import('./mundo/mapaLocal.js');
     const container = document.getElementById('mapa-container');
