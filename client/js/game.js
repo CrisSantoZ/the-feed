@@ -348,16 +348,21 @@ window.voltarParaEstado = async function(estadoNome) {
     
     console.log('[VOLTAR_ESTADO] Voltando para o país e selecionando estado:', estadoNome);
     
-    // ✅ VOLTA PARA O PAÍS (recria o SVG do Brasil)
+    // ✅ FORÇA A DESTRUIÇÃO DO GLOBO SE EXISTIR
+    if (mapaInicializado) {
+        destroyMundo();
+        mapaInicializado = false;
+    }
+    
+    // ✅ RECRIA O SVG DO BRASIL
     renderizarConteudoCentral('mapa', { nivel: 'pais', pais: paisNome });
     
-    // Aguarda o SVG carregar e depois seleciona o estado
+    // ✅ AUMENTA O TIMEOUT PARA 1 SEGUNDO (para garantir que o SVG carregou)
     setTimeout(() => {
-        // Dispara o clique no estado para mostrar as cidades
         if (window.selecionarEstado) {
             window.selecionarEstado(paisNome, estadoNome);
         }
-    }, 500);
+    }, 1000);
 };
 
 window.voltarParaMundo = function() {
