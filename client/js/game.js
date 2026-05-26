@@ -329,18 +329,13 @@ window.voltarParaCidade = async function(cidade, estado, pais) {
     
     console.log('[VOLTAR] Recarregando cidade:', { cidade, estado, pais });
     
-    // Recria o estado primeiro
-    renderizarConteudoCentral('mapa', { nivel: 'estado', pais: pais, estado: estado });
-    
-    // Aguarda e depois mostra a cidade
-    setTimeout(async () => {
-        const container = document.getElementById('mapa-container');
-        if (container) {
-            const { renderizarMapaCidade } = await import('./mundo/mapaCidade.js');
-            const html = await renderizarMapaCidade(pais, estado, cidade);
-            container.innerHTML = html;
-        }
-    }, 300);
+    // ✅ NÃO RECRIA O ESTADO - VOLTA DIRETO PARA A CIDADE
+    const container = document.getElementById('mapa-container');
+    if (container) {
+        const { renderizarMapaCidade } = await import('./mundo/mapaCidade.js');
+        const html = await renderizarMapaCidade(pais, estado, cidade);
+        container.innerHTML = html;
+    }
 };
 
 window.abrirModalTransporte = async function(tipo, destino, pais, cidade) {
