@@ -472,5 +472,29 @@ async function buscarFinanceiro(playerId) {
     });
 }
 
+// ==================== DETECTOR DE REATIVAÇÃO DA ABA ====================
+// Quando o jogador voltar para a aba do jogo, sincroniza os dados
+
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+        console.log('[WAKE] Aba ativada, sincronizando status...');
+        
+        const playerId = sessionStorage.getItem('playerId');
+        if (playerId && window.socket) {
+            // Verifica se o socket está conectado
+            if (!window.socket.connected) {
+                console.log('[WAKE] Socket desconectado, reconectando...');
+                window.socket.connect();
+            }
+            
+            // Força sincronização
+            sincronizarStatus();
+            
+            // Força um tick manual para atualizar
+            window.socket.emit('tick', playerId);
+        }
+    }
+});
+
 // Exportar funções para uso externo
 export { sincronizarStatus, buscarNecessidades, buscarSaude, buscarFinanceiro };
