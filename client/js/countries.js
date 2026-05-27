@@ -15,7 +15,24 @@ window.paisesDataGlobal = [
       { "nome": "Amazonas", "cidades": ["Manaus", "Parintins", "Tefé"] },
       { "nome": "Ceará", "cidades": ["Fortaleza", "Sobral", "Juazeiro do Norte"] },
       { "nome": "Distrito Federal", "cidades": ["Brasília", "Ceilândia", "Taguatinga"] },
-      { "nome": "Paraná", "cidades": ["Curitiba", "Londrina", "Foz do Iguaçu", "Maringá"] }
+      { "nome": "Paraná", "cidades": ["Curitiba", "Londrina", "Foz do Iguaçu", "Maringá"] },
+      { "nome": "Acre", "cidades": ["Rio Branco", "Cruzeiro do Sul", "Sena Madureira"] },
+      { "nome": "Alagoas", "cidades": ["Maceió", "Arapiraca", "Palmeira dos Índios"] },
+      { "nome": "Amapá", "cidades": ["Macapá", "Santana", "Laranjal do Jari"] },
+      { "nome": "Espírito Santo", "cidades": ["Vitória", "Vila Velha", "Serra", "Cariacica"] },
+      { "nome": "Goiás", "cidades": ["Goiânia", "Aparecida de Goiânia", "Anápolis", "Rio Verde"] },
+      { "nome": "Maranhão", "cidades": ["São Luís", "Imperatriz", "São José de Ribamar"] },
+      { "nome": "Mato Grosso", "cidades": ["Cuiabá", "Várzea Grande", "Rondonópolis"] },
+      { "nome": "Mato Grosso do Sul", "cidades": ["Campo Grande", "Dourados", "Três Lagoas"] },
+      { "nome": "Pará", "cidades": ["Belém", "Ananindeua", "Santarém", "Marabá"] },
+      { "nome": "Paraíba", "cidades": ["João Pessoa", "Campina Grande", "Santa Rita"] },
+      { "nome": "Piauí", "cidades": ["Teresina", "Parnaíba", "Picos"] },
+      { "nome": "Rio Grande do Norte", "cidades": ["Natal", "Mossoró", "Parnamirim"] },
+      { "nome": "Rondônia", "cidades": ["Porto Velho", "Ji-Paraná", "Ariquemes"] },
+      { "nome": "Roraima", "cidades": ["Boa Vista", "Rorainópolis", "Caracaraí"] },
+      { "nome": "Sergipe", "cidades": ["Aracaju", "Nossa Senhora do Socorro", "Lagarto"] },
+      { "nome": "Tocantins", "cidades": ["Palmas", "Araguaína", "Gurupi"] },
+      { "nome": "Santa Catarina", "cidades": ["Florianópolis", "Joinville", "Balneário Camboriú", "Blumenau"] }
     ]
   },
   {
