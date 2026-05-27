@@ -4,12 +4,19 @@
 const configuracoesPaises = {
     brasil: {
         id: 'mapa-brasil',
-        estadosAtivos: ['SP', 'RJ', 'MG', 'BA', 'RS', 'PR', 'SC', 'PE', 'CE', 'DF', 'AM'],
+        estadosAtivos: [
+            'AC', 'AL', 'AM', 'AP', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 'MG', 
+            'MS', 'MT', 'PA', 'PB', 'PE', 'PI', 'PR', 'RJ', 'RN', 'RO', 'RR', 
+            'RS', 'SC', 'SE', 'SP', 'TO'
+        ],
         mapaEstados: {
-            'SP': 'São Paulo', 'RJ': 'Rio de Janeiro', 'MG': 'Minas Gerais',
-            'BA': 'Bahia', 'RS': 'Rio Grande do Sul', 'PR': 'Paraná',
-            'SC': 'Santa Catarina', 'PE': 'Pernambuco', 'CE': 'Ceará',
-            'DF': 'Distrito Federal', 'AM': 'Amazonas'
+            'AC': 'Acre', 'AL': 'Alagoas', 'AM': 'Amazonas', 'AP': 'Amapá',
+            'BA': 'Bahia', 'CE': 'Ceará', 'DF': 'Distrito Federal', 'ES': 'Espírito Santo',
+            'GO': 'Goiás', 'MA': 'Maranhão', 'MG': 'Minas Gerais', 'MS': 'Mato Grosso do Sul',
+            'MT': 'Mato Grosso', 'PA': 'Pará', 'PB': 'Paraíba', 'PE': 'Pernambuco',
+            'PI': 'Piauí', 'PR': 'Paraná', 'RJ': 'Rio de Janeiro', 'RN': 'Rio Grande do Norte',
+            'RO': 'Rondônia', 'RR': 'Roraima', 'RS': 'Rio Grande do Sul', 'SC': 'Santa Catarina',
+            'SE': 'Sergipe', 'SP': 'São Paulo', 'TO': 'Tocantins'
         },
         nomePais: 'Brasil'
     }
