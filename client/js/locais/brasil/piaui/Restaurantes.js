@@ -1,4 +1,4 @@
-export const restaurantesPI = {
+const restaurantesPI = {
     // ==================== TERESINA (CAPITAL) - 20 RESTAURANTES ====================
     "Teresina": {
         // ========== 1. CENTRO - CULINÁRIA PIAUIENSE ==========

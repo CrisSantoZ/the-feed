@@ -1,4 +1,4 @@
-export const restaurantesAC = {
+const restaurantesAC = {
     // ==================== RIO BRANCO (CAPITAL) - 20 RESTAQUÊ? RESTAURANTES ====================
     "Rio Branco": {
         // ========== 1. CENTRO - CULINÁRIA ACREANA (TACACÁ E MANIÇOCA) ==========

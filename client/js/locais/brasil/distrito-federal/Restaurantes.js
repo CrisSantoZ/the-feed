@@ -1,4 +1,4 @@
-export const restaurantesDF = {
+const restaurantesDF = {
     // ==================== BRASÍLIA (CAPITAL) - 20 RESTAURANTES ====================
     "Brasília": {
         // ========== 1. ASA SUL - CULINÁRIA BRASILIENSE ==========

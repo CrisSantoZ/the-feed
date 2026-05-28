@@ -1,4 +1,4 @@
-export const restaurantesSC = {
+const restaurantesSC = {
     // ==================== FLORIANÓPOLIS (CAPITAL) - 20 RESTAURANTES ====================
     "Florianópolis": {
         // ========== 1. CENTRO - CULINÁRIA AÇORIANA (SEQUÊNCIA) ==========

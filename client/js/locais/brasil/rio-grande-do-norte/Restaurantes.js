@@ -1,4 +1,4 @@
-export const restaurantesRN = {
+const restaurantesRN = {
     // ==================== NATAL (CAPITAL) - 20 RESTAURANTES ====================
     "Natal": {
         // ========== 1. PONTA NEGRA - FRUTOS DO MAR ==========

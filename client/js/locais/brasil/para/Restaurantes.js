@@ -1,4 +1,4 @@
-export const restaurantesPA = {
+const restaurantesPA = {
     // ==================== BELÉM (CAPITAL) - 20 RESTAURANTES ====================
     "Belém": {
         // ========== 1. CENTRO HISTÓRICO (VER-O-PESO) - CULINÁRIA PARAENSE ==========

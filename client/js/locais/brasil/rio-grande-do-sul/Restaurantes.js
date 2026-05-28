@@ -1,4 +1,4 @@
-export const restaurantesRS = {
+const restaurantesRS = {
     // ==================== PORTO ALEGRE (CAPITAL) - 20 RESTAURANTES ====================
     "Porto Alegre": {
         // ========== 1. CENTRO - CHURRASCARIA GAÚCHA ==========

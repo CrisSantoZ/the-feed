@@ -1,4 +1,4 @@
-export const restaurantesMT = {
+const restaurantesMT = {
     // ==================== CUIABÁ (CAPITAL) - 20 RESTAURANTES ====================
     "Cuiabá": {
         // ========== 1. CENTRO - CULINÁRIA CUIABANA (PEIXE, MARIA IZABEL) ==========

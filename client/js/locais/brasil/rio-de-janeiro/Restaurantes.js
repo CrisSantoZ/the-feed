@@ -1,4 +1,4 @@
-export const restaurantesRJ = {
+const restaurantesRJ = {
     // ==================== RIO DE JANEIRO (CAPITAL) ====================
     "Rio de Janeiro": {
         // ========== COPACABANA ==========

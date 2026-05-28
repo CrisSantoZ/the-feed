@@ -1,6 +1,6 @@
 // client/js/locais/brasil/minas-gerais/Restaurantes.js
 
-export const restaurantesMG = {
+const restaurantesMG = {
     // ==================== BELO HORIZONTE - CAPITAL MINEIRA ====================
     "Belo Horizonte": {
         // ========== SAVASSI (BAIRRO NOBRE / ROTEIRO GASTRONÔMICO) ==========

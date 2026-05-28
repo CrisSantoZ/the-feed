@@ -1,4 +1,4 @@
-export const restaurantesCE = {
+const restaurantesCE = {
     // ==================== FORTALEZA (CAPITAL) - 20 RESTAURANTES ====================
     "Fortaleza": {
         // ========== 1. PRAIA DE IRACEMA - FRUTOS DO MAR ==========

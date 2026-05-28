@@ -1,4 +1,4 @@
-export const restaurantesES = {
+const restaurantesES = {
     // ==================== VITÓRIA (CAPITAL) - 20 RESTAQUÊ? RESTAURANTES ====================
     "Vitória": {
         // ========== 1. CENTRO - CULINÁRIA CAPIXABA (MOQUECA CAPIXABA) ==========

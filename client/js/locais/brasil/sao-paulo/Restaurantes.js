@@ -1,4 +1,4 @@
-export const restaurantesSP = {
+const restaurantesSP = {
     // ==================== SÃO PAULO (CAPITAL) - VERSÃO EXTENSA ====================
     "São Paulo": {
         // ========== REGIÃO DA PAULISTA / JARDINS ==========

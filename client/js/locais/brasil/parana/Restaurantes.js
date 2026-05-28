@@ -1,4 +1,4 @@
-export const restaurantesPR = {
+const restaurantesPR = {
     // ==================== CURITIBA (CAPITAL) - 20 RESTAURANTES ====================
     "Curitiba": {
         // ========== 1. CENTRO - COMIDA TÍPICA PARANAENSE (BARREADO) ==========

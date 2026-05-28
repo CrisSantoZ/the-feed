@@ -21,8 +21,8 @@ window.getSimboloMoeda = function() {
             const paisSlug = paisNome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
             const estadoSlug = estadoNome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ /g, '-');
             const modulo = await import(`/js/locais/${paisSlug}/${estadoSlug}/Restaurantes.js`);
-            const restaurantesSP = modulo.restaurantesSP || modulo.default;
-            const restaurante = restaurantesSP[cidadeNome]?.[localId];
+            const dados = modulo.default || modulo;
+            const restaurante = dados[cidadeNome]?.[localId];
             if (restaurante) {
                 localData = restaurante;
             }
@@ -92,13 +92,6 @@ try {
     
     // Iniciar chat local se o personagem estiver neste local
     if (localData && sessionStorage.getItem('playerLocal') === localData.id) {
-        setTimeout(async () => {
-            const { iniciarChatLocal } = await import('../chat/chatLocal.js');
-            iniciarChatLocal(localData.id, localData.nome, localTipo);
-        }, 500);
-    }
-
-if (localData && sessionStorage.getItem('playerLocal') === localData.id) {
         setTimeout(async () => {
             const { iniciarChatLocal } = await import('../chat/chatLocal.js');
             iniciarChatLocal(localData.id, localData.nome, localTipo);

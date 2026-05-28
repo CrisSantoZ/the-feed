@@ -1,4 +1,4 @@
-export const restaurantesPB = {
+const restaurantesPB = {
     // ==================== JOÃO PESSOA (CAPITAL) - 20 RESTAURANTES ====================
     "João Pessoa": {
         // ========== 1. CENTRO HISTÓRICO - CULINÁRIA PARAIBANA ==========

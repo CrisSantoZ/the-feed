@@ -1,4 +1,4 @@
-export const restaurantesRO = {
+const restaurantesRO = {
     // ==================== PORTO VELHO (CAPITAL) - 20 RESTAURANTES ====================
     "Porto Velho": {
         // ========== 1. CENTRO - CULINÁRIA RONDONIENSE (PEIXES DO MADEIRA) ==========

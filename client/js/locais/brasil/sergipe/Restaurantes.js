@@ -1,4 +1,4 @@
-export const restaurantesSE = {
+const restaurantesSE = {
     // ==================== ARACAJU (CAPITAL) - 20 RESTAURANTES ====================
     "Aracaju": {
         // ========== 1. ATALAIA - FRUTOS DO MAR ==========

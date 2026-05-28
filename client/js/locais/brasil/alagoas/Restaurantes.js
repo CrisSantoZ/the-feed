@@ -1,4 +1,4 @@
-export const restaurantesAL = {
+const restaurantesAL = {
     // ==================== MACEIÓ (CAPITAL) - 20 RESTAURANTES ====================
     "Maceió": {
         // ========== 1. PAJUÇARA - FRUTOS DO MAR ==========

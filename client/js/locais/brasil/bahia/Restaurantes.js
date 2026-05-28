@@ -1,4 +1,4 @@
-export const restaurantesBA = {
+const restaurantesBA = {
     // ==================== SALVADOR (CAPITAL) ====================
     "Salvador": {
         // ========== PELOURINHO ==========

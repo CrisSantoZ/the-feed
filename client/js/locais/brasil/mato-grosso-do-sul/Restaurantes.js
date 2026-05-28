@@ -1,4 +1,4 @@
-export const restaurantesMS = {
+const restaurantesMS = {
     // ==================== CAMPO GRANDE (CAPITAL) - 20 RESTAURANTES ====================
     "Campo Grande": {
         // ========== 1. CENTRO - CULINÁRIA SUL-MATO-GROSSENSE (SOBÁ) ==========

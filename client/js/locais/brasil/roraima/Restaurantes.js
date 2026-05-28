@@ -1,4 +1,4 @@
-export const restaurantesRR = {
+const restaurantesRR = {
     // ==================== BOA VISTA (CAPITAL) - 20 RESTAURANTES ====================
     "Boa Vista": {
         // ========== 1. CENTRO - CULINÁRIA RORAIMENSE (PEIXES DO RIO BRANCO) ==========

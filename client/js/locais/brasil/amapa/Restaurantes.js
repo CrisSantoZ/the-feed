@@ -1,4 +1,4 @@
-export const restaurantesAP = {
+const restaurantesAP = {
     // ==================== MACAPÁ (CAPITAL) - 20 RESTAURANTES ====================
     "Macapá": {
         // ========== 1. CENTRO - CULINÁRIA AMAPAENSE (TACACÁ E PEIXES) ==========

@@ -1,4 +1,4 @@
-export const restaurantesMA = {
+const restaurantesMA = {
     // ==================== SÃO LUÍS (CAPITAL) - 20 RESTAURANTES ====================
     "São Luís": {
         // ========== 1. CENTRO HISTÓRICO (REVIVER) - CULINÁRIA MARANHENSE ==========

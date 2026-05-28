@@ -1,4 +1,4 @@
-export const restaurantesAM = {
+const restaurantesAM = {
     // ==================== MANAUS (CAPITAL) - 20 RESTAURANTES ====================
     "Manaus": {
         // ========== 1. CENTRO - CULINÁRIA AMAZÔNICA TRADICIONAL ==========

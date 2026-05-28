@@ -1,4 +1,4 @@
-export const restaurantesGO = {
+const restaurantesGO = {
     // ==================== GOIÂNIA (CAPITAL) - 20 RESTAURANTES ====================
     "Goiânia": {
         // ========== 1. CENTRO - CULINÁRIA GOIANA (PEQUI E EMPADÃO) ==========

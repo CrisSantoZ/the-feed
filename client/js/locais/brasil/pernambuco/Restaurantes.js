@@ -1,4 +1,4 @@
-export const restaurantesPE = {
+const restaurantesPE = {
     // ==================== RECIFE (CAPITAL) - 20 RESTAURANTES ====================
     "Recife": {
         // ========== 1. RECIFE ANTIGO - CULINÁRIA PERNAMBUCANA TRADICIONAL ==========

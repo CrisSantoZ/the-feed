@@ -1,4 +1,4 @@
-export const restaurantesTO = {
+const restaurantesTO = {
     // ==================== PALMAS (CAPITAL) - 20 RESTAURANTES ====================
     "Palmas": {
         // ========== 1. CENTRO - CULINÁRIA TOCANTINENSE (PEIXES DO TOCANTINS) ==========
