@@ -40,10 +40,22 @@ async function sincronizarStatus() {
                 const sede = Math.round(resumo.necessidades.sede ?? 0);
                 const energia = Math.round(resumo.necessidades.energia ?? 100);
 
-                // Atualiza sessionStorage
                 sessionStorage.setItem('playerFome', fome);
                 sessionStorage.setItem('playerSede', sede);
                 sessionStorage.setItem('playerEnergia', energia);
+
+                if (resumo.necessidades.sono !== undefined) {
+                    sessionStorage.setItem('playerSono', Math.round(resumo.necessidades.sono));
+                }
+                if (resumo.saude?.geral !== undefined) {
+                    sessionStorage.setItem('playerSaude', Math.round(resumo.saude.geral));
+                }
+                if (resumo.nivel !== undefined) {
+                    sessionStorage.setItem('playerNivel', resumo.nivel);
+                }
+                if (resumo.patrimonio !== undefined) {
+                    sessionStorage.setItem('playerDinheiro', resumo.patrimonio);
+                }
 
                 // ✅ ATUALIZA UI PRINCIPAL
                 atualizarInterfaceNecessidades({ fome, sede, energia });
@@ -275,10 +287,16 @@ function configurarEventosSocket() {
     if (data.necessidades) {
         const { fome, sede, energia } = data.necessidades;
         
-        // Atualiza sessionStorage
         if (fome !== undefined) sessionStorage.setItem('playerFome', fome);
         if (sede !== undefined) sessionStorage.setItem('playerSede', sede);
         if (energia !== undefined) sessionStorage.setItem('playerEnergia', energia);
+
+        const sono = data.necessidades.sono;
+        if (sono !== undefined) sessionStorage.setItem('playerSono', sono);
+
+        if (data.saude !== undefined) {
+            sessionStorage.setItem('playerSaude', data.saude);
+        }
         
         // ✅ Atualiza dashboard principal
         atualizarInterfaceNecessidades({ fome, sede, energia });
@@ -306,10 +324,6 @@ function configurarEventosSocket() {
             }
         }
     }
-});
-
-socket.on('tickAtualizacao', (data) => {
-    console.log('✅ TICK RECEBIDO NO FRONTEND!', data);
 });
 
     // Escuta atualizações gerais de status
