@@ -41,7 +41,6 @@ const menus = {
         { id: 'mapa', nome: '🗺️ Mapa' },
         { id: 'feed', nome: '📰 Feed' },
         { id: 'pessoas', nome: '👥 Pessoas Online' },
-        { id: 'emprego', nome: '💼 Emprego' },
         { id: 'voltar', nome: '⬅ Voltar' }
     ],
     personagem: [
@@ -204,11 +203,6 @@ function selecionarItem(itemId) {
     }
     
     fecharMenu();
-    
-    if (itemId === 'emprego') {
-        window.abrirMeuEmprego();
-        return;
-    }
     
     renderizarConteudoCentral(itemId);
 }

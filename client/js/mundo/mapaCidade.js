@@ -24,8 +24,11 @@ export async function renderizarMapaCidade(paisNome, estadoNome, cidadeNome) {
 
     // TODO: Carregar outros tipos (lojas, empregos, etc.)
 
-    // Verifica se tem pelo menos uma categoria
-    const temConteudo = Object.values(categorias).some(cat => Object.keys(cat).length > 0);
+    // Empregos sempre disponiveis (vem do backend)
+    categorias.empregos = { _vagas: true };
+
+    // Verifica se tem pelo menos uma categoria (alem de empregos)
+    const temConteudo = Object.entries(categorias).some(([key, cat]) => key !== 'empregos' && Object.keys(cat).length > 0);
 
     if (!temConteudo) {
         return `
@@ -35,8 +38,9 @@ export async function renderizarMapaCidade(paisNome, estadoNome, cidadeNome) {
                     <h2 class="mapa-titulo">📍 ${cidadeNome}</h2>
                     <button class="mapa-btn-fechar" onclick="window.fecharPainel()">✖</button>
                 </div>
-                <div class="mapa-dev-msg">
-                    🚧 Nenhum local cadastrado em ${cidadeNome} ainda
+                <div style="padding:20px;">
+                    <div class="mapa-legenda" style="margin-bottom:20px;">📍 LOCAIS</div>
+                    ${gerarCategoriaEmprego(cidadeNome, estadoNome, paisNome)}
                 </div>
             </div>
         `;
@@ -51,11 +55,11 @@ export async function renderizarMapaCidade(paisNome, estadoNome, cidadeNome) {
     const categoriasHtml = Object.entries(categorias).map(([catNome, itens]) => {
         const total = Object.keys(itens).length;
         if (total === 0) return '';
+        if (catNome === 'empregos') return gerarCategoriaEmprego(cidadeNome, estadoNome, paisNome);
 
         const config = {
             restaurantes: { icone: "🍔", titulo: "RESTAURANTES", cor: "#00f3ff" },
             lojas: { icone: "🛒", titulo: "LOJAS", cor: "#00f3ff" },
-            empregos: { icone: "💼", titulo: "EMPREGOS", cor: "#ff0055" },
             saude: { icone: "🏥", titulo: "SAÚDE", cor: "#00f3ff" },
             culturais: { icone: "🎨", titulo: "CULTURA", cor: "#ff0055" },
             natureza: { icone: "🌳", titulo: "NATUREZA", cor: "#00f3ff" },
@@ -130,8 +134,31 @@ export async function renderizarMapaCidade(paisNome, estadoNome, cidadeNome) {
     `;
 }
 
+function gerarCategoriaEmprego(cidadeNome, estadoNome, paisNome) {
+    return `
+        <div class="categoria-card" style="margin-bottom: 20px; border: 1px solid #ff0055; border-radius: 12px; overflow: hidden;">
+            <div class="categoria-header" onclick="window.abrirQuadroVagas('${cidadeNome}', '${estadoNome}', '${paisNome}')" style="
+                background: rgba(0,0,0,0.5);
+                padding: 15px;
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            ">
+                <div>
+                    <span style="font-size: 1.2rem;">💼</span>
+                    <span style="color: #ff0055; margin-left: 10px; font-weight: bold;">EMPREGOS</span>
+                    <span style="color: #888; margin-left: 10px; font-size: 12px;">🔍 Ver vagas</span>
+                </div>
+                <span style="color: #ff0055;">➡️</span>
+            </div>
+        </div>
+    `;
+}
+
 // Função global para abrir/fechar categorias
 window.toggleCategoria = function (catNome) {
+    if (catNome === 'empregos') return;
     const conteudo = document.getElementById(`categoria-conteudo-${catNome}`);
     const seta = document.getElementById(`categoria-seta-${catNome}`);
 
