@@ -92,9 +92,14 @@ export function renderizarQuadroVagas(cidade, estado, pais) {
 
         lista.querySelectorAll('.btn-candidatar').forEach(btn => {
             btn.addEventListener('click', () => {
+                const playerId = sessionStorage.getItem('playerId');
                 btn.textContent = '⏳ Enviando...';
                 btn.disabled = true;
-                socket.emit('candidatarVaga', { vagaId: btn.dataset.vagaId, empresaId: btn.dataset.empresaId });
+                socket.emit('candidatarVaga', {
+                    vagaId: btn.dataset.vagaId,
+                    empresaId: btn.dataset.empresaId,
+                    playerId: playerId
+                });
             });
         });
     });
