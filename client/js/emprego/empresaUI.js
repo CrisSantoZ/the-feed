@@ -108,12 +108,19 @@ export function renderizarQuadroVagas(cidade, estado, pais) {
         const btn = document.querySelector('.btn-candidatar[disabled]');
         if (!btn) return;
         if (resultado.sucesso) {
-            btn.textContent = '✅ Enviada!';
+            btn.textContent = '✅ ' + (resultado.contratado ? 'Contratado!' : 'Enviada!');
             btn.style.background = '#1a5a1a';
             btn.disabled = true;
+
+            if (resultado.contratado) {
+                sessionStorage.setItem('playerCargo', resultado.cargo);
+                sessionStorage.setItem('playerEmpresa', resultado.empresa);
+                sessionStorage.setItem('playerEmpresaId', resultado.empresaId);
+                sessionStorage.setItem('playerSalario', resultado.salario);
+            }
         } else {
             const msg = typeof resultado === 'string' ? resultado : (resultado?.erro || 'Erro');
-            btn.textContent = '❌ ' + msg.substring(0, 35);
+            btn.textContent = '❌ ' + msg.substring(0, 40);
             btn.disabled = false;
             setTimeout(() => { btn.textContent = '📄 Candidatar-se'; }, 3000);
         }
