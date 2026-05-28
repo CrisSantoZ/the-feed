@@ -107,20 +107,14 @@ export function renderizarQuadroVagas(cidade, estado, pais) {
             btn.style.background = '#1a5a1a';
             btn.disabled = true;
         } else {
-            btn.textContent = '❌ ' + (resultado.erro || 'Falhou');
+            const msg = typeof resultado === 'string' ? resultado : (resultado?.erro || 'Erro');
+            btn.textContent = '❌ ' + msg.substring(0, 35);
             btn.disabled = false;
             setTimeout(() => { btn.textContent = '📄 Candidatar-se'; }, 3000);
         }
     });
 
-    socket.once('erroServidor', (erro) => {
-        const btn = document.querySelector('.btn-candidatar[disabled]');
-        if (!btn) return;
-        const msg = typeof erro === 'string' ? erro : (erro?.erro || 'Erro ao candidatar');
-        btn.textContent = '❌ ' + msg.substring(0, 40);
-        btn.disabled = false;
-        setTimeout(() => { btn.textContent = '📄 Candidatar-se'; }, 3000);
-    });
+    // Remove listener genérico de erroServidor - cada evento trata seu próprio erro
 }
 
 // ==================== MINHA EMPRESA ====================
