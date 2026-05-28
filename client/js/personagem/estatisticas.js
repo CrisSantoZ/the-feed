@@ -1,5 +1,6 @@
-export async function renderizarEstatisticas() {
-    const { barraHTML } = await import('../utils.js');
+import { barraHTML } from '../utils.js';
+
+export function renderizarEstatisticas() {
     const playerDinheiro = sessionStorage.getItem('playerDinheiro') || 0;
     const simbolo = sessionStorage.getItem('simboloMoeda') || 'R$';
     const playerNivel = sessionStorage.getItem('playerNivel') || 1;

@@ -1,5 +1,6 @@
-export async function renderizarIdiomas() {
-    const { barraHTML } = await import('../utils.js');
+import { barraHTML } from '../utils.js';
+
+export function renderizarIdiomas() {
     return `
         <div class="mapa-container" style="padding:0;">
             <div class="mapa-header" style="padding:15px;margin:0;">

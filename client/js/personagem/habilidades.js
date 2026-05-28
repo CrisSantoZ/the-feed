@@ -1,5 +1,6 @@
-export async function renderizarHabilidades() {
-    const { barraHTML } = await import('../utils.js');
+import { barraHTML } from '../utils.js';
+
+export function renderizarHabilidades() {
     function skillItem(icone, nome, nivel, xp, xpMax, cor) {
         return `
             <div style="background:rgba(0,0,0,0.3);padding:10px;border-radius:8px;margin-bottom:6px;border-left:3px solid ${cor};">

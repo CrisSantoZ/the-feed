@@ -1,6 +1,6 @@
-export async function renderizarAtributos() {
-    const { renderizarSecaoEmprego, configurarBotoesEmprego } = await import('../emprego/empresaUI.js');
-    const { barraHTML } = await import('../utils.js');
+import { barraHTML } from '../utils.js';
+
+export function renderizarAtributos() {
     const playerNome = sessionStorage.getItem('playerNome') || 'Carregando...';
     const playerSaude = sessionStorage.getItem('playerSaude') || 100;
     const playerFome = Math.round(sessionStorage.getItem('playerFome') || 0);
@@ -13,6 +13,8 @@ export async function renderizarAtributos() {
     const simbolo = sessionStorage.getItem('simboloMoeda') || 'R$';
     const playerCidade = sessionStorage.getItem('playerCidade') || '---';
     const playerEstado = sessionStorage.getItem('playerEstado') || '---';
+
+    const temEmprego = !!sessionStorage.getItem('playerCargo');
 
     return `
         <div class="mapa-container" style="padding:0;">
@@ -60,11 +62,30 @@ export async function renderizarAtributos() {
                     ${barraHTML((playerXP / (playerNivel * 1000)) * 100, '#00f3ff')}
                 </div>
 
-                ${renderizarSecaoEmprego()}
+                ${temEmprego ? gerarSecaoEmprego() : ''}
 
             </div>
         </div>
     `;
+}
 
-    setTimeout(configurarBotoesEmprego, 100);
+function gerarSecaoEmprego() {
+    const empresa = sessionStorage.getItem('playerEmpresa') || '';
+    const cargo = sessionStorage.getItem('playerCargo') || '';
+    const salario = sessionStorage.getItem('playerSalario') || '0';
+    const simbolo = sessionStorage.getItem('simboloMoeda') || 'R$';
+
+    return `
+        <div style="background:rgba(0,243,255,0.03);border:1px solid #00ff6622;border-radius:12px;padding:15px;margin-bottom:15px;">
+            <div style="color:#00ff66;font-weight:bold;font-size:0.8rem;margin-bottom:8px;letter-spacing:1px;">💼 EMPREGO</div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                <span style="font-size:1.5rem;">🏢</span>
+                <div>
+                    <div style="color:#fff;font-weight:bold;font-size:0.85rem;">${empresa}</div>
+                    <div style="color:#00f3ff;font-size:0.75rem;">${cargo}</div>
+                </div>
+            </div>
+            <div class="stat-row"><span class="stat-label">💰 Salário</span><span class="stat-val" style="color:#00ff66;">${simbolo} ${Number(salario).toLocaleString()}/semana</span></div>
+        </div>
+    `;
 }
