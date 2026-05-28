@@ -380,21 +380,10 @@ window.voltarParaPais = async function(paisNome) {
     }, 500);
 };
 
-// ==================== SISTEMA DE PEDIDOS ====================
 // ==================== SISTEMA DE EMPREGO ====================
 window.abrirQuadroVagas = async function(cidade, estado, pais) {
     const { renderizarQuadroVagas } = await import('./emprego/empresaUI.js');
     renderizarQuadroVagas(cidade, estado, pais);
-};
-
-window.abrirMeuEmprego = async function() {
-    const { renderizarMeuEmprego } = await import('./emprego/empresaUI.js');
-    renderizarMeuEmprego();
-};
-
-window.abrirMinhaEmpresa = async function() {
-    const { renderizarMinhaEmpresa } = await import('./emprego/empresaUI.js');
-    renderizarMinhaEmpresa();
 };
 
 window.fazerPedido = async function(restauranteId, pratoId) {

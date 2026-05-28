@@ -8,6 +8,7 @@ export function renderizarEstatisticas() {
     const playerCidade = sessionStorage.getItem('playerCidade') || '---';
     const playerEstado = sessionStorage.getItem('playerEstado') || '---';
     const playerPais = sessionStorage.getItem('playerPais') || '---';
+    const playerSalario = sessionStorage.getItem('playerSalario') || 0;
 
     return `
         <div class="mapa-container" style="padding:0;">
@@ -25,7 +26,7 @@ export function renderizarEstatisticas() {
                     <div class="stat-row"><span class="stat-label">🏦 Conta bancária</span><span class="stat-val">${simbolo} 0</span></div>
                     <div class="stat-row"><span class="stat-label">📊 Investimentos</span><span class="stat-val">${simbolo} 0</span></div>
                     <div class="stat-row"><span class="stat-label">💳 Score crédito</span><span class="stat-val">---</span></div>
-                    <div class="stat-row"><span class="stat-label">💼 Salário</span><span class="stat-val">${simbolo} 0/mês</span></div>
+                    <div class="stat-row"><span class="stat-label">💼 Salário</span><span class="stat-val">${simbolo} ${Number(playerSalario).toLocaleString()}/semana</span></div>
                 </div>
 
                 <div style="background:rgba(0,243,255,0.03);border:1px solid rgba(0,243,255,0.12);border-radius:12px;padding:15px;margin-bottom:15px;">
