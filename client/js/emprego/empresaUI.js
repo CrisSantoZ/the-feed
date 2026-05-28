@@ -143,18 +143,6 @@ export function renderizarQuadroVagas(cidade, estado, pais) {
             });
         });
     });
-            btn.addEventListener('click', () => {
-                const playerId = sessionStorage.getItem('playerId');
-                btn.textContent = '⏳ Enviando...';
-                btn.disabled = true;
-                socket.emit('candidatarVaga', {
-                    vagaId: btn.dataset.vagaId,
-                    empresaId: btn.dataset.empresaId,
-                    playerId: playerId
-                });
-            });
-        });
-    });
 
     socket.once('candidaturaEnviada', (resultado) => {
         const btn = document.querySelector('.btn-candidatar[disabled]');
