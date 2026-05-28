@@ -3,17 +3,19 @@ const socket = window.socket;
 // ==================== QUADRO DE VAGAS ====================
 
 export function renderizarQuadroVagas(cidade, estado, pais) {
+    console.log('[VAGAS] Abrindo quadro de vagas:', { cidade, estado, pais });
     const playerId = sessionStorage.getItem('playerId');
     const playerCargo = sessionStorage.getItem('playerCargo');
 
     const container = document.createElement('div');
     container.className = 'mapa-container';
     container.style.padding = '0';
+    container.id = 'quadro-vagas-container';
 
     container.innerHTML = `
         <div class="mapa-header" style="padding:15px;margin:0;">
             <span style="color:#fff;font-family:'Syncopate',monospace;font-size:0.9rem;">💼 QUADRO DE VAGAS</span>
-            <button onclick="this.closest('.mapa-container').remove(); window.fecharPainel?.()" style="background:none;border:none;color:#ff0055;font-size:20px;cursor:pointer;">✖</button>
+            <button onclick="this.closest('#quadro-vagas-container').remove(); window.fecharPainel?.()" style="background:none;border:none;color:#ff0055;font-size:20px;cursor:pointer;">✖</button>
         </div>
         <div id="vagas-lista" style="padding:0 15px 15px;">
             <div style="text-align:center;padding:30px;color:#888;">
@@ -23,12 +25,21 @@ export function renderizarQuadroVagas(cidade, estado, pais) {
         </div>
     `;
 
-    document.getElementById('painel-ativo').innerHTML = '';
-    document.getElementById('painel-ativo').appendChild(container);
-    document.getElementById('painel-ativo').style.display = 'block';
-    setTimeout(() => document.getElementById('painel-ativo').classList.add('visivel'), 50);
+    const painel = document.getElementById('painel-ativo');
+    const mapaContainer = document.getElementById('mapa-container');
+
+    if (painel) {
+        painel.innerHTML = '';
+        painel.appendChild(container);
+        painel.style.display = 'block';
+        setTimeout(() => painel.classList.add('visivel'), 50);
+    } else if (mapaContainer) {
+        mapaContainer.innerHTML = '';
+        mapaContainer.appendChild(container);
+    }
 
     socket.emit('listarVagas', { pais, estado, cidade });
+    console.log('[VAGAS] Emitindo listarVagas...');
 
     socket.once('vagasListadas', (resultado) => {
         const lista = document.getElementById('vagas-lista');
@@ -378,11 +389,9 @@ export function renderizarMeuEmprego() {
     });
 }
 
-function abrirQuadroVagas() {
-    const cidade = sessionStorage.getItem('playerCidade') || 'São Paulo';
-    const estado = sessionStorage.getItem('playerEstado') || 'São Paulo';
-    const pais = sessionStorage.getItem('playerPais') || 'Brasil';
-    renderizarQuadroVagas(cidade, estado, pais);
-}
-
-window.abrirQuadroVagas = abrirQuadroVagas;
+window.abrirQuadroVagas = function(cidade, estado, pais) {
+    const c = cidade || sessionStorage.getItem('playerCidade') || 'São Paulo';
+    const e = estado || sessionStorage.getItem('playerEstado') || 'São Paulo';
+    const p = pais || sessionStorage.getItem('playerPais') || 'Brasil';
+    renderizarQuadroVagas(c, e, p);
+};
