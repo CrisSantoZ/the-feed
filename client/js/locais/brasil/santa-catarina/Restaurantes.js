@@ -388,7 +388,7 @@ export const restaurantesSC = {
             telefone: "(48) 5000-9999",
             descricao: "Quiosque na Beiramar com vista para a baía.",
             tipo: ["petiscos", "vista", "turístico", "casual"],
-            preco_medium: 35,
+            preco_medio: 35,
             estrelas: 4.3,
             avaliacoes: 1120,
             cardapio: [

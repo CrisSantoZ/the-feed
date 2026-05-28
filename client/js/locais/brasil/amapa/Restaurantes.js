@@ -388,7 +388,7 @@ export const restaurantesAP = {
             telefone: "(96) 5000-9999",
             descricao: "Praça de alimentação.",
             tipo: ["fast-food", "shopping", "familiar"],
-            preco_medium: 35,
+            preco_medio: 35,
             estrelas: 4.1,
             avaliacoes: 1450,
             cardapio: [
@@ -409,7 +409,7 @@ export const restaurantesAP = {
             telefone: "(96) 5111-0000",
             descricao: "Opções rápidas no aeroporto.",
             tipo: ["fast-food", "aeroporto", "viagem"],
-            preco_medium: 40,
+            preco_medio: 40,
             estrelas: 3.8,
             avaliacoes: 890,
             cardapio: [
@@ -454,7 +454,7 @@ export const restaurantesAP = {
             telefone: "(96) 3333-2222",
             descricao: "Peixes frescos do rio.",
             tipo: ["peixaria", "amazonica", "familiar"],
-            preco_medium: 40,
+            preco_medio: 40,
             estrelas: 4.4,
             avaliacoes: 560,
             cardapio: [
@@ -475,7 +475,7 @@ export const restaurantesAP = {
             telefone: "(96) 3444-3333",
             descricao: "Boteco tradicional.",
             tipo: ["boteco", "petiscos", "happy-hour", "popular"],
-            preco_medium: 26,
+            preco_medio: 26,
             estrelas: 4.3,
             avaliacoes: 560,
             cardapio: [
@@ -496,7 +496,7 @@ export const restaurantesAP = {
             telefone: "(96) 3555-4444",
             descricao: "Pizzaria tradicional.",
             tipo: ["pizzaria", "italiana", "familiar"],
-            preco_medium: 42,
+            preco_medio: 42,
             estrelas: 4.3,
             avaliacoes: 450,
             cardapio: [
@@ -517,7 +517,7 @@ export const restaurantesAP = {
             telefone: "(96) 3666-5555",
             descricao: "Cafeteria regional.",
             tipo: ["cafeteria", "regional", "doces", "artesanal"],
-            preco_medium: 20,
+            preco_medio: 20,
             estrelas: 4.4,
             avaliacoes: 450,
             cardapio: [
@@ -538,7 +538,7 @@ export const restaurantesAP = {
             telefone: "(96) 3777-6666",
             descricao: "Hamburgueria artesanal.",
             tipo: ["hamburguer", "americana", "artesanal"],
-            preco_medium: 35,
+            preco_medio: 35,
             estrelas: 4.3,
             avaliacoes: 450,
             cardapio: [
@@ -559,7 +559,7 @@ export const restaurantesAP = {
             telefone: "(96) 3888-7777",
             descricao: "Tapiocaria regional.",
             tipo: ["tapiocaria", "regional", "doces", "fast-food"],
-            preco_medium: 16,
+            preco_medio: 16,
             estrelas: 4.4,
             avaliacoes: 450,
             cardapio: [
@@ -580,7 +580,7 @@ export const restaurantesAP = {
             telefone: "(96) 3999-8888",
             descricao: "Restaurante familiar.",
             tipo: ["brasileira", "caseira", "familiar", "buffet"],
-            preco_medium: 18,
+            preco_medio: 18,
             estrelas: 4.3,
             avaliacoes: 560,
             cardapio: [
@@ -601,7 +601,7 @@ export const restaurantesAP = {
             telefone: "(96) 4000-9999",
             descricao: "Praça de alimentação.",
             tipo: ["fast-food", "shopping", "familiar"],
-            preco_medium: 32,
+            preco_medio: 32,
             estrelas: 4.1,
             avaliacoes: 890,
             cardapio: [
@@ -622,7 +622,7 @@ export const restaurantesAP = {
             telefone: "-",
             descricao: "Opções rápidas.",
             tipo: ["fast-food", "rodoviaria", "viagem"],
-            preco_medium: 16,
+            preco_medio: 16,
             estrelas: 3.5,
             avaliacoes: 340,
             cardapio: [
@@ -667,7 +667,7 @@ export const restaurantesAP = {
             telefone: "(96) 3333-2222",
             descricao: "Peixes frescos do rio Jari.",
             tipo: ["peixaria", "amazonica", "familiar"],
-            preco_medium: 38,
+            preco_medio: 38,
             estrelas: 4.4,
             avaliacoes: 450,
             cardapio: [
@@ -688,7 +688,7 @@ export const restaurantesAP = {
             telefone: "(96) 3444-3333",
             descricao: "Boteco tradicional.",
             tipo: ["boteco", "petiscos", "happy-hour", "popular"],
-            preco_medium: 25,
+            preco_medio: 25,
             estrelas: 4.3,
             avaliacoes: 450,
             cardapio: [
@@ -709,7 +709,7 @@ export const restaurantesAP = {
             telefone: "(96) 3555-4444",
             descricao: "Pizzaria tradicional.",
             tipo: ["pizzaria", "italiana", "familiar"],
-            preco_medium: 40,
+            preco_medio: 40,
             estrelas: 4.2,
             avaliacoes: 340,
             cardapio: [
@@ -730,7 +730,7 @@ export const restaurantesAP = {
             telefone: "(96) 3666-5555",
             descricao: "Cafeteria regional.",
             tipo: ["cafeteria", "regional", "doces", "artesanal"],
-            preco_medium: 20,
+            preco_medio: 20,
             estrelas: 4.3,
             avaliacoes: 340,
             cardapio: [
@@ -751,7 +751,7 @@ export const restaurantesAP = {
             telefone: "(96) 3777-6666",
             descricao: "Hamburgueria artesanal.",
             tipo: ["hamburguer", "americana", "artesanal"],
-            preco_medium: 35,
+            preco_medio: 35,
             estrelas: 4.3,
             avaliacoes: 340,
             cardapio: [
@@ -772,7 +772,7 @@ export const restaurantesAP = {
             telefone: "(96) 3888-7777",
             descricao: "Tapiocaria regional.",
             tipo: ["tapiocaria", "regional", "doces", "fast-food"],
-            preco_medium: 16,
+            preco_medio: 16,
             estrelas: 4.4,
             avaliacoes: 450,
             cardapio: [
@@ -793,7 +793,7 @@ export const restaurantesAP = {
             telefone: "(96) 3999-8888",
             descricao: "Restaurante familiar.",
             tipo: ["brasileira", "caseira", "familiar", "buffet"],
-            preco_medium: 18,
+            preco_medio: 18,
             estrelas: 4.3,
             avaliacoes: 450,
             cardapio: [
@@ -814,7 +814,7 @@ export const restaurantesAP = {
             telefone: "(96) 4000-9999",
             descricao: "Culinária indígena tradicional.",
             tipo: ["indigena", "amazonica", "regional", "tradicional"],
-            preco_medium: 35,
+            preco_medio: 35,
             estrelas: 4.7,
             avaliacoes: 340,
             cardapio: [
@@ -835,7 +835,7 @@ export const restaurantesAP = {
             telefone: "-",
             descricao: "Opções rápidas.",
             tipo: ["fast-food", "rodoviaria", "viagem"],
-            preco_medium: 16,
+            preco_medio: 16,
             estrelas: 3.5,
             avaliacoes: 230,
             cardapio: [

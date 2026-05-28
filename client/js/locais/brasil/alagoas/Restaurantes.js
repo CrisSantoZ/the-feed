@@ -178,7 +178,7 @@ export const restaurantesAL = {
             telefone: "(82) 4000-9999",
             descricao: "Hamburgueria artesanal.",
             tipo: ["hamburguer", "americana", "artesanal"],
-            preco_medium: 42,
+            preco_medio: 42,
             estrelas: 4.5,
             avaliacoes: 890,
             cardapio: [
@@ -199,7 +199,7 @@ export const restaurantesAL = {
             telefone: "(82) 4111-0000",
             descricao: "Culinária nordestina autêntica.",
             tipo: ["nordestina", "regional", "familiar"],
-            preco_medium: 45,
+            preco_medio: 45,
             estrelas: 4.4,
             avaliacoes: 780,
             cardapio: [
@@ -220,7 +220,7 @@ export const restaurantesAL = {
             telefone: "(82) 4222-1111",
             descricao: "Quiosque na praia de Jacarecica.",
             tipo: ["praia", "petiscos", "frutos-do-mar", "casual"],
-            preco_medium: 38,
+            preco_medio: 38,
             estrelas: 4.3,
             avaliacoes: 890,
             cardapio: [
@@ -241,7 +241,7 @@ export const restaurantesAL = {
             telefone: "(82) 4333-2222",
             descricao: "Restaurante familiar.",
             tipo: ["brasileira", "caseira", "familiar", "buffet"],
-            preco_medium: 25,
+            preco_medio: 25,
             estrelas: 4.3,
             avaliacoes: 670,
             cardapio: [
@@ -262,7 +262,7 @@ export const restaurantesAL = {
             telefone: "(82) 4444-3333",
             descricao: "Cafeteria regional.",
             tipo: ["cafeteria", "regional", "doces", "artesanal"],
-            preco_medium: 25,
+            preco_medio: 25,
             estrelas: 4.4,
             avaliacoes: 560,
             cardapio: [
@@ -283,7 +283,7 @@ export const restaurantesAL = {
             telefone: "(82) 4555-4444",
             descricao: "Tapiocaria com diversos sabores.",
             tipo: ["tapiocaria", "regional", "doces", "fast-food"],
-            preco_medium: 18,
+            preco_medio: 18,
             estrelas: 4.5,
             avaliacoes: 670,
             cardapio: [
@@ -304,7 +304,7 @@ export const restaurantesAL = {
             telefone: "(82) 4666-5555",
             descricao: "Lanchonete tradicional.",
             tipo: ["lanches", "fast-food", "popular", "familiar"],
-            preco_medium: 22,
+            preco_medio: 22,
             estrelas: 4.2,
             avaliacoes: 890,
             cardapio: [
@@ -325,7 +325,7 @@ export const restaurantesAL = {
             telefone: "(82) 4777-6666",
             descricao: "Culinária árabe autêntica.",
             tipo: ["arabe", "massas", "familiar", "vegetariano"],
-            preco_medium: 48,
+            preco_medio: 48,
             estrelas: 4.4,
             avaliacoes: 560,
             cardapio: [
@@ -346,7 +346,7 @@ export const restaurantesAL = {
             telefone: "(82) 4888-7777",
             descricao: "Restaurante japonês.",
             tipo: ["japonesa", "sushi", "rodizio", "familiar"],
-            preco_medium: 75,
+            preco_medio: 75,
             estrelas: 4.6,
             avaliacoes: 670,
             cardapio: [
@@ -367,7 +367,7 @@ export const restaurantesAL = {
             telefone: "(82) 4999-8888",
             descricao: "Restaurante popular com comida caseira.",
             tipo: ["brasileira", "popular", "caseira", "buffet"],
-            preco_medium: 15,
+            preco_medio: 15,
             estrelas: 4.3,
             avaliacoes: 1340,
             cardapio: [
@@ -388,7 +388,7 @@ export const restaurantesAL = {
             telefone: "(82) 5000-9999",
             descricao: "Praça de alimentação.",
             tipo: ["fast-food", "shopping", "variado", "familiar"],
-            preco_medium: 40,
+            preco_medio: 40,
             estrelas: 4.2,
             avaliacoes: 2340,
             cardapio: [
@@ -409,7 +409,7 @@ export const restaurantesAL = {
             telefone: "(82) 5111-0000",
             descricao: "Opções rápidas no aeroporto.",
             tipo: ["fast-food", "aeroporto", "viagem"],
-            preco_medium: 45,
+            preco_medio: 45,
             estrelas: 3.8,
             avaliacoes: 1450,
             cardapio: [
@@ -538,7 +538,7 @@ export const restaurantesAL = {
             telefone: "(82) 3777-6666",
             descricao: "Hamburgueria artesanal.",
             tipo: ["hamburguer", "americana", "artesanal"],
-            preco_medium: 38,
+            preco_medio: 38,
             estrelas: 4.3,
             avaliacoes: 560,
             cardapio: [
@@ -559,7 +559,7 @@ export const restaurantesAL = {
             telefone: "(82) 3888-7777",
             descricao: "Tapiocaria com diversos sabores.",
             tipo: ["tapiocaria", "regional", "doces", "fast-food"],
-            preco_medium: 18,
+            preco_medio: 18,
             estrelas: 4.5,
             avaliacoes: 560,
             cardapio: [
@@ -580,7 +580,7 @@ export const restaurantesAL = {
             telefone: "(82) 3999-8888",
             descricao: "Praça de alimentação.",
             tipo: ["fast-food", "shopping", "familiar"],
-            preco_medium: 35,
+            preco_medio: 35,
             estrelas: 4.1,
             avaliacoes: 890,
             cardapio: [
@@ -601,7 +601,7 @@ export const restaurantesAL = {
             telefone: "(82) 4000-9999",
             descricao: "Especializada em feijoada.",
             tipo: ["brasileira", "feijoada", "tradicional", "familiar"],
-            preco_medium: 40,
+            preco_medio: 40,
             estrelas: 4.6,
             avaliacoes: 560,
             cardapio: [
@@ -622,7 +622,7 @@ export const restaurantesAL = {
             telefone: "-",
             descricao: "Opções rápidas.",
             tipo: ["fast-food", "rodoviaria", "viagem"],
-            preco_medium: 18,
+            preco_medio: 18,
             estrelas: 3.5,
             avaliacoes: 340,
             cardapio: [
@@ -667,7 +667,7 @@ export const restaurantesAL = {
             telefone: "(82) 3333-2222",
             descricao: "Culinária sertaneja autêntica.",
             tipo: ["nordestina", "sertaneja", "regional", "familiar"],
-            preco_medium: 38,
+            preco_medio: 38,
             estrelas: 4.4,
             avaliacoes: 450,
             cardapio: [
@@ -688,7 +688,7 @@ export const restaurantesAL = {
             telefone: "(82) 3444-3333",
             descricao: "Boteco tradicional.",
             tipo: ["boteco", "petiscos", "happy-hour", "popular"],
-            preco_medium: 25,
+            preco_medio: 25,
             estrelas: 4.3,
             avaliacoes: 450,
             cardapio: [
@@ -709,7 +709,7 @@ export const restaurantesAL = {
             telefone: "(82) 3555-4444",
             descricao: "Pizzaria tradicional.",
             tipo: ["pizzaria", "italiana", "familiar"],
-            preco_medium: 42,
+            preco_medio: 42,
             estrelas: 4.3,
             avaliacoes: 340,
             cardapio: [
@@ -730,7 +730,7 @@ export const restaurantesAL = {
             telefone: "(82) 3666-5555",
             descricao: "Cafeteria regional.",
             tipo: ["cafeteria", "regional", "doces", "artesanal"],
-            preco_medium: 20,
+            preco_medio: 20,
             estrelas: 4.3,
             avaliacoes: 340,
             cardapio: [
@@ -751,7 +751,7 @@ export const restaurantesAL = {
             telefone: "(82) 3777-6666",
             descricao: "Hamburgueria artesanal.",
             tipo: ["hamburguer", "americana", "artesanal"],
-            preco_medium: 35,
+            preco_medio: 35,
             estrelas: 4.3,
             avaliacoes: 340,
             cardapio: [
@@ -772,7 +772,7 @@ export const restaurantesAL = {
             telefone: "(82) 3888-7777",
             descricao: "Tapiocaria regional.",
             tipo: ["tapiocaria", "regional", "doces", "fast-food"],
-            preco_medium: 16,
+            preco_medio: 16,
             estrelas: 4.4,
             avaliacoes: 450,
             cardapio: [
@@ -793,7 +793,7 @@ export const restaurantesAL = {
             telefone: "(82) 3999-8888",
             descricao: "Culinária indígena na aldeia Xukuru. Experiência cultural e gastronômica.",
             tipo: ["indigena", "cultural", "regional", "tradicional"],
-            preco_medium: 35,
+            preco_medio: 35,
             estrelas: 4.8,
             avaliacoes: 340,
             cardapio: [
@@ -814,7 +814,7 @@ export const restaurantesAL = {
             telefone: "(82) 4000-9999",
             descricao: "Praça de alimentação.",
             tipo: ["fast-food", "shopping", "familiar"],
-            preco_medium: 35,
+            preco_medio: 35,
             estrelas: 4.1,
             avaliacoes: 670,
             cardapio: [
@@ -835,7 +835,7 @@ export const restaurantesAL = {
             telefone: "-",
             descricao: "Opções rápidas.",
             tipo: ["fast-food", "rodoviaria", "viagem"],
-            preco_medium: 16,
+            preco_medio: 16,
             estrelas: 3.5,
             avaliacoes: 230,
             cardapio: [

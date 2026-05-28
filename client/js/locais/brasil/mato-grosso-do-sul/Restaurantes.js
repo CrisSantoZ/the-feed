@@ -10,7 +10,7 @@ export const restaurantesMS = {
             telefone: "(67) 3222-1111",
             descricao: "Restaurante tradicional especializado em sobá, prato típico sul-mato-grossense de influência japonesa. Caldo com macarrão, frango e legumes.",
             tipo: ["sul-mato-grossense", "japonesa", "tradicional", "regional", "familiar"],
-            preco_medium: 45,
+            preco_medio: 45,
             estrelas: 4.8,
             avaliacoes: 3450,
             cardapio: [
@@ -31,7 +31,7 @@ export const restaurantesMS = {
             telefone: "(67) 3333-2222",
             descricao: "Peixes frescos do Pantanal. Pintado, pacu, dourado e piranha.",
             tipo: ["peixaria", "sul-mato-grossense", "pantaneira", "familiar"],
-            preco_medium: 55,
+            preco_medio: 55,
             estrelas: 4.6,
             avaliacoes: 1870,
             cardapio: [
@@ -52,7 +52,7 @@ export const restaurantesMS = {
             telefone: "(67) 3444-3333",
             descricao: "Churrascaria com rodízio de carnes.",
             tipo: ["churrascaria", "brasileira", "rodizio", "familiar"],
-            preco_medium: 75,
+            preco_medio: 75,
             estrelas: 4.6,
             avaliacoes: 1450,
             cardapio: [
@@ -73,7 +73,7 @@ export const restaurantesMS = {
             telefone: "(67) 3555-4444",
             descricao: "Boteco tradicional.",
             tipo: ["boteco", "petiscos", "happy-hour", "popular"],
-            preco_medium: 28,
+            preco_medio: 28,
             estrelas: 4.4,
             avaliacoes: 890,
             cardapio: [
@@ -94,7 +94,7 @@ export const restaurantesMS = {
             telefone: "(67) 3666-5555",
             descricao: "Pizzaria tradicional.",
             tipo: ["pizzaria", "italiana", "familiar"],
-            preco_medium: 48,
+            preco_medio: 48,
             estrelas: 4.4,
             avaliacoes: 780,
             cardapio: [
@@ -115,7 +115,7 @@ export const restaurantesMS = {
             telefone: "(67) 3777-6666",
             descricao: "Hamburgueria artesanal.",
             tipo: ["hamburguer", "americana", "artesanal"],
-            preco_medium: 42,
+            preco_medio: 42,
             estrelas: 4.5,
             avaliacoes: 780,
             cardapio: [
@@ -136,7 +136,7 @@ export const restaurantesMS = {
             telefone: "(67) 3888-7777",
             descricao: "Cafeteria regional.",
             tipo: ["cafeteria", "regional", "doces", "artesanal"],
-            preco_medium: 22,
+            preco_medio: 22,
             estrelas: 4.4,
             avaliacoes: 560,
             cardapio: [
@@ -157,7 +157,7 @@ export const restaurantesMS = {
             telefone: "(67) 3999-8888",
             descricao: "Culinária pantaneira autêntica.",
             tipo: ["pantaneira", "sul-mato-grossense", "regional", "familiar"],
-            preco_medium: 50,
+            preco_medio: 50,
             estrelas: 4.5,
             avaliacoes: 670,
             cardapio: [
@@ -178,7 +178,7 @@ export const restaurantesMS = {
             telefone: "(67) 4000-9999",
             descricao: "Tapiocaria com diversos sabores.",
             tipo: ["tapiocaria", "regional", "doces", "fast-food"],
-            preco_medium: 18,
+            preco_medio: 18,
             estrelas: 4.5,
             avaliacoes: 780,
             cardapio: [
@@ -199,7 +199,7 @@ export const restaurantesMS = {
             telefone: "(67) 4111-0000",
             descricao: "Restaurante familiar.",
             tipo: ["brasileira", "caseira", "familiar", "buffet"],
-            preco_medium: 22,
+            preco_medio: 22,
             estrelas: 4.3,
             avaliacoes: 890,
             cardapio: [
@@ -220,7 +220,7 @@ export const restaurantesMS = {
             telefone: "(67) 4222-1111",
             descricao: "Culinária árabe autêntica.",
             tipo: ["arabe", "massas", "familiar", "vegetariano"],
-            preco_medium: 50,
+            preco_medio: 50,
             estrelas: 4.5,
             avaliacoes: 560,
             cardapio: [
@@ -241,7 +241,7 @@ export const restaurantesMS = {
             telefone: "(67) 4333-2222",
             descricao: "Peixes frescos do Pantanal.",
             tipo: ["peixaria", "sul-mato-grossense", "familiar"],
-            preco_medium: 48,
+            preco_medio: 48,
             estrelas: 4.4,
             avaliacoes: 560,
             cardapio: [
@@ -262,7 +262,7 @@ export const restaurantesMS = {
             telefone: "(67) 4444-3333",
             descricao: "Restaurante popular.",
             tipo: ["brasileira", "popular", "caseira", "buffet"],
-            preco_medium: 15,
+            preco_medio: 15,
             estrelas: 4.3,
             avaliacoes: 1240,
             cardapio: [
@@ -283,7 +283,7 @@ export const restaurantesMS = {
             telefone: "(67) 4555-4444",
             descricao: "Cantina italiana.",
             tipo: ["italiana", "massas", "familiar"],
-            preco_medium: 55,
+            preco_medio: 55,
             estrelas: 4.4,
             avaliacoes: 560,
             cardapio: [
@@ -304,7 +304,7 @@ export const restaurantesMS = {
             telefone: "(67) 4666-5555",
             descricao: "Lanchonete tradicional.",
             tipo: ["lanches", "fast-food", "popular", "familiar"],
-            preco_medium: 22,
+            preco_medio: 22,
             estrelas: 4.2,
             avaliacoes: 780,
             cardapio: [
@@ -325,7 +325,7 @@ export const restaurantesMS = {
             telefone: "(67) 4777-6666",
             descricao: "Praça de alimentação.",
             tipo: ["fast-food", "shopping", "variado", "familiar"],
-            preco_medium: 40,
+            preco_medio: 40,
             estrelas: 4.2,
             avaliacoes: 2340,
             cardapio: [
@@ -346,7 +346,7 @@ export const restaurantesMS = {
             telefone: "(67) 4888-7777",
             descricao: "Praça de alimentação.",
             tipo: ["fast-food", "shopping", "familiar"],
-            preco_medium: 40,
+            preco_medio: 40,
             estrelas: 4.1,
             avaliacoes: 1560,
             cardapio: [
@@ -367,7 +367,7 @@ export const restaurantesMS = {
             telefone: "(67) 4999-8888",
             descricao: "Opções rápidas no aeroporto.",
             tipo: ["fast-food", "aeroporto", "viagem"],
-            preco_medium: 45,
+            preco_medio: 45,
             estrelas: 3.8,
             avaliacoes: 1120,
             cardapio: [
@@ -388,7 +388,7 @@ export const restaurantesMS = {
             telefone: "(67) 5000-9999",
             descricao: "Quiosque no parque.",
             tipo: ["petiscos", "parque", "casual", "familiar"],
-            preco_medium: 20,
+            preco_medio: 20,
             estrelas: 4.3,
             avaliacoes: 670,
             cardapio: [
@@ -409,7 +409,7 @@ export const restaurantesMS = {
             telefone: "-",
             descricao: "Opções rápidas.",
             tipo: ["fast-food", "rodoviaria", "viagem"],
-            preco_medium: 18,
+            preco_medio: 18,
             estrelas: 3.5,
             avaliacoes: 560,
             cardapio: [
@@ -433,7 +433,7 @@ export const restaurantesMS = {
             telefone: "(67) 3222-1111",
             descricao: "Churrascaria com rodízio de carnes.",
             tipo: ["churrascaria", "brasileira", "rodizio", "familiar"],
-            preco_medium: 65,
+            preco_medio: 65,
             estrelas: 4.5,
             avaliacoes: 780,
             cardapio: [
@@ -454,7 +454,7 @@ export const restaurantesMS = {
             telefone: "(67) 3333-2222",
             descricao: "Especialidade em sobá, prato típico sul-mato-grossense.",
             tipo: ["sul-mato-grossense", "japonesa", "regional", "familiar"],
-            preco_medium: 42,
+            preco_medio: 42,
             estrelas: 4.6,
             avaliacoes: 670,
             cardapio: [
@@ -475,7 +475,7 @@ export const restaurantesMS = {
             telefone: "(67) 3444-3333",
             descricao: "Boteco tradicional.",
             tipo: ["boteco", "petiscos", "happy-hour", "popular"],
-            preco_medium: 26,
+            preco_medio: 26,
             estrelas: 4.3,
             avaliacoes: 560,
             cardapio: [
@@ -496,7 +496,7 @@ export const restaurantesMS = {
             telefone: "(67) 3555-4444",
             descricao: "Pizzaria tradicional.",
             tipo: ["pizzaria", "italiana", "familiar"],
-            preco_medium: 45,
+            preco_medio: 45,
             estrelas: 4.3,
             avaliacoes: 560,
             cardapio: [
@@ -517,7 +517,7 @@ export const restaurantesMS = {
             telefone: "(67) 3666-5555",
             descricao: "Cafeteria regional.",
             tipo: ["cafeteria", "regional", "doces", "artesanal"],
-            preco_medium: 22,
+            preco_medio: 22,
             estrelas: 4.3,
             avaliacoes: 450,
             cardapio: [
@@ -538,7 +538,7 @@ export const restaurantesMS = {
             telefone: "(67) 3777-6666",
             descricao: "Hamburgueria artesanal.",
             tipo: ["hamburguer", "americana", "artesanal"],
-            preco_medium: 38,
+            preco_medio: 38,
             estrelas: 4.3,
             avaliacoes: 450,
             cardapio: [
@@ -559,7 +559,7 @@ export const restaurantesMS = {
             telefone: "(67) 3888-7777",
             descricao: "Tapiocaria regional.",
             tipo: ["tapiocaria", "regional", "doces", "fast-food"],
-            preco_medium: 16,
+            preco_medio: 16,
             estrelas: 4.4,
             avaliacoes: 450,
             cardapio: [
@@ -580,7 +580,7 @@ export const restaurantesMS = {
             telefone: "(67) 3999-8888",
             descricao: "Restaurante familiar.",
             tipo: ["brasileira", "caseira", "familiar", "buffet"],
-            preco_medium: 20,
+            preco_medio: 20,
             estrelas: 4.3,
             avaliacoes: 560,
             cardapio: [
@@ -601,7 +601,7 @@ export const restaurantesMS = {
             telefone: "(67) 4000-9999",
             descricao: "Praça de alimentação.",
             tipo: ["fast-food", "shopping", "familiar"],
-            preco_medium: 35,
+            preco_medio: 35,
             estrelas: 4.1,
             avaliacoes: 890,
             cardapio: [
@@ -622,7 +622,7 @@ export const restaurantesMS = {
             telefone: "-",
             descricao: "Opções rápidas.",
             tipo: ["fast-food", "rodoviaria", "viagem"],
-            preco_medium: 16,
+            preco_medio: 16,
             estrelas: 3.5,
             avaliacoes: 340,
             cardapio: [
@@ -646,7 +646,7 @@ export const restaurantesMS = {
             telefone: "(67) 3222-1111",
             descricao: "Peixes frescos do rio Paraná. Pintado, pacu, dourado e curimbatá.",
             tipo: ["peixaria", "sul-mato-grossense", "regional", "familiar"],
-            preco_medium: 50,
+            preco_medio: 50,
             estrelas: 4.5,
             avaliacoes: 780,
             cardapio: [
@@ -667,7 +667,7 @@ export const restaurantesMS = {
             telefone: "(67) 3333-2222",
             descricao: "Churrascaria com rodízio de carnes.",
             tipo: ["churrascaria", "brasileira", "rodizio", "familiar"],
-            preco_medium: 65,
+            preco_medio: 65,
             estrelas: 4.5,
             avaliacoes: 670,
             cardapio: [
@@ -688,7 +688,7 @@ export const restaurantesMS = {
             telefone: "(67) 3444-3333",
             descricao: "Boteco tradicional.",
             tipo: ["boteco", "petiscos", "happy-hour", "popular"],
-            preco_medium: 26,
+            preco_medio: 26,
             estrelas: 4.3,
             avaliacoes: 450,
             cardapio: [
@@ -709,7 +709,7 @@ export const restaurantesMS = {
             telefone: "(67) 3555-4444",
             descricao: "Pizzaria tradicional.",
             tipo: ["pizzaria", "italiana", "familiar"],
-            preco_medium: 45,
+            preco_medio: 45,
             estrelas: 4.3,
             avaliacoes: 450,
             cardapio: [
@@ -730,7 +730,7 @@ export const restaurantesMS = {
             telefone: "(67) 3666-5555",
             descricao: "Cafeteria regional.",
             tipo: ["cafeteria", "regional", "doces", "artesanal"],
-            preco_medium: 22,
+            preco_medio: 22,
             estrelas: 4.3,
             avaliacoes: 340,
             cardapio: [
@@ -751,7 +751,7 @@ export const restaurantesMS = {
             telefone: "(67) 3777-6666",
             descricao: "Hamburgueria artesanal.",
             tipo: ["hamburguer", "americana", "artesanal"],
-            preco_medium: 38,
+            preco_medio: 38,
             estrelas: 4.3,
             avaliacoes: 340,
             cardapio: [
@@ -772,7 +772,7 @@ export const restaurantesMS = {
             telefone: "(67) 3888-7777",
             descricao: "Tapiocaria regional.",
             tipo: ["tapiocaria", "regional", "doces", "fast-food"],
-            preco_medium: 16,
+            preco_medio: 16,
             estrelas: 4.4,
             avaliacoes: 340,
             cardapio: [
@@ -793,7 +793,7 @@ export const restaurantesMS = {
             telefone: "(67) 3999-8888",
             descricao: "Restaurante familiar.",
             tipo: ["brasileira", "caseira", "familiar", "buffet"],
-            preco_medium: 20,
+            preco_medio: 20,
             estrelas: 4.3,
             avaliacoes: 450,
             cardapio: [
@@ -814,7 +814,7 @@ export const restaurantesMS = {
             telefone: "(67) 4000-9999",
             descricao: "Praça de alimentação.",
             tipo: ["fast-food", "shopping", "familiar"],
-            preco_medium: 35,
+            preco_medio: 35,
             estrelas: 4.1,
             avaliacoes: 670,
             cardapio: [
@@ -835,7 +835,7 @@ export const restaurantesMS = {
             telefone: "-",
             descricao: "Opções rápidas.",
             tipo: ["fast-food", "rodoviaria", "viagem"],
-            preco_medium: 16,
+            preco_medio: 16,
             estrelas: 3.5,
             avaliacoes: 230,
             cardapio: [

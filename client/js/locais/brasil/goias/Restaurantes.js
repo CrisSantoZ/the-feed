@@ -52,7 +52,7 @@ export const restaurantesGO = {
             telefone: "(62) 3444-3333",
             descricao: "Churrascaria com rodízio de carnes nobres. Buffet completo.",
             tipo: ["churrascaria", "brasileira", "rodizio", "premium", "familiar"],
-            preco_medium: 85,
+            preco_medio: 85,
             estrelas: 4.7,
             avaliacoes: 2340,
             cardapio: [
@@ -73,7 +73,7 @@ export const restaurantesGO = {
             telefone: "(62) 3555-4444",
             descricao: "Frutos do mar frescos. Peixes e camarões.",
             tipo: ["frutos-do-mar", "brasileira", "premium", "familiar"],
-            preco_medium: 75,
+            preco_medio: 75,
             estrelas: 4.6,
             avaliacoes: 1450,
             cardapio: [
@@ -94,7 +94,7 @@ export const restaurantesGO = {
             telefone: "(62) 3666-5555",
             descricao: "Pizzaria tradicional. Massa fina.",
             tipo: ["pizzaria", "italiana", "familiar"],
-            preco_medium: 55,
+            preco_medio: 55,
             estrelas: 4.5,
             avaliacoes: 1120,
             cardapio: [
@@ -115,7 +115,7 @@ export const restaurantesGO = {
             telefone: "(62) 3777-6666",
             descricao: "Boteco tradicional.",
             tipo: ["boteco", "petiscos", "happy-hour", "popular"],
-            preco_medium: 30,
+            preco_medio: 30,
             estrelas: 4.4,
             avaliacoes: 1120,
             cardapio: [
@@ -136,7 +136,7 @@ export const restaurantesGO = {
             telefone: "(62) 3888-7777",
             descricao: "Culinária nordestina autêntica.",
             tipo: ["nordestina", "regional", "familiar"],
-            preco_medium: 45,
+            preco_medio: 45,
             estrelas: 4.4,
             avaliacoes: 890,
             cardapio: [
@@ -157,7 +157,7 @@ export const restaurantesGO = {
             telefone: "(62) 3999-8888",
             descricao: "Hamburgueria artesanal.",
             tipo: ["hamburguer", "americana", "artesanal"],
-            preco_medium: 42,
+            preco_medio: 42,
             estrelas: 4.5,
             avaliacoes: 890,
             cardapio: [
@@ -178,7 +178,7 @@ export const restaurantesGO = {
             telefone: "(62) 4000-9999",
             descricao: "Cafeteria regional.",
             tipo: ["cafeteria", "regional", "doces", "artesanal"],
-            preco_medium: 25,
+            preco_medio: 25,
             estrelas: 4.5,
             avaliacoes: 670,
             cardapio: [
@@ -199,7 +199,7 @@ export const restaurantesGO = {
             telefone: "(62) 4111-0000",
             descricao: "Cozinha internacional contemporânea.",
             tipo: ["contemporanea", "internacional", "premium", "romântico"],
-            preco_medium: 110,
+            preco_medio: 110,
             estrelas: 4.8,
             avaliacoes: 670,
             cardapio: [
@@ -220,7 +220,7 @@ export const restaurantesGO = {
             telefone: "(62) 4222-1111",
             descricao: "Restaurante familiar.",
             tipo: ["brasileira", "caseira", "familiar", "buffet"],
-            preco_medium: 25,
+            preco_medio: 25,
             estrelas: 4.3,
             avaliacoes: 890,
             cardapio: [
@@ -241,7 +241,7 @@ export const restaurantesGO = {
             telefone: "(62) 4333-2222",
             descricao: "Tapiocaria com diversos sabores.",
             tipo: ["tapiocaria", "regional", "doces", "fast-food"],
-            preco_medium: 18,
+            preco_medio: 18,
             estrelas: 4.5,
             avaliacoes: 890,
             cardapio: [
@@ -262,7 +262,7 @@ export const restaurantesGO = {
             telefone: "(62) 4444-3333",
             descricao: "Quiosque no parque.",
             tipo: ["petiscos", "parque", "casual", "familiar"],
-            preco_medium: 20,
+            preco_medio: 20,
             estrelas: 4.3,
             avaliacoes: 670,
             cardapio: [
@@ -283,7 +283,7 @@ export const restaurantesGO = {
             telefone: "(62) 4555-4444",
             descricao: "Peixes frescos.",
             tipo: ["peixaria", "brasileira", "familiar"],
-            preco_medium: 45,
+            preco_medio: 45,
             estrelas: 4.4,
             avaliacoes: 670,
             cardapio: [
@@ -304,7 +304,7 @@ export const restaurantesGO = {
             telefone: "(62) 4666-5555",
             descricao: "Restaurante popular.",
             tipo: ["brasileira", "popular", "caseira", "buffet"],
-            preco_medium: 15,
+            preco_medio: 15,
             estrelas: 4.3,
             avaliacoes: 1450,
             cardapio: [
@@ -325,7 +325,7 @@ export const restaurantesGO = {
             telefone: "(62) 4777-6666",
             descricao: "Comida rápida para estudantes.",
             tipo: ["fast-food", "lanches", "popular", "universitario"],
-            preco_medium: 18,
+            preco_medio: 18,
             estrelas: 4.2,
             avaliacoes: 1120,
             cardapio: [
@@ -346,7 +346,7 @@ export const restaurantesGO = {
             telefone: "(62) 4888-7777",
             descricao: "Praça de alimentação.",
             tipo: ["fast-food", "shopping", "variado", "familiar"],
-            preco_medium: 45,
+            preco_medio: 45,
             estrelas: 4.3,
             avaliacoes: 3450,
             cardapio: [
@@ -367,7 +367,7 @@ export const restaurantesGO = {
             telefone: "(62) 4999-8888",
             descricao: "Praça de alimentação.",
             tipo: ["fast-food", "shopping", "familiar"],
-            preco_medium: 45,
+            preco_medio: 45,
             estrelas: 4.2,
             avaliacoes: 2340,
             cardapio: [
@@ -388,7 +388,7 @@ export const restaurantesGO = {
             telefone: "(62) 5000-9999",
             descricao: "Culinária árabe autêntica.",
             tipo: ["arabe", "massas", "familiar", "vegetariano"],
-            preco_medium: 50,
+            preco_medio: 50,
             estrelas: 4.5,
             avaliacoes: 670,
             cardapio: [
@@ -409,7 +409,7 @@ export const restaurantesGO = {
             telefone: "(62) 5111-0000",
             descricao: "Opções rápidas no aeroporto.",
             tipo: ["fast-food", "aeroporto", "viagem"],
-            preco_medium: 45,
+            preco_medio: 45,
             estrelas: 3.8,
             avaliacoes: 1450,
             cardapio: [
@@ -433,7 +433,7 @@ export const restaurantesGO = {
             telefone: "(62) 3222-1111",
             descricao: "Churrascaria com rodízio de carnes.",
             tipo: ["churrascaria", "brasileira", "rodizio", "familiar"],
-            preco_medium: 65,
+            preco_medio: 65,
             estrelas: 4.5,
             avaliacoes: 890,
             cardapio: [
@@ -454,7 +454,7 @@ export const restaurantesGO = {
             telefone: "(62) 3333-2222",
             descricao: "Culinária goiana tradicional.",
             tipo: ["goiana", "regional", "familiar"],
-            preco_medium: 42,
+            preco_medio: 42,
             estrelas: 4.4,
             avaliacoes: 670,
             cardapio: [
@@ -475,7 +475,7 @@ export const restaurantesGO = {
             telefone: "(62) 3444-3333",
             descricao: "Boteco tradicional.",
             tipo: ["boteco", "petiscos", "happy-hour", "popular"],
-            preco_medium: 26,
+            preco_medio: 26,
             estrelas: 4.3,
             avaliacoes: 560,
             cardapio: [
@@ -496,7 +496,7 @@ export const restaurantesGO = {
             telefone: "(62) 3555-4444",
             descricao: "Pizzaria tradicional.",
             tipo: ["pizzaria", "italiana", "familiar"],
-            preco_medium: 45,
+            preco_medio: 45,
             estrelas: 4.3,
             avaliacoes: 560,
             cardapio: [
@@ -517,7 +517,7 @@ export const restaurantesGO = {
             telefone: "(62) 3666-5555",
             descricao: "Cafeteria regional.",
             tipo: ["cafeteria", "regional", "doces", "artesanal"],
-            preco_medium: 22,
+            preco_medio: 22,
             estrelas: 4.3,
             avaliacoes: 450,
             cardapio: [
@@ -538,7 +538,7 @@ export const restaurantesGO = {
             telefone: "(62) 3777-6666",
             descricao: "Hamburgueria artesanal.",
             tipo: ["hamburguer", "americana", "artesanal"],
-            preco_medium: 38,
+            preco_medio: 38,
             estrelas: 4.3,
             avaliacoes: 450,
             cardapio: [
@@ -559,7 +559,7 @@ export const restaurantesGO = {
             telefone: "(62) 3888-7777",
             descricao: "Tapiocaria regional.",
             tipo: ["tapiocaria", "regional", "doces", "fast-food"],
-            preco_medium: 16,
+            preco_medio: 16,
             estrelas: 4.4,
             avaliacoes: 450,
             cardapio: [
@@ -580,7 +580,7 @@ export const restaurantesGO = {
             telefone: "(62) 3999-8888",
             descricao: "Restaurante familiar.",
             tipo: ["brasileira", "caseira", "familiar", "buffet"],
-            preco_medium: 20,
+            preco_medio: 20,
             estrelas: 4.3,
             avaliacoes: 560,
             cardapio: [
@@ -601,7 +601,7 @@ export const restaurantesGO = {
             telefone: "(62) 4000-9999",
             descricao: "Praça de alimentação.",
             tipo: ["fast-food", "shopping", "familiar"],
-            preco_medium: 35,
+            preco_medio: 35,
             estrelas: 4.1,
             avaliacoes: 890,
             cardapio: [
@@ -622,7 +622,7 @@ export const restaurantesGO = {
             telefone: "-",
             descricao: "Opções rápidas.",
             tipo: ["fast-food", "rodoviaria", "viagem"],
-            preco_medium: 16,
+            preco_medio: 16,
             estrelas: 3.5,
             avaliacoes: 340,
             cardapio: [
@@ -646,7 +646,7 @@ export const restaurantesGO = {
             telefone: "(62) 3222-1111",
             descricao: "Culinária goiana tradicional com pequi e empadão.",
             tipo: ["goiana", "regional", "familiar"],
-            preco_medium: 45,
+            preco_medio: 45,
             estrelas: 4.5,
             avaliacoes: 780,
             cardapio: [
@@ -667,7 +667,7 @@ export const restaurantesGO = {
             telefone: "(62) 3333-2222",
             descricao: "Churrascaria com rodízio.",
             tipo: ["churrascaria", "brasileira", "rodizio", "familiar"],
-            preco_medium: 65,
+            preco_medio: 65,
             estrelas: 4.5,
             avaliacoes: 670,
             cardapio: [
@@ -688,7 +688,7 @@ export const restaurantesGO = {
             telefone: "(62) 3444-3333",
             descricao: "Boteco tradicional.",
             tipo: ["boteco", "petiscos", "happy-hour", "popular"],
-            preco_medium: 26,
+            preco_medio: 26,
             estrelas: 4.3,
             avaliacoes: 560,
             cardapio: [
@@ -709,7 +709,7 @@ export const restaurantesGO = {
             telefone: "(62) 3555-4444",
             descricao: "Pizzaria tradicional.",
             tipo: ["pizzaria", "italiana", "familiar"],
-            preco_medium: 45,
+            preco_medio: 45,
             estrelas: 4.3,
             avaliacoes: 450,
             cardapio: [
@@ -730,7 +730,7 @@ export const restaurantesGO = {
             telefone: "(62) 3666-5555",
             descricao: "Cafeteria regional.",
             tipo: ["cafeteria", "regional", "doces", "artesanal"],
-            preco_medium: 22,
+            preco_medio: 22,
             estrelas: 4.3,
             avaliacoes: 450,
             cardapio: [
@@ -751,7 +751,7 @@ export const restaurantesGO = {
             telefone: "(62) 3777-6666",
             descricao: "Hamburgueria artesanal.",
             tipo: ["hamburguer", "americana", "artesanal"],
-            preco_medium: 38,
+            preco_medio: 38,
             estrelas: 4.3,
             avaliacoes: 450,
             cardapio: [
@@ -772,7 +772,7 @@ export const restaurantesGO = {
             telefone: "(62) 3888-7777",
             descricao: "Tapiocaria regional.",
             tipo: ["tapiocaria", "regional", "doces", "fast-food"],
-            preco_medium: 16,
+            preco_medio: 16,
             estrelas: 4.4,
             avaliacoes: 450,
             cardapio: [
@@ -793,7 +793,7 @@ export const restaurantesGO = {
             telefone: "(62) 3999-8888",
             descricao: "Restaurante familiar.",
             tipo: ["brasileira", "caseira", "familiar", "buffet"],
-            preco_medium: 20,
+            preco_medio: 20,
             estrelas: 4.3,
             avaliacoes: 560,
             cardapio: [
@@ -814,7 +814,7 @@ export const restaurantesGO = {
             telefone: "(62) 4000-9999",
             descricao: "Praça de alimentação.",
             tipo: ["fast-food", "shopping", "familiar"],
-            preco_medium: 35,
+            preco_medio: 35,
             estrelas: 4.1,
             avaliacoes: 890,
             cardapio: [
@@ -835,7 +835,7 @@ export const restaurantesGO = {
             telefone: "-",
             descricao: "Opções rápidas.",
             tipo: ["fast-food", "rodoviaria", "viagem"],
-            preco_medium: 16,
+            preco_medio: 16,
             estrelas: 3.5,
             avaliacoes: 340,
             cardapio: [
@@ -859,7 +859,7 @@ export const restaurantesGO = {
             telefone: "(64) 3222-1111",
             descricao: "Culinária típica do interior goiano. Pequi, empadão e frango caipira.",
             tipo: ["goiana", "regional", "interior", "familiar"],
-            preco_medium: 42,
+            preco_medio: 42,
             estrelas: 4.5,
             avaliacoes: 670,
             cardapio: [
@@ -880,7 +880,7 @@ export const restaurantesGO = {
             telefone: "(64) 3333-2222",
             descricao: "Churrascaria com rodízio.",
             tipo: ["churrascaria", "brasileira", "rodizio", "familiar"],
-            preco_medium: 65,
+            preco_medio: 65,
             estrelas: 4.5,
             avaliacoes: 560,
             cardapio: [
@@ -901,7 +901,7 @@ export const restaurantesGO = {
             telefone: "(64) 3444-3333",
             descricao: "Boteco tradicional.",
             tipo: ["boteco", "petiscos", "happy-hour", "popular"],
-            preco_medium: 26,
+            preco_medio: 26,
             estrelas: 4.3,
             avaliacoes: 450,
             cardapio: [
@@ -922,7 +922,7 @@ export const restaurantesGO = {
             telefone: "(64) 3555-4444",
             descricao: "Pizzaria tradicional.",
             tipo: ["pizzaria", "italiana", "familiar"],
-            preco_medium: 45,
+            preco_medio: 45,
             estrelas: 4.3,
             avaliacoes: 450,
             cardapio: [
@@ -943,7 +943,7 @@ export const restaurantesGO = {
             telefone: "(64) 3666-5555",
             descricao: "Cafeteria regional.",
             tipo: ["cafeteria", "regional", "doces", "artesanal"],
-            preco_medium: 22,
+            preco_medio: 22,
             estrelas: 4.3,
             avaliacoes: 340,
             cardapio: [
@@ -964,7 +964,7 @@ export const restaurantesGO = {
             telefone: "(64) 3777-6666",
             descricao: "Hamburgueria artesanal.",
             tipo: ["hamburguer", "americana", "artesanal"],
-            preco_medium: 38,
+            preco_medio: 38,
             estrelas: 4.3,
             avaliacoes: 340,
             cardapio: [
@@ -985,7 +985,7 @@ export const restaurantesGO = {
             telefone: "(64) 3888-7777",
             descricao: "Tapiocaria regional.",
             tipo: ["tapiocaria", "regional", "doces", "fast-food"],
-            preco_medium: 16,
+            preco_medio: 16,
             estrelas: 4.4,
             avaliacoes: 340,
             cardapio: [
@@ -1006,7 +1006,7 @@ export const restaurantesGO = {
             telefone: "(64) 3999-8888",
             descricao: "Restaurante familiar.",
             tipo: ["brasileira", "caseira", "familiar", "buffet"],
-            preco_medium: 20,
+            preco_medio: 20,
             estrelas: 4.3,
             avaliacoes: 450,
             cardapio: [
@@ -1027,7 +1027,7 @@ export const restaurantesGO = {
             telefone: "(64) 4000-9999",
             descricao: "Praça de alimentação.",
             tipo: ["fast-food", "shopping", "familiar"],
-            preco_medium: 35,
+            preco_medio: 35,
             estrelas: 4.1,
             avaliacoes: 670,
             cardapio: [
@@ -1048,7 +1048,7 @@ export const restaurantesGO = {
             telefone: "-",
             descricao: "Opções rápidas.",
             tipo: ["fast-food", "rodoviaria", "viagem"],
-            preco_medium: 16,
+            preco_medio: 16,
             estrelas: 3.5,
             avaliacoes: 230,
             cardapio: [

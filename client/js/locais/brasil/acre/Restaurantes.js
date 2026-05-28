@@ -157,7 +157,7 @@ export const restaurantesAC = {
             telefone: "(68) 3999-8888",
             descricao: "Pizzaria tradicional. Massa fina.",
             tipo: ["pizzaria", "italiana", "familiar"],
-            preco_medium: 45,
+            preco_medio: 45,
             estrelas: 4.3,
             avaliacoes: 670,
             cardapio: [
@@ -178,7 +178,7 @@ export const restaurantesAC = {
             telefone: "(68) 4000-9999",
             descricao: "Hamburgueria artesanal.",
             tipo: ["hamburguer", "americana", "artesanal"],
-            preco_medium: 38,
+            preco_medio: 38,
             estrelas: 4.4,
             avaliacoes: 560,
             cardapio: [
@@ -199,7 +199,7 @@ export const restaurantesAC = {
             telefone: "(68) 4111-0000",
             descricao: "Restaurante familiar. Comida caseira.",
             tipo: ["brasileira", "caseira", "familiar", "buffet"],
-            preco_medium: 22,
+            preco_medio: 22,
             estrelas: 4.3,
             avaliacoes: 780,
             cardapio: [
@@ -220,7 +220,7 @@ export const restaurantesAC = {
             telefone: "(68) 4222-1111",
             descricao: "Cafeteria com produtos regionais. Cafés, bolos e tapiocas.",
             tipo: ["cafeteria", "regional", "doces", "artesanal"],
-            preco_medium: 22,
+            preco_medio: 22,
             estrelas: 4.4,
             avaliacoes: 560,
             cardapio: [
@@ -241,7 +241,7 @@ export const restaurantesAC = {
             telefone: "(68) 4333-2222",
             descricao: "Culinária indígena autêntica da região. Peixes, mandioca e frutos da floresta.",
             tipo: ["indigena", "amazonica", "regional", "tradicional"],
-            preco_medium: 40,
+            preco_medio: 40,
             estrelas: 4.6,
             avaliacoes: 450,
             cardapio: [
@@ -262,7 +262,7 @@ export const restaurantesAC = {
             telefone: "(68) 4444-3333",
             descricao: "Lanchonete tradicional.",
             tipo: ["lanches", "fast-food", "popular", "familiar"],
-            preco_medium: 22,
+            preco_medio: 22,
             estrelas: 4.2,
             avaliacoes: 670,
             cardapio: [
@@ -283,7 +283,7 @@ export const restaurantesAC = {
             telefone: "(68) 4555-4444",
             descricao: "Comida rápida para estudantes.",
             tipo: ["fast-food", "lanches", "popular", "universitario"],
-            preco_medium: 18,
+            preco_medio: 18,
             estrelas: 4.1,
             avaliacoes: 890,
             cardapio: [
@@ -304,7 +304,7 @@ export const restaurantesAC = {
             telefone: "(68) 4666-5555",
             descricao: "Peixes frescos do rio Acre.",
             tipo: ["peixaria", "acreana", "amazonica", "familiar"],
-            preco_medium: 45,
+            preco_medio: 45,
             estrelas: 4.4,
             avaliacoes: 560,
             cardapio: [
@@ -325,7 +325,7 @@ export const restaurantesAC = {
             telefone: "(68) 4777-6666",
             descricao: "Tapiocaria com diversos sabores.",
             tipo: ["tapiocaria", "regional", "doces", "fast-food"],
-            preco_medium: 18,
+            preco_medio: 18,
             estrelas: 4.4,
             avaliacoes: 560,
             cardapio: [
@@ -346,7 +346,7 @@ export const restaurantesAC = {
             telefone: "(68) 4888-7777",
             descricao: "Culinária nordestina autêntica.",
             tipo: ["nordestina", "regional", "familiar"],
-            preco_medium: 40,
+            preco_medio: 40,
             estrelas: 4.3,
             avaliacoes: 560,
             cardapio: [
@@ -367,7 +367,7 @@ export const restaurantesAC = {
             telefone: "(68) 4999-8888",
             descricao: "Praça de alimentação do Shopping Tropical.",
             tipo: ["fast-food", "shopping", "variado", "familiar"],
-            preco_medium: 35,
+            preco_medio: 35,
             estrelas: 4.2,
             avaliacoes: 1340,
             cardapio: [
@@ -388,7 +388,7 @@ export const restaurantesAC = {
             telefone: "(68) 5000-9999",
             descricao: "Culinária árabe autêntica.",
             tipo: ["arabe", "massas", "familiar", "vegetariano"],
-            preco_medium: 45,
+            preco_medio: 45,
             estrelas: 4.4,
             avaliacoes: 450,
             cardapio: [
@@ -409,7 +409,7 @@ export const restaurantesAC = {
             telefone: "(68) 5111-0000",
             descricao: "Opções rápidas no aeroporto.",
             tipo: ["fast-food", "aeroporto", "viagem"],
-            preco_medium: 40,
+            preco_medio: 40,
             estrelas: 3.8,
             avaliacoes: 890,
             cardapio: [
@@ -688,7 +688,7 @@ export const restaurantesAC = {
             telefone: "(68) 3444-3333",
             descricao: "Restaurante familiar.",
             tipo: ["brasileira", "caseira", "familiar", "buffet"],
-            preco_medium: 20,
+            preco_medio: 20,
             estrelas: 4.3,
             avaliacoes: 450,
             cardapio: [
@@ -709,7 +709,7 @@ export const restaurantesAC = {
             telefone: "(68) 3555-4444",
             descricao: "Boteco tradicional.",
             tipo: ["boteco", "petiscos", "happy-hour", "popular"],
-            preco_medium: 25,
+            preco_medio: 25,
             estrelas: 4.3,
             avaliacoes: 450,
             cardapio: [
@@ -730,7 +730,7 @@ export const restaurantesAC = {
             telefone: "(68) 3666-5555",
             descricao: "Pizzaria tradicional.",
             tipo: ["pizzaria", "italiana", "familiar"],
-            preco_medium: 42,
+            preco_medio: 42,
             estrelas: 4.2,
             avaliacoes: 340,
             cardapio: [
@@ -751,7 +751,7 @@ export const restaurantesAC = {
             telefone: "(68) 3777-6666",
             descricao: "Cafeteria regional.",
             tipo: ["cafeteria", "regional", "doces", "artesanal"],
-            preco_medium: 20,
+            preco_medio: 20,
             estrelas: 4.3,
             avaliacoes: 340,
             cardapio: [
@@ -772,7 +772,7 @@ export const restaurantesAC = {
             telefone: "(68) 3888-7777",
             descricao: "Hamburgueria artesanal.",
             tipo: ["hamburguer", "americana", "artesanal"],
-            preco_medium: 35,
+            preco_medio: 35,
             estrelas: 4.3,
             avaliacoes: 340,
             cardapio: [
@@ -793,7 +793,7 @@ export const restaurantesAC = {
             telefone: "(68) 3999-8888",
             descricao: "Tapiocaria com sabores regionais.",
             tipo: ["tapiocaria", "regional", "doces", "fast-food"],
-            preco_medium: 16,
+            preco_medio: 16,
             estrelas: 4.4,
             avaliacoes: 450,
             cardapio: [
@@ -814,7 +814,7 @@ export const restaurantesAC = {
             telefone: "(68) 4000-9999",
             descricao: "Culinária indígena tradicional da região.",
             tipo: ["indigena", "amazonica", "regional", "tradicional"],
-            preco_medium: 35,
+            preco_medio: 35,
             estrelas: 4.7,
             avaliacoes: 340,
             cardapio: [
@@ -835,7 +835,7 @@ export const restaurantesAC = {
             telefone: "-",
             descricao: "Opções rápidas.",
             tipo: ["fast-food", "rodoviaria", "viagem"],
-            preco_medium: 16,
+            preco_medio: 16,
             estrelas: 3.5,
             avaliacoes: 230,
             cardapio: [
