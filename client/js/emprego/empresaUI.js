@@ -63,7 +63,10 @@ export function renderizarQuadroVagas(cidade, estado, pais) {
         });
 
         const ordem = ['entry', 'fisicas', 'mentais', 'profissionais', 'sociais', 'gerencia'];
-        let htmlVagas = `<div style="color:#888;font-size:0.7rem;margin-bottom:12px;">📍 ${resultado.vagas.length} vaga(s) em ${cidade}</div>`;
+        let htmlVagas = `
+            <div style="color:#888;font-size:0.7rem;margin-bottom:12px;">📍 ${resultado.vagas.length} vaga(s) em ${cidade}</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+        `;
 
         ordem.forEach(cat => {
             const vagas = agrupadas[cat];
@@ -71,35 +74,75 @@ export function renderizarQuadroVagas(cidade, estado, pais) {
             const cfg = NOMES_CATEGORIAS[cat] || { icone: '📌', nome: cat, cor: '#888' };
 
             htmlVagas += `
-                <div style="margin-bottom:16px;">
-                    <div style="color:${cfg.cor};font-weight:bold;font-size:0.75rem;letter-spacing:1px;margin-bottom:8px;padding-left:4px;">${cfg.icone} ${cfg.nome} (${vagas.length})</div>
-                    ${vagas.map(v => {
-                        const reqs = v.requisitos?.atributos || {};
-                        const reqStr = Object.entries(reqs).map(([k, val]) => `${k} ${val}`).join(', ');
-                        return `
-                            <div class="vaga-card" data-vaga-id="${v.id}" data-empresa-id="${v.empresaId}" style="background:rgba(0,243,255,0.03);border:1px solid ${cfg.cor}22;border-radius:10px;padding:12px;margin-bottom:8px;">
-                                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-                                    <span style="color:#fff;font-weight:bold;font-size:0.85rem;">${v.cargo}</span>
-                                    <span style="color:#00ff66;font-weight:bold;font-size:0.8rem;">${simbolo} ${Number(v.salario).toLocaleString()}/sem</span>
+                <div style="border:1px solid ${cfg.cor}33;border-radius:10px;overflow:hidden;">
+                    <div class="cat-header" data-cat="${cat}" style="
+                        background:rgba(0,0,0,0.4);
+                        padding:12px;
+                        cursor:pointer;
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:center;
+                        user-select:none;
+                    ">
+                        <div>
+                            <span style="font-size:1.1rem;">${cfg.icone}</span>
+                            <span style="color:${cfg.cor};margin-left:8px;font-weight:bold;font-size:0.8rem;">${cfg.nome}</span>
+                            <span style="color:#888;margin-left:6px;font-size:0.65rem;">${vagas.length} vaga(s)</span>
+                        </div>
+                        <span class="cat-seta" style="color:${cfg.cor};font-size:0.8rem;transition:transform 0.2s;">▶</span>
+                    </div>
+                    <div class="cat-conteudo" style="display:none;padding:10px;">
+                        ${vagas.map(v => {
+                            const reqs = v.requisitos?.atributos || {};
+                            const reqStr = Object.entries(reqs).map(([k, val]) => `${k} ${val}`).join(', ');
+                            return `
+                                <div class="vaga-card" data-vaga-id="${v.id}" data-empresa-id="${v.empresaId}" style="background:rgba(0,243,255,0.03);border:1px solid ${cfg.cor}22;border-radius:10px;padding:12px;margin-bottom:8px;">
+                                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                                        <span style="color:#fff;font-weight:bold;font-size:0.85rem;">${v.cargo}</span>
+                                        <span style="color:#00ff66;font-weight:bold;font-size:0.8rem;">${simbolo} ${Number(v.salario).toLocaleString()}/sem</span>
+                                    </div>
+                                    <div style="color:${cfg.cor};font-size:0.7rem;margin-bottom:4px;">🏢 ${v.empresaNome}</div>
+                                    <div style="color:#888;font-size:0.65rem;margin-bottom:6px;">${v.descricao || ''}</div>
+                                    <div style="display:flex;flex-wrap:wrap;gap:8px;font-size:0.6rem;color:#555;margin-bottom:8px;">
+                                        <span>⭐ Nv.${v.requisitos?.nivelMinimo || 1}</span>
+                                        ${reqStr ? `<span>📌 ${reqStr}</span>` : ''}
+                                        <span>👥 ${v.totalCandidatos}</span>
+                                    </div>
+                                    <button class="btn-candidatar" data-vaga-id="${v.id}" data-empresa-id="${v.empresaId}" style="width:100%;background:linear-gradient(135deg,${cfg.cor},#ff0055);border:none;color:#fff;padding:8px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:0.75rem;">📄 Candidatar-se</button>
                                 </div>
-                                <div style="color:${cfg.cor};font-size:0.7rem;margin-bottom:4px;">🏢 ${v.empresaNome}</div>
-                                <div style="color:#888;font-size:0.65rem;margin-bottom:6px;">${v.descricao || ''}</div>
-                                <div style="display:flex;flex-wrap:wrap;gap:8px;font-size:0.6rem;color:#555;margin-bottom:8px;">
-                                    <span>⭐ Nv.${v.requisitos?.nivelMinimo || 1}</span>
-                                    ${reqStr ? `<span>📌 ${reqStr}</span>` : ''}
-                                    <span>👥 ${v.totalCandidatos}</span>
-                                </div>
-                                <button class="btn-candidatar" data-vaga-id="${v.id}" data-empresa-id="${v.empresaId}" style="width:100%;background:linear-gradient(135deg,${cfg.cor},#ff0055);border:none;color:#fff;padding:8px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:0.75rem;">📄 Candidatar-se</button>
-                            </div>
-                        `;
-                    }).join('')}
+                            `;
+                        }).join('')}
+                    </div>
                 </div>
             `;
         });
 
+        htmlVagas += `</div>`;
         lista.innerHTML = htmlVagas;
 
+        lista.querySelectorAll('.cat-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const conteudo = header.nextElementSibling;
+                const seta = header.querySelector('.cat-seta');
+                const aberto = conteudo.style.display === 'block';
+                conteudo.style.display = aberto ? 'none' : 'block';
+                seta.style.transform = aberto ? 'rotate(0deg)' : 'rotate(90deg)';
+            });
+        });
+
         lista.querySelectorAll('.btn-candidatar').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const playerId = sessionStorage.getItem('playerId');
+                btn.textContent = '⏳ Enviando...';
+                btn.disabled = true;
+                socket.emit('candidatarVaga', {
+                    vagaId: btn.dataset.vagaId,
+                    empresaId: btn.dataset.empresaId,
+                    playerId: playerId
+                });
+            });
+        });
+    });
             btn.addEventListener('click', () => {
                 const playerId = sessionStorage.getItem('playerId');
                 btn.textContent = '⏳ Enviando...';
@@ -166,7 +209,7 @@ export function renderizarSecaoEmprego() {
                 </div>
             </div>
             <div class="stat-row"><span class="stat-label">💰 Salário</span><span class="stat-val" style="color:#00ff66;">${simbolo} ${Number(salario || 0).toLocaleString()}/semana</span></div>
-            <div class="stat-row"><span class="stat-label">📅 Pagamento</span><span class="stat-val">Automático a cada 7 minutos</span></div>
+            <div class="stat-row"><span class="stat-label">📅 Pagamento</span><span class="stat-val">Automático a cada 7 dias</span></div>
             <button id="btn-pedir-demissao" style="margin-top:10px;width:100%;background:none;border:1px solid #ff0055;color:#ff0055;padding:8px;border-radius:6px;cursor:pointer;font-size:0.7rem;">🚪 Pedir Demissão</button>
         </div>
     `;
