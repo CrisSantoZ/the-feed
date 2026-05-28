@@ -1,4 +1,5 @@
-export function renderizarAtributos() {
+export async function renderizarAtributos() {
+    const { renderizarSecaoEmprego, configurarBotoesEmprego } = await import('../emprego/empresaUI.js');
     const playerNome = sessionStorage.getItem('playerNome') || 'Carregando...';
     const playerSaude = sessionStorage.getItem('playerSaude') || 100;
     const playerFome = Math.round(sessionStorage.getItem('playerFome') || 0);
@@ -59,12 +60,15 @@ export function renderizarAtributos() {
                 </div>
 
                 <div style="background:rgba(0,243,255,0.03);border:1px solid rgba(0,243,255,0.12);border-radius:12px;padding:15px;">
-                    <div style="color:#00f3ff;font-weight:bold;font-size:0.8rem;margin-bottom:12px;letter-spacing:1px;">XP & PROGRESSO</div>
                     <div class="stat-row"><span class="stat-label">⭐ Nível ${playerNivel}</span><span class="stat-val">${playerXP} / ${(playerNivel * 1000)} XP</span></div>
                     ${barra((playerXP / (playerNivel * 1000)) * 100, '#00f3ff')}
                 </div>
 
+                ${renderizarSecaoEmprego()}
+
             </div>
         </div>
     `;
+
+    setTimeout(configurarBotoesEmprego, 100);
 }
