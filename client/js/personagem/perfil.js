@@ -270,9 +270,17 @@ export function renderizarPerfilSidebar() {
             <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #333;">
                 <p style="color: #00f3ff; margin: 5px 0; font-size: 11px;">💰 ${simboloMoeda} <span id="player-dinheiro-sidebar">${dinheiro}</span></p>
                 <p style="color: #888; margin: 5px 0; font-size: 10px;">📍 ${escapeHtml(playerCidade)}</p>
+                ${renderizarEmpregoSidebar()}
             </div>
         </div>
     `;
+}
+
+function renderizarEmpregoSidebar() {
+    const cargo = sessionStorage.getItem('playerCargo');
+    const empresa = sessionStorage.getItem('playerEmpresa');
+    if (!cargo) return '';
+    return `<p style="color: #00ff66; margin: 5px 0; font-size: 10px;">🏢 ${escapeHtml(empresa || '')} · ${escapeHtml(cargo)}</p>`;
 }
 
 // ==================== EVENTOS DE SOCKET ====================
