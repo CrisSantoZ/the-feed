@@ -1,9 +1,5 @@
-export function renderizarHabilidades() {
-    function barra(valor, cor) {
-        const pct = Math.min(100, Math.max(0, valor));
-        return `<div class="stat-bar" style="height:4px;"><div class="stat-bar-fill" style="width:${pct}%;background:${cor}"></div></div>`;
-    }
-
+export async function renderizarHabilidades() {
+    const { barraHTML } = await import('../utils.js');
     function skillItem(icone, nome, nivel, xp, xpMax, cor) {
         return `
             <div style="background:rgba(0,0,0,0.3);padding:10px;border-radius:8px;margin-bottom:6px;border-left:3px solid ${cor};">
@@ -11,7 +7,7 @@ export function renderizarHabilidades() {
                     <span style="color:#fff;font-size:0.8rem;">${icone} ${nome}</span>
                     <span style="color:${cor};font-size:0.7rem;font-weight:bold;">Nv.${nivel}</span>
                 </div>
-                ${barra((xp / xpMax) * 100, cor)}
+                ${barraHTML((xp / xpMax) * 100, cor)}
                 <div style="display:flex;justify-content:space-between;font-size:0.6rem;color:#555;margin-top:2px;">
                     <span>XP: ${xp}/${xpMax}</span>
                 </div>

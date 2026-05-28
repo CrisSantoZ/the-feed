@@ -1,9 +1,5 @@
-export function renderizarIdiomas() {
-    function barra(valor, cor) {
-        const pct = Math.min(100, Math.max(0, valor));
-        return `<div class="stat-bar"><div class="stat-bar-fill" style="width:${pct}%;background:${cor}"></div></div>`;
-    }
-
+export async function renderizarIdiomas() {
+    const { barraHTML } = await import('../utils.js');
     return `
         <div class="mapa-container" style="padding:0;">
             <div class="mapa-header" style="padding:15px;margin:0;">
@@ -34,7 +30,7 @@ export function renderizarIdiomas() {
                             <span style="color:#fff;font-weight:bold;flex:1;">Inglês</span>
                             <span style="color:#888;font-size:0.7rem;">0%</span>
                         </div>
-                        ${barra(0, '#00f3ff')}
+                        ${barraHTML(0, '#00f3ff')}
                         <div style="display:flex;gap:8px;font-size:0.6rem;color:#555;margin-top:4px;">
                             <span>🎧 Compreensão: 0%</span>
                             <span>🗣️ Fala: 0%</span>
@@ -48,7 +44,7 @@ export function renderizarIdiomas() {
                             <span style="color:#fff;font-weight:bold;flex:1;">Espanhol</span>
                             <span style="color:#888;font-size:0.7rem;">0%</span>
                         </div>
-                        ${barra(0, '#ff0055')}
+                        ${barraHTML(0, '#ff0055')}
                         <div style="display:flex;gap:8px;font-size:0.6rem;color:#555;margin-top:4px;">
                             <span>🎧 Compreensão: 0%</span>
                             <span>🗣️ Fala: 0%</span>

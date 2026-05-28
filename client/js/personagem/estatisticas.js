@@ -1,4 +1,5 @@
-export function renderizarEstatisticas() {
+export async function renderizarEstatisticas() {
+    const { barraHTML } = await import('../utils.js');
     const playerDinheiro = sessionStorage.getItem('playerDinheiro') || 0;
     const simbolo = sessionStorage.getItem('simboloMoeda') || 'R$';
     const playerNivel = sessionStorage.getItem('playerNivel') || 1;
@@ -6,11 +7,6 @@ export function renderizarEstatisticas() {
     const playerCidade = sessionStorage.getItem('playerCidade') || '---';
     const playerEstado = sessionStorage.getItem('playerEstado') || '---';
     const playerPais = sessionStorage.getItem('playerPais') || '---';
-
-    function barra(valor, cor) {
-        const pct = Math.min(100, Math.max(0, valor));
-        return `<div class="stat-bar"><div class="stat-bar-fill" style="width:${pct}%;background:${cor}"></div></div>`;
-    }
 
     return `
         <div class="mapa-container" style="padding:0;">
@@ -34,7 +30,7 @@ export function renderizarEstatisticas() {
                 <div style="background:rgba(0,243,255,0.03);border:1px solid rgba(0,243,255,0.12);border-radius:12px;padding:15px;margin-bottom:15px;">
                     <div style="color:#00f3ff;font-weight:bold;font-size:0.8rem;margin-bottom:12px;letter-spacing:1px;">PROGRESSO</div>
                     <div class="stat-row"><span class="stat-label">⭐ Nível</span><span class="stat-val">${playerNivel}</span></div>
-                    ${barra((playerXP / (playerNivel * 1000)) * 100, '#00f3ff')}
+                    ${barraHTML((playerXP / (playerNivel * 1000)) * 100, '#00f3ff')}
                     <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:#555;margin-top:2px;">
                         <span>XP: ${playerXP}</span>
                         <span>Próximo: ${playerNivel * 1000} XP</span>
@@ -56,7 +52,7 @@ export function renderizarEstatisticas() {
                     <div style="color:#00f3ff;font-weight:bold;font-size:0.8rem;margin-bottom:12px;letter-spacing:1px;">SOCIAL</div>
                     <div class="stat-row"><span class="stat-label">👥 Amigos</span><span class="stat-val">0</span></div>
                     <div class="stat-row"><span class="stat-label">🔥 Popularidade</span><span class="stat-val">0%</span></div>
-                    ${barra(0, '#ff0055')}
+                    ${barraHTML(0, '#ff0055')}
                     <div class="stat-row"><span class="stat-label">⚔️ Facção</span><span class="stat-val">Nenhuma</span></div>
                 </div>
 

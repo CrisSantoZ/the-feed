@@ -1,5 +1,6 @@
 export async function renderizarAtributos() {
     const { renderizarSecaoEmprego, configurarBotoesEmprego } = await import('../emprego/empresaUI.js');
+    const { barraHTML } = await import('../utils.js');
     const playerNome = sessionStorage.getItem('playerNome') || 'Carregando...';
     const playerSaude = sessionStorage.getItem('playerSaude') || 100;
     const playerFome = Math.round(sessionStorage.getItem('playerFome') || 0);
@@ -12,11 +13,6 @@ export async function renderizarAtributos() {
     const simbolo = sessionStorage.getItem('simboloMoeda') || 'R$';
     const playerCidade = sessionStorage.getItem('playerCidade') || '---';
     const playerEstado = sessionStorage.getItem('playerEstado') || '---';
-
-    function barra(valor, cor) {
-        const pct = Math.min(100, Math.max(0, valor));
-        return `<div class="stat-bar"><div class="stat-bar-fill" style="width:${pct}%;background:${cor}"></div></div>`;
-    }
 
     return `
         <div class="mapa-container" style="padding:0;">
@@ -43,25 +39,25 @@ export async function renderizarAtributos() {
                 <div style="background:rgba(0,243,255,0.03);border:1px solid rgba(0,243,255,0.12);border-radius:12px;padding:15px;margin-bottom:15px;">
                     <div style="color:#00f3ff;font-weight:bold;font-size:0.8rem;margin-bottom:12px;letter-spacing:1px;">NECESSIDADES</div>
                     <div class="stat-row"><span class="stat-label">🍔 Fome</span><span class="stat-val">${playerFome}%</span></div>
-                    ${barra(playerFome, '#ff0055')}
+                    ${barraHTML(playerFome, '#ff0055')}
                     <div class="stat-row"><span class="stat-label">💧 Sede</span><span class="stat-val">${playerSede}%</span></div>
-                    ${barra(playerSede, '#00f3ff')}
+                    ${barraHTML(playerSede, '#00f3ff')}
                     <div class="stat-row"><span class="stat-label">⚡ Energia</span><span class="stat-val">${playerEnergia}%</span></div>
-                    ${barra(playerEnergia, '#00ff66')}
+                    ${barraHTML(playerEnergia, '#00ff66')}
                     <div class="stat-row"><span class="stat-label">😴 Sono</span><span class="stat-val">${playerSono}%</span></div>
-                    ${barra(playerSono, '#ff8800')}
+                    ${barraHTML(playerSono, '#ff8800')}
                 </div>
 
                 <div style="background:rgba(0,243,255,0.03);border:1px solid rgba(0,243,255,0.12);border-radius:12px;padding:15px;margin-bottom:15px;">
                     <div style="color:#00f3ff;font-weight:bold;font-size:0.8rem;margin-bottom:12px;letter-spacing:1px;">SAÚDE</div>
                     <div class="stat-row"><span class="stat-label">❤️ Geral</span><span class="stat-val">${playerSaude}%</span></div>
-                    ${barra(playerSaude, '#ff0055')}
+                    ${barraHTML(playerSaude, '#ff0055')}
                     <div style="color:#888;font-size:0.7rem;margin-top:8px;">🧬 Doenças: 0 · 🩸 Tipo: O+</div>
                 </div>
 
                 <div style="background:rgba(0,243,255,0.03);border:1px solid rgba(0,243,255,0.12);border-radius:12px;padding:15px;">
                     <div class="stat-row"><span class="stat-label">⭐ Nível ${playerNivel}</span><span class="stat-val">${playerXP} / ${(playerNivel * 1000)} XP</span></div>
-                    ${barra((playerXP / (playerNivel * 1000)) * 100, '#00f3ff')}
+                    ${barraHTML((playerXP / (playerNivel * 1000)) * 100, '#00f3ff')}
                 </div>
 
                 ${renderizarSecaoEmprego()}

@@ -36,11 +36,6 @@ function header(titulo) {
     return `<div class="mapa-header" style="padding:15px;margin:0;background:#030407;"><span style="color:#fff;font-family:'Syncopate',monospace;font-size:0.9rem;">${titulo}</span><button onclick="window.empresaFecharPainel()" style="background:none;border:none;color:#ff0055;font-size:20px;cursor:pointer;">✖</button></div>`;
 }
 
-function barra(valor, cor) {
-    const pct = Math.min(100, Math.max(0, valor));
-    return `<div class="stat-bar"><div class="stat-bar-fill" style="width:${pct}%;background:${cor}"></div></div>`;
-}
-
 // ==================== QUADRO DE VAGAS ====================
 
 export function renderizarQuadroVagas(cidade, estado, pais) {

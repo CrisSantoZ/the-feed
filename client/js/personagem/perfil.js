@@ -53,6 +53,9 @@ async function sincronizarStatus() {
                 if (resumo.nivel !== undefined) {
                     sessionStorage.setItem('playerNivel', resumo.nivel);
                 }
+                if (resumo.xp !== undefined) {
+                    sessionStorage.setItem('playerXP', resumo.xp);
+                }
                 if (resumo.patrimonio !== undefined) {
                     sessionStorage.setItem('playerDinheiro', resumo.patrimonio);
                 }
@@ -302,11 +305,17 @@ function configurarEventosSocket() {
         if (sede !== undefined) sessionStorage.setItem('playerSede', sede);
         if (energia !== undefined) sessionStorage.setItem('playerEnergia', energia);
 
-        const sono = data.necessidades.sono;
+        const sono = data.necessidades?.sono;
         if (sono !== undefined) sessionStorage.setItem('playerSono', sono);
 
         if (data.saude !== undefined) {
-            sessionStorage.setItem('playerSaude', data.saude);
+            sessionStorage.setItem('playerSaude', Math.round(Number(data.saude)));
+        }
+        if (data.nivel !== undefined) {
+            sessionStorage.setItem('playerNivel', data.nivel);
+        }
+        if (data.xp !== undefined) {
+            sessionStorage.setItem('playerXP', data.xp);
         }
         
         // ✅ Atualiza dashboard principal

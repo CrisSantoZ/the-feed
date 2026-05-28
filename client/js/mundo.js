@@ -293,6 +293,7 @@ if (pais.id === playerPais) {
         labelRenderer.setSize(newWidth, newHeight);
     }
     window.addEventListener('resize', handleResize);
+    window.__mundoHandleResize = handleResize;
 
     console.log('[MUNDO] Globo 3D inicializado com sucesso!');
 }
@@ -440,6 +441,10 @@ export function destroyMundo() {
     }
     if (controls) {
         controls.dispose();
+    }
+    if (window.__mundoHandleResize) {
+        window.removeEventListener('resize', window.__mundoHandleResize);
+        delete window.__mundoHandleResize;
     }
     const container = document.getElementById('mapa-container');
     if (container) {
