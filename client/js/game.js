@@ -41,6 +41,7 @@ const menus = {
         { id: 'mapa', nome: '🗺️ Mapa' },
         { id: 'feed', nome: '📰 Feed' },
         { id: 'pessoas', nome: '👥 Pessoas Online' },
+        { id: 'emprego', nome: '💼 Emprego' },
         { id: 'voltar', nome: '⬅ Voltar' }
     ],
     personagem: [
@@ -84,6 +85,7 @@ const renderizadores = {
     habilidades: () => renderizarHabilidades(),
     estatisticas: () => renderizarEstatisticas(),
     idiomas: () => renderizarIdiomas(),
+    emprego: () => '',
     amigos: () => renderizarAmigos(),
     chat: () => renderizarChat(),
     faccoes: () => renderizarFaccoes(),
@@ -202,6 +204,12 @@ function selecionarItem(itemId) {
     }
     
     fecharMenu();
+    
+    if (itemId === 'emprego') {
+        window.abrirMeuEmprego();
+        return;
+    }
+    
     renderizarConteudoCentral(itemId);
 }
 
@@ -379,6 +387,22 @@ window.voltarParaPais = async function(paisNome) {
 };
 
 // ==================== SISTEMA DE PEDIDOS ====================
+// ==================== SISTEMA DE EMPREGO ====================
+window.abrirQuadroVagas = async function(cidade, estado, pais) {
+    const { renderizarQuadroVagas } = await import('./emprego/empresaUI.js');
+    renderizarQuadroVagas(cidade, estado, pais);
+};
+
+window.abrirMeuEmprego = async function() {
+    const { renderizarMeuEmprego } = await import('./emprego/empresaUI.js');
+    renderizarMeuEmprego();
+};
+
+window.abrirMinhaEmpresa = async function() {
+    const { renderizarMinhaEmpresa } = await import('./emprego/empresaUI.js');
+    renderizarMinhaEmpresa();
+};
+
 window.fazerPedido = async function(restauranteId, pratoId) {
     const playerId = sessionStorage.getItem('playerId');
     const cidade = sessionStorage.getItem('playerCidade');

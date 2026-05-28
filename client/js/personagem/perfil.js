@@ -56,6 +56,8 @@ async function sincronizarStatus() {
                 if (resumo.patrimonio !== undefined) {
                     sessionStorage.setItem('playerDinheiro', resumo.patrimonio);
                 }
+                if (resumo.cargo) sessionStorage.setItem('playerCargo', resumo.cargo);
+                if (resumo.empresa) sessionStorage.setItem('playerEmpresa', resumo.empresa);
 
                 // ✅ ATUALIZA UI PRINCIPAL
                 atualizarInterfaceNecessidades({ fome, sede, energia });
