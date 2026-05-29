@@ -386,6 +386,11 @@ window.abrirQuadroVagas = async function(cidade, estado, pais) {
     renderizarQuadroVagas(cidade, estado, pais);
 };
 
+window.abrirMeuEmpregoSidebar = async function() {
+    const { abrirMeuEmpregoSidebar } = await import('./emprego/empresaUI.js');
+    abrirMeuEmpregoSidebar();
+};
+
 window.fazerPedido = async function(restauranteId, pratoId) {
     const playerId = sessionStorage.getItem('playerId');
     const cidade = sessionStorage.getItem('playerCidade');

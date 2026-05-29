@@ -228,7 +228,7 @@ window.abrirQuadroVagas = function(cidade, estado, pais) {
     );
 };
 
-window.abrirMeuEmpregoSidebar = function() {
+export function abrirMeuEmpregoSidebar() {
     if (!confirm('Tem certeza que deseja se demitir?')) return;
     const empresaId = sessionStorage.getItem('playerEmpresaId');
     if (!empresaId) {
