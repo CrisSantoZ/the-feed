@@ -407,18 +407,25 @@ async function substituirGloboPorMapa(pais) {
     container.style.background = '#030407';
 
     // Mostrar mapa do país
+    const nomeNoCountries = {
+        'Brasil': 'Brasil', 'EUA': 'Estados Unidos', 'Japão': 'Japão',
+        'França': 'França', 'Alemanha': 'Alemanha', 'Itália': 'Itália',
+        'Reino Unido': 'Reino Unido', 'China': 'China', 'Austrália': 'Austrália',
+        'Canadá': 'Canadá', 'México': 'México', 'Argentina': 'Argentina',
+        'Espanha': 'Espanha', 'Portugal': 'Portugal', 'Rússia': 'Rússia',
+        'Índia': 'Índia', 'Islândia': 'Islândia', 'Suécia': 'Suécia',
+        'Nova Zelândia': 'Nova Zelândia'
+    }[pais.nome] || pais.nome;
+
     if (pais.id === 'brasil') {
         const { renderizarMapaPais } = await import('./mundo/mapaPais.js');
         container.innerHTML = renderizarMapaPais('Brasil');
-        
-        // Inicializa o gerenciador
         const { initMapaPais } = await import('./mundo/mapaManager.js');
         initMapaPais('brasil');
-        
     } else {
         const { renderizarMapaPais, afterRenderMapa } = await import('./mundo/mapaPais.js');
-        container.innerHTML = renderizarMapaPais(pais.nome);
-        setTimeout(() => afterRenderMapa(pais.nome), 200);
+        container.innerHTML = renderizarMapaPais(nomeNoCountries);
+        setTimeout(() => afterRenderMapa(nomeNoCountries), 200);
     }
 
     // Limpar os renderers antigos
