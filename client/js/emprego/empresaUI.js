@@ -13,7 +13,7 @@ function painelAbrir(html) {
     const p = document.getElementById('painel-ativo');
     const m = document.getElementById('mapa-container');
     if (p) {
-        p.innerHTML = `<div class="painel-conteudo" style="background:#030407;min-height:100%;color:#fff;">${html}</div>`;
+        p.innerHTML = `<div class="painel-conteudo" style="background:#030407;min-height:100%;color:#fff;max-height:100vh;overflow-y:auto;">${html}</div>`;
         p.style.display = 'block';
         setTimeout(() => p.classList.add('visivel'), 50);
     } else if (m) {
@@ -230,11 +230,17 @@ window.abrirQuadroVagas = function(cidade, estado, pais) {
 
 window.abrirMeuEmpregoSidebar = function() {
     if (!confirm('Tem certeza que deseja se demitir?')) return;
-    socket.emit('pedirDemissao', sessionStorage.getItem('playerEmpresaId'));
+    const empresaId = sessionStorage.getItem('playerEmpresaId');
+    socket.emit('pedirDemissao', empresaId);
     socket.once('demissaoEfetuada', (r) => {
         if (r.sucesso) {
             ['playerCargo','playerEmpresa','playerEmpresaId','playerSalario'].forEach(k => sessionStorage.removeItem(k));
             window.abrirPersonagem?.();
+        } else {
+            alert(r.erro || 'Erro ao pedir demissão');
         }
+    });
+    socket.once('erroServidor', (e) => {
+        alert(e?.erro || e || 'Erro ao pedir demissão');
     });
 };
