@@ -283,7 +283,20 @@ function renderizarEmpregoSidebar() {
     const cargo = sessionStorage.getItem('playerCargo');
     const empresa = sessionStorage.getItem('playerEmpresa');
     if (!cargo) return '';
-    return `<p style="color: #00ff66; margin: 5px 0; font-size: 10px;">🏢 ${escapeHtml(empresa || '')} · ${escapeHtml(cargo)}</p>`;
+    return `
+        <p style="color: #00ff66; margin: 5px 0; font-size: 10px;">🏢 ${escapeHtml(empresa || '')} · ${escapeHtml(cargo)}</p>
+        <button onclick="window.abrirMeuEmpregoSidebar()" style="
+            margin-top:6px;
+            width:100%;
+            background:none;
+            border:1px solid #ff0055;
+            color:#ff0055;
+            padding:5px;
+            border-radius:4px;
+            cursor:pointer;
+            font-size:0.6rem;
+        ">🚪 Demitir-se</button>
+    `;
 }
 
 // ==================== EVENTOS DE SOCKET ====================

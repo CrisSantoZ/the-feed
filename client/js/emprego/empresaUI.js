@@ -227,3 +227,14 @@ window.abrirQuadroVagas = function(cidade, estado, pais) {
         pais || sessionStorage.getItem('playerPais') || 'Brasil'
     );
 };
+
+window.abrirMeuEmpregoSidebar = function() {
+    if (!confirm('Tem certeza que deseja se demitir?')) return;
+    socket.emit('pedirDemissao', sessionStorage.getItem('playerEmpresaId'));
+    socket.once('demissaoEfetuada', (r) => {
+        if (r.sucesso) {
+            ['playerCargo','playerEmpresa','playerEmpresaId','playerSalario'].forEach(k => sessionStorage.removeItem(k));
+            window.abrirPersonagem?.();
+        }
+    });
+};
