@@ -127,7 +127,7 @@ export function renderizarMapaPaisSVG(paisNome, paisId) {
 }
 
 export function initMapaPaisSVG(paisNome, paisId) {
-  const id = paisId || mapaNomeParaId[paisNome?.toLowerCase()] || null;
+  const id = paisId || mapaNomeParaId[normalizar(paisNome)] || null;
   const dados = mapasPaises[id];
   const config = mapaRegiaoEstados[id];
   if (!dados || !config) return;
