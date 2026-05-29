@@ -1,6 +1,4 @@
-/* ==========================================================================
-   MAPA PAÍS - GERADOR DE HTML PARA MAPAS DE PAÍSES
-   ========================================================================== */
+import { renderizarMapaPaisSVG, initMapaPaisSVG } from './mapaPaisSVG.js';
 
 export function renderizarMapaPais(paisNome) {
     const paises = window.paisesDataGlobal || [];
@@ -9,6 +7,16 @@ export function renderizarMapaPais(paisNome) {
     const idioma = pais?.idioma || 'Idioma local';
     const moeda = pais?.moeda || 'Moeda local';
     
+    const flagMap = {
+        'Brasil': '🇧🇷', 'Estados Unidos': '🇺🇸', 'França': '🇫🇷', 'Itália': '🇮🇹',
+        'Japão': '🇯🇵', 'Reino Unido': '🇬🇧', 'Alemanha': '🇩🇪', 'Espanha': '🇪🇸',
+        'Portugal': '🇵🇹', 'Argentina': '🇦🇷', 'México': '🇲🇽', 'Canadá': '🇨🇦',
+        'Austrália': '🇦🇺', 'China': '🇨🇳', 'Rússia': '🇷🇺', 'Índia': '🇮🇳',
+        'Coreia do Sul': '🇰🇷', 'Suíça': '🇨🇭', 'Holanda': '🇳🇱', 'Suécia': '🇸🇪',
+        'Turquia': '🇹🇷', 'Egito': '🇪🇬', 'África do Sul': '🇿🇦', 'Cuba': '🇨🇺'
+    };
+    const flag = flagMap[paisNome] || '🌍';
+
     const regioesHtml = regioes.map(regiao => `
         <div class="regiao-card" onclick="window.selecionarEstado('${paisNome}', '${regiao.nome}')" style="
             background: rgba(0,243,255,0.08);
@@ -23,14 +31,7 @@ export function renderizarMapaPais(paisNome) {
         </div>
     `).join('');
 
-    const flagMap = {
-        'Brasil': '🇧🇷', 'Estados Unidos': '🇺🇸', 'França': '🇫🇷', 'Itália': '🇮🇹',
-        'Japão': '🇯🇵', 'Reino Unido': '🇬🇧', 'Alemanha': '🇩🇪', 'Espanha': '🇪🇸',
-        'Portugal': '🇵🇹', 'Argentina': '🇦🇷', 'México': '🇲🇽', 'Canadá': '🇨🇦',
-        'Austrália': '🇦🇺', 'China': '🇨🇳', 'Rússia': '🇷🇺', 'Índia': '🇮🇳',
-        'Coreia do Sul': '🇰🇷', 'Suíça': '🇨🇭', 'Holanda': '🇳🇱', 'Suécia': '🇸🇪'
-    };
-    const flag = flagMap[paisNome] || '🌍';
+    const svgHtml = paisNome !== 'Brasil' ? renderizarMapaPaisSVG(paisNome) : null;
 
     return `
         <div class="mapa-container" style="background:#030407;">
@@ -49,7 +50,16 @@ export function renderizarMapaPais(paisNome) {
                     </div>
                 </div>
 
-                <div style="color:#00f3ff;font-weight:bold;font-size:0.8rem;margin-bottom:12px;letter-spacing:1px;">📍 ESTADOS / REGIÕES</div>
+                ${paisNome === 'Brasil' ? `
+                    <div class="mapa-legenda" style="margin-bottom:15px;">
+                        🔹 Estados em <span class="mapa-legenda-ativo">azul</span> disponíveis
+                    </div>
+                    <div class="mapa-wrapper">
+                        <brazil-component id="mapa-brasil" class="mapa-svg" hidden-states="false"></brazil-component>
+                    </div>
+                ` : (svgHtml || '')}
+
+                <div style="color:#00f3ff;font-weight:bold;font-size:0.8rem;margin:15px 0 12px;letter-spacing:1px;">📍 ESTADOS / REGIÕES</div>
                 
                 ${regioes.length === 0 ? `
                     <div style="text-align:center;padding:30px;color:#888;">
@@ -64,4 +74,10 @@ export function renderizarMapaPais(paisNome) {
             </div>
         </div>
     `;
+}
+
+export function afterRenderMapa(paisNome) {
+    if (paisNome !== 'Brasil') {
+        initMapaPaisSVG(paisNome);
+    }
 }

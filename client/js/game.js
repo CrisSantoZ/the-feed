@@ -130,6 +130,11 @@ function renderizarConteudoCentral(tipo, dados = {}) {
                 const { initMapaPais } = await import('./mundo/mapaManager.js');
                 initMapaPais('brasil');
             }, 200);
+        } else {
+            setTimeout(async () => {
+                const { afterRenderMapa } = await import('./mundo/mapaPais.js');
+                afterRenderMapa(paisNome);
+            }, 200);
         }
         
         return;
