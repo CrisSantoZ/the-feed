@@ -231,6 +231,10 @@ window.abrirQuadroVagas = function(cidade, estado, pais) {
 window.abrirMeuEmpregoSidebar = function() {
     if (!confirm('Tem certeza que deseja se demitir?')) return;
     const empresaId = sessionStorage.getItem('playerEmpresaId');
+    if (!empresaId) {
+        alert('Erro: ID da empresa não encontrado. Recarregue o jogo e tente novamente.');
+        return;
+    }
     const playerId = sessionStorage.getItem('playerId');
     socket.emit('pedirDemissao', { empresaId, playerId });
     socket.once('demissaoEfetuada', (r) => {
