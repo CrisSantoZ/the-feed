@@ -286,7 +286,7 @@ function renderizarEmpregoSidebar() {
     if (!cargo) return '';
     return `
         <p style="color: #00ff66; margin: 5px 0; font-size: 10px;">🏢 ${escapeHtml(empresa || '')} · ${escapeHtml(cargo)}</p>
-        <button onclick="window.abrirMeuEmpregoSidebar()" style="
+        <button onclick="window.demitirAgora()" style="
             margin-top:6px;
             width:100%;
             background:none;

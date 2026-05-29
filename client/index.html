@@ -30,13 +30,18 @@
     <script src="https://the-feed-backend-production.up.railway.app/socket.io/socket.io.js"></script>
     <script>
         window.socket = io('https://the-feed-backend-production.up.railway.app');
-        window.abrirMeuEmpregoSidebar = function() {
-            const sid = setInterval(function() {
-                if (typeof window.empresaDemitir === 'function') {
-                    clearInterval(sid);
-                    window.empresaDemitir();
+        window.demitirAgora = function() {
+            var eid = sessionStorage.getItem('playerEmpresaId');
+            var pid = sessionStorage.getItem('playerId');
+            if (!eid) { alert('Você não está empregado'); return; }
+            if (!confirm('Tem certeza?')) return;
+            window.socket.emit('pedirDemissao', { empresaId: eid, playerId: pid });
+            window.socket.once('demissaoEfetuada', function(r) {
+                if (r && r.sucesso) {
+                    ['playerCargo','playerEmpresa','playerEmpresaId','playerSalario'].forEach(function(k) { sessionStorage.removeItem(k); });
+                    if (typeof window.abrirPersonagem === 'function') window.abrirPersonagem();
                 }
-            }, 100);
+            });
         };
     </script>
     
