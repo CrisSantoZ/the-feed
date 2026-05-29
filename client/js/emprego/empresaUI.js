@@ -13,7 +13,7 @@ function painelAbrir(html) {
     const p = document.getElementById('painel-ativo');
     const m = document.getElementById('mapa-container');
     if (p) {
-        p.innerHTML = `<div class="painel-conteudo" style="background:#030407;min-height:100%;color:#fff;max-height:100vh;overflow-y:auto;">${html}</div>`;
+        p.innerHTML = `<div class="painel-conteudo" style="background:#030407;min-height:100%;color:#fff;">${html}</div>`;
         p.style.display = 'block';
         setTimeout(() => p.classList.add('visivel'), 50);
     } else if (m) {
@@ -241,6 +241,8 @@ window.abrirMeuEmpregoSidebar = function() {
         }
     });
     socket.once('erroServidor', (e) => {
-        alert(e?.erro || e || 'Erro ao pedir demissão');
+        const msg = typeof e === 'string' ? e : (e?.erro || 'Erro ao pedir demissão');
+        const msgl = typeof msg === 'string' ? msg : JSON.stringify(msg);
+        alert(msgl);
     });
 };
