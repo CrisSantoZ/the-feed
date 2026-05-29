@@ -45,13 +45,17 @@ const mapaRegiaoEstados = {
   'cuba': { 'havana': 'Havana', 'santiago-cuba': 'Santiago de Cuba', 'holguin': 'Holguín', 'villa-clara': 'Villa Clara' }
 };
 
+function normalizar(str) {
+  return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
 const mapaNomeParaId = {
-  'brasil': 'brasil', 'estados unidos': 'eua', 'eua': 'eua', 'frança': 'franca',
-  'itália': 'italia', 'italia': 'italia', 'japão': 'japao', 'reino unido': 'reino_unido',
+  'brasil': 'brasil', 'estados unidos': 'eua', 'eua': 'eua', 'franca': 'franca',
+  'italia': 'italia', 'japao': 'japao', 'reino unido': 'reino_unido',
   'alemanha': 'alemanha', 'espanha': 'espanha', 'portugal': 'portugal',
-  'argentina': 'argentina', 'méxico': 'mexico', 'mexico': 'mexico',
+  'argentina': 'argentina', 'mexico': 'mexico',
   'china': 'china', 'coreia do sul': 'coreia_sul', 'australia': 'australia',
-  'egito': 'egito', 'áfrica do sul': 'africa_sul', 'africa do sul': 'africa_sul',
+  'egito': 'egito', 'africa do sul': 'africa_sul',
   'turquia': 'turquia', 'cuba': 'cuba'
 };
 
@@ -63,7 +67,8 @@ const bandeiras = {
 };
 
 export function renderizarMapaPaisSVG(paisNome, paisId) {
-  const id = paisId || mapaNomeParaId[paisNome?.toLowerCase()] || null;
+  const id = paisId || mapaNomeParaId[normalizar(paisNome)] || null;
+  console.log('[SVG] renderizar para:', paisNome, 'normalizado:', normalizar(paisNome), 'id:', id);
   const dados = mapasPaises[id];
   const config = mapaRegiaoEstados[id];
   

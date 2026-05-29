@@ -3,9 +3,15 @@
    ========================================================================== */
 
 /* Container geral do mapa */
-/* Scroll personalizado no mapa-container (padrão cyberpunk) */
+.mapa-container {
+    padding: 0;
+    height: 100%;
+    overflow-y: auto;
+}
+
+/* Scroll personalizado cyberpunk */
 .mapa-container::-webkit-scrollbar,
-.mapa-wrapper::-webkit-scrollbar,
+.mapa-wrapper::-webkit-scrollbar {
 .painel-conteudo::-webkit-scrollbar {
     width: 4px;
 }
