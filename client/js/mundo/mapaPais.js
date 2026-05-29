@@ -32,6 +32,7 @@ export function renderizarMapaPais(paisNome) {
     `).join('');
 
     const svgHtml = paisNome !== 'Brasil' ? renderizarMapaPaisSVG(paisNome) : null;
+    console.log('[MAPA] renderizando', paisNome, 'svgHtml:', svgHtml ? 'SIM' : 'NAO');
 
     return `
         <div class="mapa-container" style="background:#030407;">
