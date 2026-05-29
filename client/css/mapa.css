@@ -11,7 +11,7 @@
 
 /* Scroll personalizado cyberpunk */
 .mapa-container::-webkit-scrollbar,
-.mapa-wrapper::-webkit-scrollbar {
+.mapa-wrapper::-webkit-scrollbar,
 .painel-conteudo::-webkit-scrollbar {
     width: 4px;
 }
