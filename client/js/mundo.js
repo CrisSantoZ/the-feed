@@ -416,11 +416,9 @@ async function substituirGloboPorMapa(pais) {
         initMapaPais('brasil');
         
     } else {
-        container.innerHTML = `
-            <div style="display:flex; justify-content:center; align-items:center; height:100%; color:#ff0055;">
-                🗺️ Mapa de ${pais.nome} em desenvolvimento
-            </div>
-        `;
+        const { renderizarMapaPais, afterRenderMapa } = await import('./mundo/mapaPais.js');
+        container.innerHTML = renderizarMapaPais(pais.nome);
+        setTimeout(() => afterRenderMapa(pais.nome), 200);
     }
 
     // Limpar os renderers antigos
