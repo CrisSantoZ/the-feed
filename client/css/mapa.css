@@ -3,11 +3,26 @@
    ========================================================================== */
 
 /* Container geral do mapa */
+/* Scroll personalizado no mapa-container (padrão cyberpunk) */
+.mapa-container::-webkit-scrollbar,
+.mapa-wrapper::-webkit-scrollbar,
+.painel-conteudo::-webkit-scrollbar {
+    width: 4px;
+}
+.mapa-container::-webkit-scrollbar-track,
+.mapa-wrapper::-webkit-scrollbar-track,
+.painel-conteudo::-webkit-scrollbar-track {
+    background: #111;
+}
+.mapa-container::-webkit-scrollbar-thumb,
+.mapa-wrapper::-webkit-scrollbar-thumb,
+.painel-conteudo::-webkit-scrollbar-thumb {
+    background: #00f3ff;
+    border-radius: 2px;
+}
 .mapa-container {
-    padding: 20px;
-    height: 100%;
-    overflow-y: auto;
-    background: #030407;
+    scrollbar-width: thin;
+    scrollbar-color: #00f3ff #111;
 }
 
 /* Cabeçalho do mapa */
