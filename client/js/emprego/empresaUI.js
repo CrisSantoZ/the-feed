@@ -231,7 +231,8 @@ window.abrirQuadroVagas = function(cidade, estado, pais) {
 window.abrirMeuEmpregoSidebar = function() {
     if (!confirm('Tem certeza que deseja se demitir?')) return;
     const empresaId = sessionStorage.getItem('playerEmpresaId');
-    socket.emit('pedirDemissao', empresaId);
+    const playerId = sessionStorage.getItem('playerId');
+    socket.emit('pedirDemissao', { empresaId, playerId });
     socket.once('demissaoEfetuada', (r) => {
         if (r.sucesso) {
             ['playerCargo','playerEmpresa','playerEmpresaId','playerSalario'].forEach(k => sessionStorage.removeItem(k));
