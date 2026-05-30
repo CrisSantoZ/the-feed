@@ -45,7 +45,7 @@ export async function renderizarMapaAmcharts(paisNome) {
       function walk(arr) {
         if (!arr || arr.length === 0) return;
         if (typeof arr[0] === 'number' && typeof arr[1] === 'number') {
-          pontos.push([arr[0], arr[1]]);
+          pontos.push([arr[0] * SCALE, arr[1] * SCALE]);
         } else {
           arr.forEach(walk);
         }
@@ -64,8 +64,9 @@ export async function renderizarMapaAmcharts(paisNome) {
       });
     });
 
-    const w = maxX - minX;
-    const h = maxY - minY;
+    const SCALE = 0.01;
+    const w = (maxX - minX) * SCALE;
+    const h = (maxY - minY) * SCALE;
     if (w <= 0 || h <= 0 || !isFinite(w) || !isFinite(h)) return null;
     const pad = Math.max(w, h) * 0.05;
 
@@ -73,13 +74,29 @@ export async function renderizarMapaAmcharts(paisNome) {
       function walkCoords(arr, depth = 0) {
         if (!arr || arr.length === 0) return '';
         if (Array.isArray(arr[0]) && Array.isArray(arr[0][0]) && typeof arr[0][0][0] === 'number') {
-          // [[[x,y],[x,y],...]] - MultiPolygon ring
           return arr.map(ring => {
             if (!ring || ring.length < 2) return '';
-            let d = `M${ring[0][0]},${ring[0][1]}`;
+            let d = `M${ring[0][0]*SCALE},${ring[0][1]*SCALE}`;
             for (let i = 1; i < ring.length; i++) {
-              d += `L${ring[i][0]},${ring[i][1]}`;
+              d += `L${ring[i][0]*SCALE},${ring[i][1]*SCALE}`;
             }
+            d += 'Z';
+            return d;
+          }).join(' ');
+        }
+        if (Array.isArray(arr[0]) && typeof arr[0][0] === 'number') {
+          if (arr.length < 2) return '';
+          let d = `M${arr[0][0]*SCALE},${arr[0][1]*SCALE}`;
+          for (let i = 1; i < arr.length; i++) {
+            d += `L${arr[i][0]*SCALE},${arr[i][1]*SCALE}`;
+          }
+          d += 'Z';
+          return d;
+        }
+        return arr.map(a => walkCoords(a, depth + 1)).join(' ');
+      }
+      return walkCoords(geometry?.coordinates || []);
+    }
             d += 'Z';
             return d;
           }).join(' ');
@@ -107,24 +124,15 @@ export async function renderizarMapaAmcharts(paisNome) {
       return `<path id="svg-${id}" class="svg-estado" data-nome="${nome}" d="${allPaths}" />`;
     }).join('');
 
-    const labelsHtml = features.map(f => {
-      const nome = f.properties?.name || '';
-      if (!nome) return '';
-      const pontos = extrairCoords(f.geometry);
-      if (pontos.length === 0) return '';
-      const cx = pontos.reduce((s, p) => s + p[0], 0) / pontos.length;
-      const cy = pontos.reduce((s, p) => s + p[1], 0) / pontos.length;
-      return `<text x="${cx}" y="${cy}" class="svg-label">${nome}</text>`;
-    }).join('');
+    const labelsHtml = '';
 
     return `
       <div class="mapa-wrapper" style="background:#0a0a14;border-radius:12px;padding:10px;margin-bottom:15px;overflow:hidden;">
         <svg viewBox="${minX-pad} ${minY-pad} ${w+pad*2} ${h+pad*2}" style="width:100%;height:auto;max-height:55vh;" class="mapa-svg-amcharts">
           <style>
-            .svg-estado { fill:rgba(0,243,255,0.12); stroke:rgba(0,243,255,0.3); stroke-width:1; cursor:pointer; transition:all 0.2s; }
-            .svg-estado:hover { fill:rgba(0,243,255,0.35); stroke:#ff0055; stroke-width:1.5; }
-            .svg-estado.ativo { fill:rgba(0,255,100,0.25); stroke:#00ff66; stroke-width:1.5; }
-            .svg-label { fill:#666; font-size:10px; font-family:'JetBrains Mono',monospace; text-anchor:middle; pointer-events:none; }
+            .svg-estado { fill:rgba(0,243,255,0.15); stroke:rgba(0,243,255,0.4); stroke-width:0.5; cursor:pointer; transition:all 0.2s; }
+            .svg-estado:hover { fill:rgba(0,243,255,0.4); stroke:#ff0055; stroke-width:1; }
+            .svg-estado.ativo { fill:rgba(0,255,100,0.3); stroke:#00ff66; stroke-width:1; }
           </style>
           ${pathsHtml}
           ${labelsHtml}
