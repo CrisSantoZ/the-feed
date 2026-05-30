@@ -16,7 +16,9 @@ const ISO_POR_NOME = {
 const cache = {};
 
 export async function renderizarMapaPaisSVG(paisNome) {
+  console.log('[MAPSVG] renderizar para', paisNome);
   const iso = ISO_POR_NOME[paisNome];
+  console.log('[MAPSVG] ISO:', iso);
   if (!iso) return null;
 
   try {
