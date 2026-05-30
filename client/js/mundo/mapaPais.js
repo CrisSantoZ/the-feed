@@ -1,4 +1,4 @@
-import { renderizarMapaPaisSVG } from './mapaPaisSVG.js';
+import { renderizarMapaPaisSVG, initMapaPaisSVG } from './mapaPaisSVG.js';
 
 export async function renderizarMapaPais(paisNome) {
     const paises = window.paisesDataGlobal || [];
@@ -31,7 +31,7 @@ export async function renderizarMapaPais(paisNome) {
         </div>
     `).join('');
 
-    const svgHtml = null; // Mapas interativos: buscar SVGs com IDs de regioes
+    const svgHtml = paisNome !== 'Brasil' ? await renderizarMapaPaisSVG(paisNome) : null;
 
     return `
         <div class="mapa-container" style="background:#030407;">
@@ -77,5 +77,5 @@ export async function renderizarMapaPais(paisNome) {
 }
 
 export function afterRenderMapa(paisNome) {
-    // Mapas interativos: buscar SVGs com IDs de regioes
+    if (paisNome !== 'Brasil') initMapaPaisSVG(paisNome);
 }

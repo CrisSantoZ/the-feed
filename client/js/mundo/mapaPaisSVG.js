@@ -1,6 +1,6 @@
-/* ==========================================================================
-   MAPA PAÍS - RENDERIZADOR GENÉRICO (SVG com estados clicáveis)
-   ========================================================================== */
+// Carrega SVGs do GitHub raw e renderiza com estados clicáveis
+
+const GITHUB = 'https://raw.githubusercontent.com/CrisSantoZ/the-feed/main/client/assets/maps';
 
 const ISO_POR_NOME = {
   'Brasil': 'BR', 'Estados Unidos': 'US', 'EUA': 'US', 'França': 'FR',
@@ -13,71 +13,48 @@ const ISO_POR_NOME = {
   'Grécia': 'GR', 'Irlanda': 'IE', 'Polônia': 'PL'
 };
 
-const GITHUB_RAW = 'https://raw.githubusercontent.com/ahuseyn/interactive-svg-maps/master/maps';
-
 const cache = {};
 
 export async function renderizarMapaPaisSVG(paisNome) {
-  console.log('[MAPSVG] renderizar para', paisNome);
   const iso = ISO_POR_NOME[paisNome];
-  console.log('[MAPSVG] ISO:', iso);
   if (!iso) return null;
 
   try {
     if (!cache[iso]) {
-      const resp = await fetch(`${GITHUB_RAW}/${iso}.svg`);
-      if (!resp.ok) {
-        console.log(`[MAPSVG] fetch ${iso}.svg falhou: ${resp.status}`);
-        return null;
-      }
+      const resp = await fetch(`${GITHUB}/${iso}.svg`);
+      if (!resp.ok) return null;
       const texto = await resp.text();
-      if (!texto.includes('<svg') && !texto.includes('<path')) {
-        console.log(`[MAPSVG] ${iso}.svg: resposta invalida (${texto.substring(0,100)})`);
-        return null;
-      }
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(texto, 'image/svg+xml');
-      const svgEl = doc.querySelector('svg');
-      if (!svgEl) {
-        console.log(`[MAPSVG] ${iso}.svg sem elemento svg`);
-        return null;
-      }
+      if (!texto.includes('<path')) return null;
 
-      const viewBox = svgEl.getAttribute('viewBox') || '0 0 800 600';
-      
+      // Extrair viewBox do SVG
+      const vbMatch = texto.match(/viewBox="([^"]+)"/);
+      if (!vbMatch) return null;
+
+      // Extrair paths com id e data-nome
+      const pathRegex = /<path\s+id="([^"]*)"\s+class="regiao"\s+data-nome="([^"]*)"\s+d="([^"]*)"\s*\/?>/g;
       const paths = [];
-      svgEl.querySelectorAll('path').forEach(p => {
-        const id = p.getAttribute('id') || '';
-        const d = p.getAttribute('d') || '';
-        if (id && d) paths.push({ id, d });
-      });
-
-      if (paths.length === 0) {
-        console.log(`[MAPSVG] ${iso}.svg sem paths`);
-        return null;
+      let m;
+      while ((m = pathRegex.exec(texto)) !== null) {
+        if (m[1] && m[3]) paths.push({ id: m[1], nome: m[2], d: m[3] });
       }
+      if (paths.length === 0) return null;
 
-      cache[iso] = { viewBox, paths, nomeNoSVG: {} };
+      cache[iso] = { viewBox: vbMatch[1], paths };
     }
 
     const data = cache[iso];
-    if (!data) return null;
 
-    // Construir mapping ID -> nome baseado no countries.js
-    const regioes = (window.paisesDataGlobal?.find(p => ISO_POR_NOME[paisNome] === iso)?.regioes) || [];
-
-    const pathsHtml = data.paths.map(p => {
-      const nome = data.nomeNoSVG[p.id] || p.id;
-      return `<path id="svg-path-${p.id}" class="svg-estado" data-nome="${nome}" data-id="${p.id}" d="${p.d}" />`;
-    }).join('');
+    const pathsHtml = data.paths.map(p =>
+      `<path class="svg-estado" data-nome="${p.nome}" d="${p.d}" />`
+    ).join('');
 
     return `
       <div class="mapa-wrapper" style="background:#0a0a14;border-radius:12px;padding:10px;margin-bottom:15px;">
         <svg viewBox="${data.viewBox}" style="width:100%;height:350px;display:block;" class="mapa-svg-iso">
           <style>
-            .svg-estado { fill:rgba(0,243,255,0.3); stroke:#00f3ff; stroke-width:1.5; cursor:pointer; }
+            .svg-estado { fill:rgba(0,243,255,0.3); stroke:#00f3ff; stroke-width:0.3; cursor:pointer; }
             .svg-estado:hover { fill:rgba(0,243,255,0.6); }
-            .svg-estado.ativo { fill:rgba(0,255,100,0.4); stroke:#00ff66; stroke-width:2.5; }
+            .svg-estado.ativo { fill:rgba(0,255,100,0.4); stroke:#00ff66; stroke-width:0.5; }
           </style>
           ${pathsHtml}
         </svg>
@@ -101,26 +78,23 @@ export function initMapaPaisSVG(paisNome) {
 
   const playerEstado = sessionStorage.getItem('playerEstado') || '';
   const playerPais = sessionStorage.getItem('playerPais') || '';
-
   const info = document.getElementById('sinfo-pais');
 
   svg.querySelectorAll('.svg-estado').forEach(el => {
     const nome = el.getAttribute('data-nome') || '';
     if (playerPais === paisNome && playerEstado === nome) el.classList.add('ativo');
-
     el.addEventListener('click', () => {
       if (window.selecionarEstado) {
-        const nomeEstado = el.getAttribute('data-nome') || el.getAttribute('data-id') || '';
+        const nomeEstado = el.getAttribute('data-nome') || '';
         window.selecionarEstado(paisNome, nomeEstado);
       }
     });
   });
 
-  // Mouse move único no SVG inteiro (sem reflow)
   let lastNome = '';
   svg.addEventListener('mousemove', (e) => {
     const target = e.target;
-    if (!target.classList || !target.classList.contains('svg-estado')) {
+    if (!target.classList?.contains('svg-estado')) {
       if (info && lastNome) { info.textContent = 'Passe o mouse sobre um estado'; lastNome = ''; }
       return;
     }
