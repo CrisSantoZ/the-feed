@@ -1,5 +1,3 @@
-import { renderizarMapaAmcharts } from './mapaAmcharts.js';
-
 export async function renderizarMapaPais(paisNome) {
     const paises = window.paisesDataGlobal || [];
     const pais = paises.find(p => p.nome === paisNome);
