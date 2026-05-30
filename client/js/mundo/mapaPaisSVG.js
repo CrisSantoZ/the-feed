@@ -24,6 +24,10 @@ export async function renderizarMapaPaisSVG(paisNome) {
   try {
     if (!cache[iso]) {
       const resp = await fetch(`/assets/maps/${iso}.svg`);
+      if (!resp.ok) {
+        console.log(`[MAPSVG] fetch ${iso}.svg falhou: ${resp.status}`);
+        return null;
+      }
       const texto = await resp.text();
       
       const parser = new DOMParser();
