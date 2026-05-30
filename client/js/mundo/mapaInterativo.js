@@ -79,9 +79,9 @@ class MapaInterativo extends HTMLElement {
           .wrapper { position:relative; }
           svg { width:100%; height:auto; display:block; }
           .info { text-align:center; color:#888; font-size:0.7rem; margin-top:6px; font-family:sans-serif; }
-          .regiao { fill:rgba(0,243,255,0.3); stroke:#00f3ff; stroke-width:0.3; cursor:pointer; }
-          .regiao:hover { fill:rgba(0,243,255,0.6); }
-          .regiao.ativo { fill:rgba(0,255,100,0.4); stroke:#00ff66; stroke-width:0.5; }
+          .regiao { fill:rgba(0,243,255,0.25); stroke:rgba(0,243,255,0.5); stroke-width:0.15; cursor:pointer; }
+          .regiao:hover { fill:rgba(0,243,255,0.5); }
+          .regiao.ativo { fill:rgba(0,255,100,0.3); stroke:rgba(0,255,100,0.6); stroke-width:0.2; }
           .carregando { text-align:center; padding:30px; color:#888; font-family:sans-serif; }
         </style>
         <div class="wrapper">
@@ -117,10 +117,17 @@ class MapaInterativo extends HTMLElement {
         const target = e.target;
         if (!target.hasAttribute || !target.hasAttribute('data-nome')) return;
         const nome = target.getAttribute('data-nome') || '';
+        // Tenta encontrar o nome em português no countries.js
+        const paises = window.paisesDataGlobal || [];
+        const pais = paises.find(p => p.nome === this.pais);
+        const regiao = pais?.regioes?.find(r =>
+          r.nome.toLowerCase() === nome.toLowerCase() ||
+          nome.toLowerCase().includes(r.nome.toLowerCase().split(' ')[0].toLowerCase())
+        );
+        const nomeFinal = regiao?.nome || nome;
         this.dispatchEvent(new CustomEvent('regiao-click', {
-          detail: { nome, pais: this.pais },
-          bubbles: true,
-          composed: true
+          detail: { nome: nomeFinal, pais: this.pais, nomeOriginal: nome },
+          bubbles: true, composed: true
         }));
       });
 
