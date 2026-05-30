@@ -31,8 +31,8 @@ export async function renderizarMapaPaisSVG(paisNome) {
         return null;
       }
       const texto = await resp.text();
-      if (texto.length < 100 || texto.includes('404') || texto.includes('Not Found')) {
-        console.log(`[MAPSVG] ${iso}.svg conteudo invalido`);
+      if (!texto.includes('<svg') && !texto.includes('<path')) {
+        console.log(`[MAPSVG] ${iso}.svg: resposta invalida (${texto.substring(0,100)})`);
         return null;
       }
       const parser = new DOMParser();
