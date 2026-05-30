@@ -15,7 +15,6 @@ const nomeParaArquivo = {
 };
 
 const mapasCarregados = {};
-const SCALE = 0.01;
 
 function extrairCoords(geometry) {
   const coords = geometry?.coordinates || [];
@@ -23,7 +22,7 @@ function extrairCoords(geometry) {
   function walk(arr) {
     if (!arr || arr.length === 0) return;
     if (typeof arr[0] === 'number' && typeof arr[1] === 'number') {
-      pontos.push([arr[0] * SCALE, arr[1] * SCALE]);
+      pontos.push([arr[0], arr[1]]);
     } else {
       arr.forEach(walk);
     }
@@ -33,21 +32,20 @@ function extrairCoords(geometry) {
 }
 
 function pathToD(geometry) {
-  const scalePt = (x, y) => `${x * SCALE},${y * SCALE}`;
   function walk(arr) {
     if (!arr || arr.length === 0) return '';
     if (Array.isArray(arr[0]) && Array.isArray(arr[0][0]) && typeof arr[0][0][0] === 'number') {
       return arr.map(ring => {
         if (!ring || ring.length < 2) return '';
-        let d = `M${scalePt(ring[0][0], ring[0][1])}`;
-        for (let i = 1; i < ring.length; i++) d += `L${scalePt(ring[i][0], ring[i][1])}`;
+        let d = `M${ring[0][0]},${ring[0][1]}`;
+        for (let i = 1; i < ring.length; i++) d += `L${ring[i][0]},${ring[i][1]}`;
         return d + 'Z';
       }).join(' ');
     }
     if (Array.isArray(arr[0]) && typeof arr[0][0] === 'number') {
       if (arr.length < 2) return '';
-      let d = `M${scalePt(arr[0][0], arr[0][1])}`;
-      for (let i = 1; i < arr.length; i++) d += `L${scalePt(arr[i][0], arr[i][1])}`;
+      let d = `M${arr[0][0]},${arr[0][1]}`;
+      for (let i = 1; i < arr.length; i++) d += `L${arr[i][0]},${arr[i][1]}`;
       return d + 'Z';
     }
     return arr.map(a => walk(a)).join(' ');
@@ -96,9 +94,9 @@ export async function renderizarMapaAmcharts(paisNome) {
       <div class="mapa-wrapper" style="background:#0a0a14;border-radius:12px;padding:10px;margin-bottom:15px;overflow:hidden;">
         <svg viewBox="${minX-pad} ${minY-pad} ${w+pad*2} ${h+pad*2}" style="width:100%;height:auto;max-height:55vh;" class="mapa-svg-amcharts">
           <style>
-            .svg-estado { fill:rgba(0,243,255,0.12); stroke:rgba(0,243,255,0.3); stroke-width:0.5; cursor:pointer; transition:all 0.2s; }
-            .svg-estado:hover { fill:rgba(0,243,255,0.35); stroke:#ff0055; stroke-width:1; }
-            .svg-estado.ativo { fill:rgba(0,255,100,0.25); stroke:#00ff66; stroke-width:1; }
+            .svg-estado { fill:rgba(0,243,255,0.12); stroke:rgba(0,243,255,0.3); stroke-width:10; cursor:pointer; transition:all 0.2s; }
+            .svg-estado:hover { fill:rgba(0,243,255,0.35); stroke:#ff0055; stroke-width:15; }
+            .svg-estado.ativo { fill:rgba(0,255,100,0.25); stroke:#00ff66; stroke-width:15; }
           </style>
           ${pathsHtml}
         </svg>
