@@ -89,7 +89,7 @@ export async function renderizarMapaAmcharts(paisNome) {
       <div class="mapa-wrapper" style="background:#0a0a14;border-radius:12px;padding:10px;margin-bottom:15px;overflow:hidden;">
         <svg viewBox="${minX-pad} ${minY-pad} ${w+pad*2} ${h+pad*2}" style="width:100%;height:auto;max-height:55vh;display:block;" class="mapa-svg-amcharts">
           <style>
-            .svg-estado { fill:rgba(0,243,255,0.1); stroke:#00f3ff; stroke-width:0.2; cursor:pointer; transition:fill 0.2s; }
+            .svg-estado { fill:rgba(0,243,255,0.1); stroke:#00f3ff; stroke-width:0.2; cursor:pointer; }
             .svg-estado:hover { fill:rgba(0,243,255,0.35); stroke:#ff0055; stroke-width:0.4; }
             .svg-estado.ativo { fill:rgba(0,255,100,0.2); stroke:#00ff66; stroke-width:0.4; }
           </style>
