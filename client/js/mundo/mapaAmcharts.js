@@ -64,6 +64,11 @@ export async function renderizarMapaAmcharts(paisNome) {
       });
     });
 
+    const w = maxX - minX;
+    const h = maxY - minY;
+    if (w <= 0 || h <= 0 || !isFinite(w) || !isFinite(h)) return null;
+    const pad = Math.max(w, h) * 0.05;
+
     function pathToD(geometry) {
       function walkCoords(arr, depth = 0) {
         if (!arr || arr.length === 0) return '';
