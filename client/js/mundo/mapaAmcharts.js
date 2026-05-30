@@ -39,15 +39,28 @@ export async function renderizarMapaAmcharts(paisNome) {
     let todasPaths = [];
     let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
 
+    function extrairCoords(geometry) {
+      const coords = geometry?.coordinates || [];
+      const pontos = [];
+      function walk(arr) {
+        if (!arr || arr.length === 0) return;
+        if (typeof arr[0] === 'number' && typeof arr[1] === 'number') {
+          pontos.push([arr[0], arr[1]]);
+        } else {
+          arr.forEach(walk);
+        }
+      }
+      walk(coords);
+      return pontos;
+    }
+
     features.forEach(f => {
-      const paths = f.geometry?.paths || [];
-      paths.forEach(path => {
-        path.forEach(([x, y]) => {
-          if (x < minX) minX = x;
-          if (x > maxX) maxX = x;
-          if (y < minY) minY = y;
-          if (y > maxY) maxY = y;
-        });
+      const pontos = extrairCoords(f.geometry);
+      pontos.forEach(([x, y]) => {
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+        if (y < minY) minY = y;
+        if (y > maxY) maxY = y;
       });
     });
 
