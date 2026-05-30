@@ -13,18 +13,18 @@ async function carregarDados() {
   return data;
 }
 
-// Mapeamento de nomes para IDs ISO 3166-1 alpha-3
+// Mapeamento de nomes para IDs ISO 3166-1 numéricos
 const nomeParaISO = {
-  'Brasil': 'BRA', 'Estados Unidos': 'USA', 'EUA': 'USA', 'França': 'FRA',
-  'Itália': 'ITA', 'Japão': 'JPN', 'Reino Unido': 'GBR', 'Alemanha': 'DEU',
-  'Espanha': 'ESP', 'Portugal': 'PRT', 'Argentina': 'ARG', 'México': 'MEX',
-  'China': 'CHN', 'Austrália': 'AUS', 'Rússia': 'RUS', 'Índia': 'IND',
-  'Canadá': 'CAN', 'Suécia': 'SWE', 'Islândia': 'ISL', 'Nova Zelândia': 'NZL',
-  'Turquia': 'TUR', 'Egito': 'EGY', 'África do Sul': 'ZAF', 'Cuba': 'CUB',
-  'Coreia do Sul': 'KOR', 'Tailândia': 'THA', 'Suíça': 'CHE', 'Holanda': 'NLD',
-  'Noruega': 'NOR', 'Dinamarca': 'DNK', 'Bélgica': 'BEL', 'Áustria': 'AUT',
-  'Polônia': 'POL', 'Irlanda': 'IRL', 'Peru': 'PER', 'Chile': 'CHL',
-  'Colômbia': 'COL', 'Venezuela': 'VEN', 'Uruguai': 'URY'
+  'Brasil': '076', 'Estados Unidos': '840', 'EUA': '840', 'França': '250',
+  'Itália': '380', 'Japão': '392', 'Reino Unido': '826', 'Alemanha': '276',
+  'Espanha': '724', 'Portugal': '620', 'Argentina': '032', 'México': '484',
+  'China': '156', 'Austrália': '036', 'Rússia': '643', 'Índia': '356',
+  'Canadá': '124', 'Suécia': '752', 'Islândia': '352', 'Nova Zelândia': '554',
+  'Turquia': '792', 'Egito': '818', 'África do Sul': '710', 'Cuba': '192',
+  'Coreia do Sul': '410', 'Tailândia': '764', 'Suíça': '756', 'Holanda': '528',
+  'Noruega': '578', 'Dinamarca': '208', 'Bélgica': '056', 'Áustria': '040',
+  'Polônia': '616', 'Irlanda': '372', 'Peru': '604', 'Chile': '152',
+  'Colômbia': '170', 'Venezuela': '862', 'Uruguai': '858'
 };
 
 // IDs para nomes de região (mapeamento manual aproximado)
