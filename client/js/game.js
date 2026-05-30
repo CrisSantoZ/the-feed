@@ -93,7 +93,7 @@ const renderizadores = {
     imoveis: () => renderizarImoveis()
 };
 
-function renderizarConteudoCentral(tipo, dados = {}) {
+async function renderizarConteudoCentral(tipo, dados = {}) {
     const mapaContainer = document.getElementById('mapa-container');
     
     const popupPais = document.getElementById('info-pais-globo');
