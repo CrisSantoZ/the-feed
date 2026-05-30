@@ -132,4 +132,8 @@ export async function renderizarMapaReal(paisNome) {
       </div>
     </div>
   `;
+  } catch (erro) {
+    console.log('[MAPAREAL] erro:', erro.message);
+    return null;
+  }
 }
