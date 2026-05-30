@@ -29,36 +29,33 @@ export async function renderizarMapaPaisSVG(paisNome) {
         return null;
       }
       const texto = await resp.text();
-      
+      if (texto.length < 100 || texto.includes('404') || texto.includes('Not Found')) {
+        console.log(`[MAPSVG] ${iso}.svg conteudo invalido`);
+        return null;
+      }
       const parser = new DOMParser();
       const doc = parser.parseFromString(texto, 'image/svg+xml');
       const svgEl = doc.querySelector('svg');
-      if (!svgEl) return null;
+      if (!svgEl) {
+        console.log(`[MAPSVG] ${iso}.svg sem elemento svg`);
+        return null;
+      }
 
       const viewBox = svgEl.getAttribute('viewBox') || '0 0 800 600';
       
-      // Extrai paths com id (estados/regiões)
       const paths = [];
       svgEl.querySelectorAll('path').forEach(p => {
         const id = p.getAttribute('id') || '';
         const d = p.getAttribute('d') || '';
-        if (id && d) {
-          paths.push({ id, d });
-        }
+        if (id && d) paths.push({ id, d });
       });
 
-      if (paths.length === 0) return null;
+      if (paths.length === 0) {
+        console.log(`[MAPSVG] ${iso}.svg sem paths`);
+        return null;
+      }
 
       cache[iso] = { viewBox, paths, nomeNoSVG: {} };
-
-      // Tenta extrair nomes dos paths (alguns SVGs têm title dentro do path)
-      svgEl.querySelectorAll('path').forEach(p => {
-        const id = p.getAttribute('id') || '';
-        const title = p.querySelector('title');
-        if (id && title) {
-          cache[iso].nomeNoSVG[id] = title.textContent.trim();
-        }
-      });
     }
 
     const data = cache[iso];
