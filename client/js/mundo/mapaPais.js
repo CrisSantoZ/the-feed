@@ -31,7 +31,7 @@ export async function renderizarMapaPais(paisNome) {
         </div>
     `).join('');
 
-    const svgHtml = null;
+    const svgHtml = paisNome !== 'Brasil' ? await renderizarMapaPaisSVG(paisNome) : null;
 
     return `
         <div class="mapa-container" style="background:#030407;">
