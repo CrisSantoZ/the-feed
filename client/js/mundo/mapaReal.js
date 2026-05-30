@@ -31,18 +31,22 @@ const nomeParaISO = {
 const idRegiaoParaNome = {};
 
 export async function renderizarMapaReal(paisNome) {
-  const data = await carregarDados();
-  const iso = nomeParaISO[paisNome];
-  if (!iso) return null;
+  console.log('[MAPAREAL] iniciando para', paisNome);
+  try {
+    const data = await carregarDados();
+    console.log('[MAPAREAL] dados carregados, tamanho:', Object.keys(data).length);
+    const iso = nomeParaISO[paisNome];
+    console.log('[MAPAREAL] ISO para', paisNome, '=', iso);
+    if (!iso) { console.log('[MAPAREAL] ISO nao encontrado'); return null; }
 
-  const topology = data;
-  const geometries = topology.objects.countries.geometries;
-  const countryGeo = geometries.find(g => g.id === iso);
-  if (!countryGeo) return null;
+    const geometries = data.objects.countries.geometries;
+    const countryGeo = geometries.find(g => g.id === iso);
+    console.log('[MAPAREAL] geometry found:', !!countryGeo);
+    if (!countryGeo) return null;
 
-  // Extrair arcs
-  const arcs = topology.arcs;
-  const transform = topology.transform;
+    const arcs = data.arcs;
+    const transform = data.transform;
+    console.log('[MAPAREAL] arcs:', arcs?.length, 'transform:', !!transform);
   
   function decodeArc(arcIndex) {
     const abs = arcIndex >= 0;
@@ -90,7 +94,9 @@ export async function renderizarMapaReal(paisNome) {
   }
 
   const paths = getPaths(countryGeo);
-  if (!paths) return null;
+  if (!paths) { console.log('[MAPAREAL] paths vazio'); return null; }
+
+  console.log('[MAPAREAL] paths gerado, tamanho:', paths.length);
 
   // Calcular viewBox
   const allCoords = [];
