@@ -13,6 +13,8 @@ const ISO_POR_NOME = {
   'Grécia': 'GR', 'Irlanda': 'IE', 'Polônia': 'PL'
 };
 
+const GITHUB_RAW = 'https://raw.githubusercontent.com/ahuseyn/interactive-svg-maps/master/maps';
+
 const cache = {};
 
 export async function renderizarMapaPaisSVG(paisNome) {
@@ -23,7 +25,7 @@ export async function renderizarMapaPaisSVG(paisNome) {
 
   try {
     if (!cache[iso]) {
-      const resp = await fetch(`/assets/maps/${iso}.svg`);
+      const resp = await fetch(`${GITHUB_RAW}/${iso}.svg`);
       if (!resp.ok) {
         console.log(`[MAPSVG] fetch ${iso}.svg falhou: ${resp.status}`);
         return null;
