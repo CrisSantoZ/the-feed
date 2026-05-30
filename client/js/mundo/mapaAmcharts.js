@@ -99,18 +99,6 @@ export async function renderizarMapaAmcharts(paisNome) {
       return `<text x="${cx}" y="${cy}" class="svg-label">${nome}</text>`;
     }).join('');
 
-    const labelsHtml = features.map(f => {
-      // Calcular centroide aproximado
-      const paths = f.geometry?.paths || [];
-      let cx = 0, cy = 0, count = 0;
-      paths.forEach(p => { p.forEach(([x, y]) => { cx += x; cy += y; count++; }); });
-      if (count === 0) return '';
-      cx /= count; cy /= count;
-      const nome = f.properties?.name || '';
-      if (!nome) return '';
-      return `<text x="${cx}" y="${cy}" class="svg-label">${nome}</text>`;
-    }).join('');
-
     return `
       <div class="mapa-wrapper" style="background:#0a0a14;border-radius:12px;padding:10px;margin-bottom:15px;overflow:hidden;">
         <svg viewBox="${minX-pad} ${minY-pad} ${w+pad*2} ${h+pad*2}" style="width:100%;height:auto;max-height:55vh;" class="mapa-svg-amcharts">
