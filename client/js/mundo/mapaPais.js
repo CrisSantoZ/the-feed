@@ -1,4 +1,4 @@
-import { renderizarMapaPaisSVG } from './mapaPaisSVG.js';
+import { renderizarMapaLeaflet, initMapaLeaflet } from './mapaLeaflet.js';
 
 export async function renderizarMapaPais(paisNome) {
     const paises = window.paisesDataGlobal || [];
@@ -31,7 +31,7 @@ export async function renderizarMapaPais(paisNome) {
         </div>
     `).join('');
 
-    const svgHtml = paisNome !== 'Brasil' ? await renderizarMapaPaisSVG(paisNome) : null;
+    const svgHtml = paisNome !== 'Brasil' ? renderizarMapaLeaflet(paisNome) : null;
 
     return `
         <div class="mapa-container" style="background:#030407;">
@@ -77,5 +77,5 @@ export async function renderizarMapaPais(paisNome) {
 }
 
 export function afterRenderMapa(paisNome) {
-    // Mapas SVG desativados - apenas navegacao por cards
+    if (paisNome !== 'Brasil') initMapaLeaflet(paisNome);
 }
