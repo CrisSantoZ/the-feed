@@ -115,6 +115,7 @@ export function initMapaAmcharts(paisNome) {
 
   const playerEstado = sessionStorage.getItem('playerEstado') || '';
   const playerPais = sessionStorage.getItem('playerPais') || '';
+  const info = document.getElementById(`sinfo-${arquivo}`);
 
   svg.querySelectorAll('.svg-estado').forEach(el => {
     const nome = el.getAttribute('data-nome') || '';
@@ -123,15 +124,21 @@ export function initMapaAmcharts(paisNome) {
     el.addEventListener('click', () => {
       if (window.selecionarEstado) window.selecionarEstado(paisNome, nome);
     });
+  });
 
-    el.addEventListener('mouseenter', () => {
-      const info = document.getElementById(`sinfo-${arquivo}`);
-      if (info) info.textContent = `📍 ${nome}`;
-    });
+  // Mouse move único no SVG inteiro (evita reflow de múltiplos listeners)
+  let lastNome = '';
+  svg.addEventListener('mousemove', (e) => {
+    const target = e.target;
+    if (!target.classList || !target.classList.contains('svg-estado')) {
+      if (info && lastNome) { info.textContent = 'Passe o mouse sobre um estado'; lastNome = ''; }
+      return;
+    }
+    const nome = target.getAttribute('data-nome') || '';
+    if (nome !== lastNome && info) { info.textContent = `📍 ${nome}`; lastNome = nome; }
+  });
 
-    el.addEventListener('mouseleave', () => {
-      const info = document.getElementById(`sinfo-${arquivo}`);
-      if (info) info.textContent = 'Passe o mouse sobre um estado';
-    });
+  svg.addEventListener('mouseleave', () => {
+    if (info) { info.textContent = 'Passe o mouse sobre um estado'; lastNome = ''; }
   });
 }
