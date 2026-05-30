@@ -1,4 +1,4 @@
-import { renderizarMapaAmcharts, initMapaAmcharts } from './mapaAmcharts.js';
+import { renderizarMapaAmcharts } from './mapaAmcharts.js';
 
 export async function renderizarMapaPais(paisNome) {
     const paises = window.paisesDataGlobal || [];
@@ -31,8 +31,7 @@ export async function renderizarMapaPais(paisNome) {
         </div>
     `).join('');
 
-    const svgHtml = paisNome !== 'Brasil' ? await renderizarMapaAmcharts(paisNome) : null;
-    console.log('[MAPA] renderizando', paisNome, 'svgHtml:', svgHtml ? 'SIM' : 'NAO');
+    const svgHtml = null; // Mapas SVG desativados temporariamente
 
     return `
         <div class="mapa-container" style="background:#030407;">
@@ -78,7 +77,5 @@ export async function renderizarMapaPais(paisNome) {
 }
 
 export function afterRenderMapa(paisNome) {
-    if (paisNome !== 'Brasil') {
-        initMapaAmcharts(paisNome);
-    }
+    // Mapas SVG desativados temporariamente
 }
