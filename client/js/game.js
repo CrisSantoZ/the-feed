@@ -122,7 +122,7 @@ function renderizarConteudoCentral(tipo, dados = {}) {
         const paisNome = dados.pais;
         
         if (mapaContainer) {
-            mapaContainer.innerHTML = renderizarMapaPais(paisNome);
+            mapaContainer.innerHTML = await renderizarMapaPais(paisNome);
         }
         
         if (paisNome === 'Brasil') {

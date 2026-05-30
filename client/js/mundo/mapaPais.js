@@ -1,6 +1,7 @@
 import { renderizarMapaPaisSVG, initMapaPaisSVG } from './mapaPaisSVG.js';
+import { renderizarMapaReal } from './mapaReal.js';
 
-export function renderizarMapaPais(paisNome) {
+export async function renderizarMapaPais(paisNome) {
     const paises = window.paisesDataGlobal || [];
     const pais = paises.find(p => p.nome === paisNome);
     const regioes = pais?.regioes || [];
@@ -31,7 +32,7 @@ export function renderizarMapaPais(paisNome) {
         </div>
     `).join('');
 
-    const svgHtml = paisNome !== 'Brasil' ? renderizarMapaPaisSVG(paisNome) : null;
+    const svgHtml = paisNome !== 'Brasil' ? (await renderizarMapaReal(paisNome)) || renderizarMapaPaisSVG(paisNome) : null;
     console.log('[MAPA] renderizando', paisNome, 'svgHtml:', svgHtml ? 'SIM' : 'NAO');
 
     return `

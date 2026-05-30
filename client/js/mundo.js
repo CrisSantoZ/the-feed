@@ -419,12 +419,12 @@ async function substituirGloboPorMapa(pais) {
 
     if (pais.id === 'brasil') {
         const { renderizarMapaPais } = await import('./mundo/mapaPais.js');
-        container.innerHTML = renderizarMapaPais('Brasil');
+        container.innerHTML = await renderizarMapaPais('Brasil');
         const { initMapaPais } = await import('./mundo/mapaManager.js');
         initMapaPais('brasil');
     } else {
         const { renderizarMapaPais, afterRenderMapa } = await import('./mundo/mapaPais.js');
-        container.innerHTML = renderizarMapaPais(nomeNoCountries);
+        container.innerHTML = await renderizarMapaPais(nomeNoCountries);
         setTimeout(() => afterRenderMapa(nomeNoCountries), 200);
     }
 
