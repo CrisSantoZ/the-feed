@@ -51,40 +51,6 @@ export async function renderizarMapaAmcharts(paisNome) {
       });
     });
 
-    const w = maxX - minX;
-    const h = maxY - minY;
-    const pad = Math.max(w, h) * 0.05;
-
-    function extrairCoords(geometry) {
-      const coords = geometry?.coordinates || [];
-      const pontos = [];
-      function walk(arr) {
-        if (arr.length === 0) return;
-        if (typeof arr[0] === 'number' && typeof arr[1] === 'number') {
-          pontos.push(arr);
-        } else {
-          arr.forEach(walk);
-        }
-      }
-      walk(coords);
-      return pontos;
-    }
-
-    features.forEach(f => {
-      const pontos = extrairCoords(f.geometry);
-      pontos.forEach(([x, y]) => {
-        if (x < minX) minX = x;
-        if (x > maxX) maxX = x;
-        if (y < minY) minY = y;
-        if (y > maxY) maxY = y;
-      });
-    });
-
-    const w = maxX - minX;
-    const h = maxY - minY;
-    if (w <= 0 || h <= 0 || !isFinite(w) || !isFinite(h)) return null;
-    const pad = Math.max(w, h) * 0.05;
-
     function pathToD(geometry) {
       function walkCoords(arr, depth = 0) {
         if (!arr || arr.length === 0) return '';
