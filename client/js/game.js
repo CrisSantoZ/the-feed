@@ -5,7 +5,7 @@
 import { initMundo, destroyMundo } from './mundo.js';
 
 // Importar módulos de conteúdo
-import { renderizarMapa } from './mundo/mapaMundial.js';
+import { renderizarMapaMundial as renderizarMapa } from './mundo/mapaMundial.js';
 import { renderizarMapaEstado } from './mundo/mapaEstado.js';
 import { renderizarMapaCidade } from './mundo/mapaCidade.js';
 import { renderizarMapaPais } from './mundo/mapaPais.js';
