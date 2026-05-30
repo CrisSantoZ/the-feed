@@ -55,22 +55,82 @@ export async function renderizarMapaAmcharts(paisNome) {
     const h = maxY - minY;
     const pad = Math.max(w, h) * 0.05;
 
-    function pathToD(pathCoords) {
-      if (!pathCoords || pathCoords.length === 0) return '';
-      let d = `M${pathCoords[0][0]},${pathCoords[0][1]}`;
-      for (let i = 1; i < pathCoords.length; i++) {
-        d += `L${pathCoords[i][0]},${pathCoords[i][1]}`;
+    function extrairCoords(geometry) {
+      const coords = geometry?.coordinates || [];
+      const pontos = [];
+      function walk(arr) {
+        if (arr.length === 0) return;
+        if (typeof arr[0] === 'number' && typeof arr[1] === 'number') {
+          pontos.push(arr);
+        } else {
+          arr.forEach(walk);
+        }
       }
-      d += 'Z';
-      return d;
+      walk(coords);
+      return pontos;
+    }
+
+    features.forEach(f => {
+      const pontos = extrairCoords(f.geometry);
+      pontos.forEach(([x, y]) => {
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+        if (y < minY) minY = y;
+        if (y > maxY) maxY = y;
+      });
+    });
+
+    const w = maxX - minX;
+    const h = maxY - minY;
+    if (w <= 0 || h <= 0 || !isFinite(w) || !isFinite(h)) return null;
+    const pad = Math.max(w, h) * 0.05;
+
+    function pathToD(geometry) {
+      function walkCoords(arr, depth = 0) {
+        if (!arr || arr.length === 0) return '';
+        if (Array.isArray(arr[0]) && Array.isArray(arr[0][0]) && typeof arr[0][0][0] === 'number') {
+          // [[[x,y],[x,y],...]] - MultiPolygon ring
+          return arr.map(ring => {
+            if (!ring || ring.length < 2) return '';
+            let d = `M${ring[0][0]},${ring[0][1]}`;
+            for (let i = 1; i < ring.length; i++) {
+              d += `L${ring[i][0]},${ring[i][1]}`;
+            }
+            d += 'Z';
+            return d;
+          }).join(' ');
+        }
+        if (Array.isArray(arr[0]) && typeof arr[0][0] === 'number') {
+          // [[x,y],[x,y],...] - Polygon ring
+          if (arr.length < 2) return '';
+          let d = `M${arr[0][0]},${arr[0][1]}`;
+          for (let i = 1; i < arr.length; i++) {
+            d += `L${arr[i][0]},${arr[i][1]}`;
+          }
+          d += 'Z';
+          return d;
+        }
+        return arr.map(a => walkCoords(a, depth + 1)).join(' ');
+      }
+      return walkCoords(geometry?.coordinates || []);
     }
 
     const pathsHtml = features.map(f => {
       const nome = f.properties?.name || f.id || '';
       const id = f.id || nome.replace(/\s+/g, '-').toLowerCase();
-      const allPaths = (f.geometry?.paths || []).map(p => pathToD(p)).join(' ');
+      const allPaths = pathToD(f.geometry);
       if (!allPaths) return '';
       return `<path id="svg-${id}" class="svg-estado" data-nome="${nome}" d="${allPaths}" />`;
+    }).join('');
+
+    const labelsHtml = features.map(f => {
+      const nome = f.properties?.name || '';
+      if (!nome) return '';
+      const pontos = extrairCoords(f.geometry);
+      if (pontos.length === 0) return '';
+      const cx = pontos.reduce((s, p) => s + p[0], 0) / pontos.length;
+      const cy = pontos.reduce((s, p) => s + p[1], 0) / pontos.length;
+      return `<text x="${cx}" y="${cy}" class="svg-label">${nome}</text>`;
     }).join('');
 
     const labelsHtml = features.map(f => {
