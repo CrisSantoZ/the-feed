@@ -167,57 +167,207 @@ export function renderizarQuadroVagas(cidade, estado, pais) {
     });
 }
 
-// ==================== MEU EMPREGO (no painel do personagem) ====================
+// ==================== MEU EMPREGO (painel dedicado) ====================
 
-export function renderizarSecaoEmprego() {
-    const cargo = sessionStorage.getItem('playerCargo');
-    const empresa = sessionStorage.getItem('playerEmpresa');
-    const salario = sessionStorage.getItem('playerSalario');
-    const simbolo = sessionStorage.getItem('simboloMoeda') || 'R$';
+function getEmpregoAtual() {
+    return {
+        cargo: sessionStorage.getItem('playerCargo'),
+        empresa: sessionStorage.getItem('playerEmpresa'),
+        empresaId: sessionStorage.getItem('playerEmpresaId'),
+        salario: Number(sessionStorage.getItem('playerSalario') || 0),
+        dataContratacao: sessionStorage.getItem('playerEmpregoDataContratacao') || null,
+        diasTrabalhados: Number(sessionStorage.getItem('playerEmpregoDiasTrabalhados') || 0),
+        totalRecebido: Number(sessionStorage.getItem('playerEmpregoTotalRecebido') || 0),
+        ultimoTrabalho: sessionStorage.getItem('playerEmpregoUltimoTrabalho') || null,
+        turno: sessionStorage.getItem('playerEmpregoTurno') || 'integral',
+        horarioInicio: sessionStorage.getItem('playerEmpregoHorarioInicio') || '08:00',
+        horarioFim: sessionStorage.getItem('playerEmpregoHorarioFim') || '17:00',
+        totalFuncionarios: sessionStorage.getItem('playerEmpregoTotalFuncionarios') || null,
+    };
+}
 
-    if (!cargo) {
+function salvarEmprego(emp) {
+    sessionStorage.setItem('playerCargo', emp.cargo || '');
+    sessionStorage.setItem('playerEmpresa', emp.empresa || '');
+    sessionStorage.setItem('playerEmpresaId', emp.empresaId || '');
+    sessionStorage.setItem('playerSalario', String(emp.salario || 0));
+    if (emp.dataContratacao) sessionStorage.setItem('playerEmpregoDataContratacao', emp.dataContratacao);
+    if (emp.diasTrabalhados != null) sessionStorage.setItem('playerEmpregoDiasTrabalhados', String(emp.diasTrabalhados));
+    if (emp.totalRecebido != null) sessionStorage.setItem('playerEmpregoTotalRecebido', String(emp.totalRecebido));
+    if (emp.ultimoTrabalho) sessionStorage.setItem('playerEmpregoUltimoTrabalho', emp.ultimoTrabalho);
+    if (emp.turno) sessionStorage.setItem('playerEmpregoTurno', emp.turno);
+    if (emp.horarioInicio) sessionStorage.setItem('playerEmpregoHorarioInicio', emp.horarioInicio);
+    if (emp.horarioFim) sessionStorage.setItem('playerEmpregoHorarioFim', emp.horarioFim);
+    if (emp.totalFuncionarios != null) sessionStorage.setItem('playerEmpregoTotalFuncionarios', String(emp.totalFuncionarios));
+}
+
+function limparEmprego() {
+    ['playerCargo','playerEmpresa','playerEmpresaId','playerSalario','playerEmpregoDataContratacao','playerEmpregoDiasTrabalhados','playerEmpregoTotalRecebido','playerEmpregoUltimoTrabalho','playerEmpregoTurno','playerEmpregoHorarioInicio','playerEmpregoHorarioFim','playerEmpregoTotalFuncionarios'].forEach(k => sessionStorage.removeItem(k));
+}
+
+function podeTrabalharHoje(ultimoTrabalho) {
+    if (!ultimoTrabalho) return true;
+    const agora = new Date();
+    const ultimo = new Date(ultimoTrabalho);
+    return agora.toDateString() !== ultimo.toDateString();
+}
+
+function estaNoHorario(horarioInicio, horarioFim) {
+    if (!horarioInicio || !horarioFim) return true;
+    try {
+        const agora = new Date();
+        const [hIni, mIni] = horarioInicio.split(':').map(Number);
+        const [hFim, mFim] = horarioFim.split(':').map(Number);
+        const inicio = new Date(agora); inicio.setHours(hIni, mIni, 0, 0);
+        const fim = new Date(agora); fim.setHours(hFim, mFim, 0, 0);
+        return agora >= inicio && agora <= fim;
+    } catch (e) {
+        return true;
+    }
+}
+
+export function renderizarPainelEmpregoAtual() {
+    const emp = getEmpregoAtual();
+    if (!emp.cargo || !emp.empresa) {
         return `
             <div style="background:rgba(0,243,255,0.03);border:1px solid rgba(0,243,255,0.12);border-radius:12px;padding:15px;margin-bottom:15px;">
-                <div style="color:#00f3ff;font-weight:bold;font-size:0.8rem;margin-bottom:8px;letter-spacing:1px;">💼 EMPREGO</div>
-                <div style="color:#888;font-size:0.7rem;text-align:center;padding:10px;">
-                    🔍 Desempregado — vá até uma cidade e candidate-se a uma vaga.
-                </div>
+                <div style="color:#00f3ff;font-weight:bold;font-size:0.8rem;margin-bottom:8px;letter-spacing:1px;">💼 EMPREGO ATUAL</div>
+                <div style="color:#888;font-size:0.7rem;text-align:center;padding:10px;">🔍 Desempregado — vá até uma cidade e candidate-se a uma vaga.</div>
             </div>
         `;
     }
 
+    const simbolo = sessionStorage.getItem('simboloMoeda') || 'R$';
+    const salarioDiario = Math.round(emp.salario / 7);
+    const noHorario = estaNoHorario(emp.horarioInicio, emp.horarioFim);
+    const jaTrabalhou = !podeTrabalharHoje(emp.ultimoTrabalho);
+    const podeTrabalhar = noHorario && !jaTrabalhou;
+
+    let botaoTrabalhar = '';
+    if (jaTrabalhou) {
+        botaoTrabalhar = `<button id="btn-trabalhar" disabled style="width:100%;background:#333;border:1px solid #555;color:#888;padding:10px;border-radius:6px;cursor:not-allowed;font-weight:bold;font-size:0.75rem;">✅ Já trabalhou hoje — volte amanhã</button>`;
+    } else if (!noHorario) {
+        botaoTrabalhar = `<button id="btn-trabalhar" disabled style="width:100%;background:#333;border:1px solid #555;color:#888;padding:10px;border-radius:6px;cursor:not-allowed;font-weight:bold;font-size:0.75rem;">⏰ Fora do horário (${emp.horarioInicio}–${emp.horarioFim})</button>`;
+    } else {
+        botaoTrabalhar = `<button id="btn-trabalhar" style="width:100%;background:linear-gradient(135deg,#00f3ff,#ff0055);border:none;color:#fff;padding:10px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:0.75rem;">⚒️ Trabalhar agora (${simbolo} ${salarioDiario.toLocaleString()})</button>`;
+    }
+
+    const dataFormatada = emp.dataContratacao ? new Date(emp.dataContratacao).toLocaleDateString('pt-BR') : '—';
+
     return `
         <div style="background:rgba(0,243,255,0.03);border:1px solid #00ff6622;border-radius:12px;padding:15px;margin-bottom:15px;">
-            <div style="color:#00ff66;font-weight:bold;font-size:0.8rem;margin-bottom:8px;letter-spacing:1px;">💼 EMPREGO ATUAL</div>
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <div style="color:#00ff66;font-weight:bold;font-size:0.8rem;margin-bottom:8px;letter-spacing:1px;">💼 MEU EMPREGO</div>
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
                 <span style="font-size:1.5rem;">🏢</span>
                 <div>
-                    <div style="color:#fff;font-weight:bold;font-size:0.85rem;">${empresa || 'Empresa'}</div>
-                    <div style="color:#00f3ff;font-size:0.75rem;">${cargo}</div>
+                    <div style="color:#fff;font-weight:bold;font-size:0.85rem;">${escapeHtml(emp.empresa || '')}</div>
+                    <div style="color:#00f3ff;font-size:0.75rem;">${escapeHtml(emp.cargo || '')}</div>
                 </div>
             </div>
-            <div class="stat-row"><span class="stat-label">💰 Salário</span><span class="stat-val" style="color:#00ff66;">${simbolo} ${Number(salario || 0).toLocaleString()}/semana</span></div>
-            <div class="stat-row"><span class="stat-label">📅 Pagamento</span><span class="stat-val">Automático a cada 7 dias</span></div>
+            <div class="stat-row"><span class="stat-label">⏰ Turno</span><span class="stat-val">${emp.turno || 'integral'} (${emp.horarioInicio}–${emp.horarioFim})</span></div>
+            <div class="stat-row"><span class="stat-label">📅 Admissão</span><span class="stat-val">${dataFormatada}</span></div>
+            <div class="stat-row"><span class="stat-label">💰 Salário</span><span class="stat-val" style="color:#00ff66;">${simbolo} ${Number(emp.salario || 0).toLocaleString()}/semana</span></div>
+            <div class="stat-row"><span class="stat-label">💵 Por dia (1/7)</span><span class="stat-val" style="color:#00ff66;">${simbolo} ${salarioDiario.toLocaleString()}</span></div>
+            <div class="stat-row"><span class="stat-label">✅ Dias trabalhados</span><span class="stat-val">${emp.diasTrabalhados || 0}</span></div>
+            <div class="stat-row"><span class="stat-label">📈 Total recebido</span><span class="stat-val" style="color:#00ff66;">${simbolo} ${Number(emp.totalRecebido || 0).toLocaleString()}</span></div>
+            <div class="stat-row"><span class="stat-label">👥 Funcionários</span><span class="stat-val">${emp.totalFuncionarios != null ? emp.totalFuncionarios : '—'}</span></div>
+            ${botaoTrabalhar}
             <button id="btn-pedir-demissao" style="margin-top:10px;width:100%;background:none;border:1px solid #ff0055;color:#ff0055;padding:8px;border-radius:6px;cursor:pointer;font-size:0.7rem;">🚪 Pedir Demissão</button>
         </div>
     `;
 }
 
 export function configurarBotoesEmprego() {
-    const btn = document.getElementById('btn-pedir-demissao');
-    if (!btn) return;
-    btn.addEventListener('click', () => {
-        if (!confirm('Tem certeza que deseja se demitir?')) return;
-        socket.emit('pedirDemissao', sessionStorage.getItem('playerEmpresaId'));
-        socket.once('demissaoEfetuada', (r) => {
-            if (r.sucesso) {
-                ['playerCargo','playerEmpresa','playerEmpresaId','playerSalario'].forEach(k => sessionStorage.removeItem(k));
-                const p = document.getElementById('painel-ativo');
-                if (p) { p.innerHTML = ''; p.style.display = 'none'; }
-                window.abrirPersonagem?.();
+    const btnTrabalhar = document.getElementById('btn-trabalhar');
+    if (btnTrabalhar) {
+        btnTrabalhar.addEventListener('click', () => {
+            const emp = getEmpregoAtual();
+            if (!emp.empresaId || !emp.cargo) {
+                alert('Erro: dados de emprego não encontrados.');
+                return;
+            }
+            if (!podeTrabalharHoje(emp.ultimoTrabalho)) {
+                alert('Você já trabalhou hoje. Próxima jornada disponível amanhã.');
+                return;
+            }
+            socket.emit('trabalhar', {
+                empresaId: emp.empresaId,
+                cargo: emp.cargo,
+                turno: emp.turno,
+                horarioInicio: emp.horarioInicio,
+                horarioFim: emp.horarioFim,
+            });
+        });
+
+        socket.once('salarioRecebido', (r) => {
+            const btn = document.getElementById('btn-trabalhar');
+            if (!btn) return;
+            if (r && r.sucesso) {
+                const emp = getEmpregoAtual();
+                emp.ultimoTrabalho = new Date().toISOString();
+                emp.diasTrabalhados = (emp.diasTrabalhados || 0) + 1;
+                emp.totalRecebido = (emp.totalRecebido || 0) + (r.valor || 0);
+                salvarEmprego(emp);
+                const painel = document.getElementById('painel-ativo') || document.getElementById('mapa-container');
+                if (painel) painel.innerHTML = renderizarPainelEmpregoAtual();
+                configurarBotoesEmprego();
+                window.atualizarDashboard && window.atualizarDashboard({ saldoRestante: r.saldoAtual || undefined });
+            } else {
+                alert(r?.erro || 'Não foi possível trabalhar agora.');
             }
         });
-    });
+    }
+
+    const btnDemissao = document.getElementById('btn-pedir-demissao');
+    if (btnDemissao) {
+        btnDemissao.addEventListener('click', () => {
+            if (!confirm('Tem certeza que deseja se demitir?')) return;
+            const empresaId = sessionStorage.getItem('playerEmpresaId');
+            const playerId = sessionStorage.getItem('playerId');
+            socket.emit('pedirDemissao', { empresaId, playerId });
+
+            socket.once('demissaoEfetuada', (r) => {
+                if (r.sucesso) {
+                    limparEmprego();
+                    abrirQuadroVagas();
+                } else {
+                    alert(r.erro || 'Erro ao pedir demissão');
+                }
+            });
+
+            socket.once('erroServidor', (e) => {
+                const msg = typeof e === 'string' ? e : (e?.erro || 'Erro ao pedir demissão');
+                alert(msg);
+            });
+        });
+    }
+}
+
+export function renderizarSecaoEmpregoSidebar() {
+    const emp = getEmpregoAtual();
+    if (!emp.cargo) return '';
+    return `
+        <p style="color:#00ff66;margin:5px 0;font-size:10px;">🏢 ${escapeHtml(emp.empresa || '')} · ${escapeHtml(emp.cargo || '')}</p>
+        <button onclick="window.demitirAgora()" style="
+            margin-top:6px;
+            width:100%;
+            background:none;
+            border:1px solid #ff0055;
+            color:#ff0055;
+            padding:5px;
+            border-radius:4px;
+            cursor:pointer;
+            font-size:0.6rem;
+        ">🚪 Demitir-se</button>
+    `;
+}
+
+export function atualizarSecaoEmprego() {
+    const emp = getEmpregoAtual();
+    const el = document.getElementById('secao-emprego-atual');
+    if (!el) return;
+    el.innerHTML = renderizarPainelEmpregoAtual();
+    if (emp.cargo) configurarBotoesEmprego();
 }
 
 window.abrirQuadroVagas = function(cidade, estado, pais) {
@@ -228,26 +378,34 @@ window.abrirQuadroVagas = function(cidade, estado, pais) {
     );
 };
 
-export function abrirMeuEmpregoSidebar() {
-    if (!confirm('Tem certeza que deseja se demitir?')) return;
-    const empresaId = sessionStorage.getItem('playerEmpresaId');
-    if (!empresaId) {
-        alert('Erro: ID da empresa não encontrado. Recarregue o jogo e tente novamente.');
+window.abrirPainelEmpregoAtual = function() {
+    const html = renderizarPainelEmpregoAtual();
+    if (!getEmpregoAtual().cargo) {
+        window.abrirQuadroVagas();
         return;
     }
+    painelAbrir(html);
+    configurarBotoesEmprego();
+};
+
+window.demitirAgora = function() {
+    if (!confirm('Tem certeza que deseja se demitir?')) return;
+    const empresaId = sessionStorage.getItem('playerEmpresaId');
     const playerId = sessionStorage.getItem('playerId');
     socket.emit('pedirDemissao', { empresaId, playerId });
+
     socket.once('demissaoEfetuada', (r) => {
         if (r.sucesso) {
-            ['playerCargo','playerEmpresa','playerEmpresaId','playerSalario'].forEach(k => sessionStorage.removeItem(k));
+            limparEmprego();
             window.abrirPersonagem?.();
+            alert('🚪 Demissão realizada com sucesso.');
         } else {
             alert(r.erro || 'Erro ao pedir demissão');
         }
     });
+
     socket.once('erroServidor', (e) => {
         const msg = typeof e === 'string' ? e : (e?.erro || 'Erro ao pedir demissão');
-        const msgl = typeof msg === 'string' ? msg : JSON.stringify(msg);
-        alert(msgl);
+        alert(msg);
     });
 };

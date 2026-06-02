@@ -48,7 +48,8 @@ const menus = {
     { id: 'inventario', nome: '🎒 Inventário' },
     { id: 'habilidades', nome: '⚡ Habilidades' },
     { id: 'estatisticas', nome: '📈 Estatísticas' },
-    { id: 'idiomas', nome: '🗣️ Idiomas' },
+        { id: 'idiomas', nome: '🗣️ Idiomas' },
+    { id: 'minhasEmpresas', nome: '🏢 Minhas Empresas' },
     { id: 'voltar', nome: '⬅ Voltar' }
 ],
     social: [
