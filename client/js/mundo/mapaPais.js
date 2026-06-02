@@ -1,4 +1,5 @@
-import './mapaInterativo.js';
+
+
 
 export async function renderizarMapaPais(paisNome) {
     const paises = window.paisesDataGlobal || [];
@@ -31,16 +32,7 @@ export async function renderizarMapaPais(paisNome) {
         </div>
     `).join('');
 
-    // Mapa interativo via web component
-    const iso = {
-      'Brasil':'BR','Estados Unidos':'US','EUA':'US','França':'FR','Itália':'IT','Japão':'JP',
-      'Reino Unido':'GB','Alemanha':'DE','Espanha':'ES','Portugal':'PT','Argentina':'AR',
-      'México':'MX','China':'CN','Austrália':'AU','Índia':'IN','Canadá':'CA','Rússia':'RU',
-      'Turquia':'TR','Egito':'EG','África do Sul':'ZA','Cuba':'CU','Coreia do Sul':'KR',
-      'Suécia':'SE','Noruega':'NO','Suíça':'CH','Holanda':'NL','Bélgica':'BE','Áustria':'AT',
-      'Grécia':'GR','Irlanda':'IE','Polônia':'PL'
-    }[paisNome];
-    const svgHtml = iso ? `<mapa-interativo iso="${iso}" pais="${paisNome}"></mapa-interativo>` : null;
+    const svgHtml = null;
 
     return `
         <div class="mapa-container" style="background:#030407;">
@@ -86,13 +78,4 @@ export async function renderizarMapaPais(paisNome) {
 }
 
 export function afterRenderMapa(paisNome) {
-    // Vincular clique do web component
-    const mapa = document.querySelector('mapa-interativo');
-    if (mapa) {
-        mapa.addEventListener('regiao-click', (e) => {
-            if (window.selecionarEstado) {
-                window.selecionarEstado(paisNome, e.detail.nome);
-            }
-        });
-    }
 }
