@@ -1,7 +1,7 @@
 const MAPS_PATH = '/assets/maps';
 
 const ISO_POR_NOME = {
-  'Brasil': 'BR', 'Estados Unidos': 'US', 'EUA': 'US', 'França': 'FR',
+  'Brasil': 'BR', 'Estados Unidos': 'US', 'EUA': 'US', 'França': 'FRA',
   'Itália': 'IT', 'Japão': 'JP', 'Reino Unido': 'GB', 'Alemanha': 'DE',
   'Espanha': 'ES', 'Portugal': 'PT', 'Argentina': 'AR', 'México': 'MX',
   'China': 'CN', 'Austrália': 'AU', 'Índia': 'IN', 'Canadá': 'CA',
