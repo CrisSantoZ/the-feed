@@ -18,10 +18,30 @@ export async function renderizarMapaPaisSVG(paisNome) {
   if (!iso) return null;
   try {
     if (!cache[iso]) {
-      const resp = await fetch(`${MAPS_PATH}/${iso}.svg`);
-      if (!resp.ok) return null;
-      cache[iso] = await resp.text();
-      if (!cache[iso].includes('<path')) { cache[iso] = null; return null; }
+      // try several filename candidates (3-letter, 2-letter, upper/lower)
+      const candidates = [];
+      candidates.push(iso);
+      if (iso.length === 3) candidates.push(iso.slice(0,2));
+      candidates.push(iso.toUpperCase());
+      if (iso.length === 3) candidates.push(iso.slice(0,2).toUpperCase());
+      // unique
+      const uniq = [...new Set(candidates.map(s => String(s).toUpperCase()))];
+      let found = null;
+      for (const cand of uniq) {
+        try {
+          const resp = await fetch(`${MAPS_PATH}/${cand}.svg`);
+          if (!resp.ok) continue;
+          const text = await resp.text();
+          if (!text.includes('<path')) continue;
+          found = { svg: text, file: cand };
+          break;
+        } catch (e) {
+          // network error, continue trying other candidates
+          continue;
+        }
+      }
+      if (!found) { cache[iso] = null; return null; }
+      cache[iso] = found.svg;
     }
     const svg = cache[iso];
     const vb = svg.match(/viewBox="([^"]+)"/)?.[1] || '0 0 800 600';
