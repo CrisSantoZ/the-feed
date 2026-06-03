@@ -104,19 +104,10 @@ export function afterRenderMapa(paisNome) {
 
     const tooltip = document.getElementById('mapa-tooltip');
 
-    const paths = wrapper.querySelectorAll('path[data-nome]');
-    if (!paths.length) {
-        console.warn(`[MAPA] Nenhum caminho clicável encontrado para ${paisNome}`);
-        return;
-    }
-
     // Buscar regiões definidas em countries.js
     const paises = window.paisesDataGlobal || [];
     const pais = paises.find(p => p.nome === paisNome) || null;
     const regioesLista = (pais?.regioes || []).map(r => (r.nome || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase());
-
-    const playerEstado = sessionStorage.getItem('playerEstado') || '';
-    const playerEstadoNormalizado = playerEstado.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
     paths.forEach(path => {
         const nome = path.dataset.nome || path.getAttribute('data-nome') || '';
