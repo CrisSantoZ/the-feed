@@ -104,19 +104,43 @@ export function afterRenderMapa(paisNome) {
 
     const tooltip = document.getElementById('mapa-tooltip');
 
+    const paths = wrapper.querySelectorAll('path[data-nome]');
+    if (!paths.length) {
+        console.warn(`[MAPA] Nenhum caminho clicável encontrado para ${paisNome}`);
+        return;
+    }
+
+    // Buscar regiões definidas em countries.js
+    const paises = window.paisesDataGlobal || [];
+    const pais = paises.find(p => p.nome === paisNome) || null;
+    const regioesLista = (pais?.regioes || []).map(r => (r.nome || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase());
+
+    const playerEstado = sessionStorage.getItem('playerEstado') || '';
+    const playerEstadoNormalizado = playerEstado.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
     paths.forEach(path => {
         const nome = path.dataset.nome || path.getAttribute('data-nome') || '';
         const nomeNormalizado = nome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
+        // classe base para estilos genéricos
         path.classList.add('regiao');
 
+        // aplicar classes de estilo compatíveis com o Brasil para padronizar visual
+        path.classList.remove('estado-ativo', 'estado-inativo', 'estado-atual');
+
+        const isActive = regioesLista.length ? regioesLista.includes(nomeNormalizado) : true; // se não tiver dados, assume ativo
+
         if (nomeNormalizado === playerEstadoNormalizado) {
-            path.classList.add('regiao--selected');
+            path.classList.add('estado-atual');
+        } else if (isActive) {
+            path.classList.add('estado-ativo');
+        } else {
+            path.classList.add('estado-inativo');
         }
 
+        // Tooltip
         path.addEventListener('mouseenter', (ev) => {
-            path.style.opacity = '0.98';
-            if (tooltip) {
+            if (typeof tooltip !== 'undefined' && tooltip) {
                 tooltip.style.display = 'block';
                 tooltip.textContent = nome;
                 const rect = wrapper.getBoundingClientRect();
@@ -126,9 +150,8 @@ export function afterRenderMapa(paisNome) {
                 tooltip.style.top = `${y}px`;
             }
         });
-
         path.addEventListener('mousemove', (ev) => {
-            if (tooltip) {
+            if (typeof tooltip !== 'undefined' && tooltip) {
                 const rect = wrapper.getBoundingClientRect();
                 const x = (ev.clientX - rect.left);
                 const y = (ev.clientY - rect.top);
@@ -136,13 +159,16 @@ export function afterRenderMapa(paisNome) {
                 tooltip.style.top = `${y}px`;
             }
         });
-
         path.addEventListener('mouseleave', () => {
-            path.style.opacity = '1';
-            if (tooltip) tooltip.style.display = 'none';
+            if (typeof tooltip !== 'undefined' && tooltip) tooltip.style.display = 'none';
         });
 
+        // Click behavior: apenas estados ativos chamam selecionarEstado
         path.addEventListener('click', () => {
+            if (!isActive) {
+                alert(`🚧 Região ${nome} em desenvolvimento.`);
+                return;
+            }
             if (window.selecionarEstado) {
                 window.selecionarEstado(paisNome, nome);
             }
