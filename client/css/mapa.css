@@ -112,6 +112,53 @@
     height: auto;
 }
 
+/* ==================== MAP REGIONS (GENERIC) ==================== */
+.regiao {
+    fill: rgba(0,243,255,0.12);
+    stroke: rgba(0,243,255,0.35);
+    stroke-width: 0.6px;
+    cursor: pointer;
+    transition: fill 200ms ease, stroke 200ms ease, transform 200ms ease, filter 200ms ease, opacity 200ms ease;
+    opacity: 0.95;
+    vector-effect: non-scaling-stroke;
+}
+.regiao:hover {
+    fill: rgba(0,243,255,0.30);
+    stroke: #00f3ff;
+    filter: drop-shadow(0 6px 14px rgba(0, 243, 255, 0.12));
+    transform: translateY(-2px);
+}
+.regiao.regiao--selected {
+    fill: linear-gradient(180deg, rgba(0,255,150,0.45), rgba(0,243,255,0.25));
+    stroke: #00ff88;
+    stroke-width: 1.6px;
+    filter: drop-shadow(0 0 12px rgba(0,255,136,0.18));
+}
+
+/* Tooltip */
+.mapa-tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: rgba(3,4,7,0.95);
+    color: #fff;
+    padding: 6px 8px;
+    font-size: 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(0,243,255,0.12);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+    transform: translate(-50%, -120%);
+    white-space: nowrap;
+    z-index: 40;
+}
+
+/* small helper for darken when disabled */
+.regiao.regiao--disabled {
+    fill: #1f1f25 !important;
+    stroke: #3a3a45 !important;
+    opacity: 0.6 !important;
+    cursor: default !important;
+}
+
 /* ==================== ESTADOS DO BRASIL ==================== */
 
 /* Estados ativos (disponíveis para explorar) */

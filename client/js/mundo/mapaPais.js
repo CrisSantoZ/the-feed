@@ -102,32 +102,44 @@ export function afterRenderMapa(paisNome) {
     const playerEstado = sessionStorage.getItem('playerEstado') || '';
     const playerEstadoNormalizado = playerEstado.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
+    const tooltip = document.getElementById('mapa-tooltip');
+
     paths.forEach(path => {
         const nome = path.dataset.nome || path.getAttribute('data-nome') || '';
         const nomeNormalizado = nome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 
-        path.style.cursor = 'pointer';
-        path.style.transition = 'fill 0.2s ease, stroke 0.2s ease, opacity 0.2s ease';
         path.classList.add('regiao');
 
         if (nomeNormalizado === playerEstadoNormalizado) {
-            path.style.fill = 'rgba(0,255,100,0.45)';
-            path.style.stroke = '#00ff66';
-            path.style.strokeWidth = '1.2';
+            path.classList.add('regiao--selected');
         }
 
-        path.addEventListener('mouseenter', () => {
-            path.style.opacity = '0.9';
-            if (nomeNormalizado !== playerEstadoNormalizado) {
-                path.style.fill = 'rgba(0,243,255,0.45)';
+        path.addEventListener('mouseenter', (ev) => {
+            path.style.opacity = '0.98';
+            if (tooltip) {
+                tooltip.style.display = 'block';
+                tooltip.textContent = nome;
+                const rect = wrapper.getBoundingClientRect();
+                const x = (ev.clientX - rect.left);
+                const y = (ev.clientY - rect.top);
+                tooltip.style.left = `${x}px`;
+                tooltip.style.top = `${y}px`;
+            }
+        });
+
+        path.addEventListener('mousemove', (ev) => {
+            if (tooltip) {
+                const rect = wrapper.getBoundingClientRect();
+                const x = (ev.clientX - rect.left);
+                const y = (ev.clientY - rect.top);
+                tooltip.style.left = `${x}px`;
+                tooltip.style.top = `${y}px`;
             }
         });
 
         path.addEventListener('mouseleave', () => {
             path.style.opacity = '1';
-            if (nomeNormalizado !== playerEstadoNormalizado) {
-                path.style.fill = '';
-            }
+            if (tooltip) tooltip.style.display = 'none';
         });
 
         path.addEventListener('click', () => {

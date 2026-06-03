@@ -29,14 +29,11 @@ export async function renderizarMapaPaisSVG(paisNome) {
     if (!paths.length) return null;
     const pathsHtml = paths.join('\n          ');
     return `
-      <div id="mapa-svg-wrapper" class="mapa-wrapper" style="background:#0a0a14;border-radius:12px;padding:10px;margin-bottom:15px;">
-        <svg viewBox="${vb}" style="width:100%;height:auto;display:block;" preserveAspectRatio="xMidYMid meet">
-          <style>
-            .regiao { fill:rgba(0,243,255,0.25); stroke:#00f3ff; stroke-width:0.2; pointer-events: all; transition: fill 0.2s ease, stroke 0.2s ease, opacity 0.2s ease; }
-            .regiao:hover { fill:rgba(0,243,255,0.45); }
-          </style>
+      <div id="mapa-svg-wrapper" class="mapa-wrapper mapa-svg-wrapper" style="margin-bottom:15px;">
+        <svg viewBox="${vb}" class="mapa-svg" preserveAspectRatio="xMidYMid meet">
           ${pathsHtml}
         </svg>
+        <div id="mapa-tooltip" class="mapa-tooltip" style="display:none;">&nbsp;</div>
       </div>
     `;
   } catch (e) {
