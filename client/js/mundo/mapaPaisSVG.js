@@ -45,9 +45,12 @@ export async function renderizarMapaPaisSVG(paisNome) {
     }
     const svg = cache[iso];
     const vb = svg.match(/viewBox="([^"]+)"/)?.[1] || '0 0 800 600';
-    const paths = svg.match(/<path[^>]*data-nome="[^"]*"[^>]*d="[^"]*"[^>]*\/?>/g) || [];
-    if (!paths.length) return null;
-    const pathsHtml = paths.join('\n          ');
+    // Parse SVG with DOMParser to reliably extract <path data-nome> regardless of attribute order
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svg, 'image/svg+xml');
+    const pathEls = [...doc.querySelectorAll('path[data-nome]')];
+    if (!pathEls.length) return null;
+    const pathsHtml = pathEls.map(el => el.outerHTML).join('\n          ');
     return `
       <div id="mapa-svg-wrapper" class="mapa-wrapper mapa-svg-wrapper" style="margin-bottom:15px;">
         <svg viewBox="${vb}" class="mapa-svg" preserveAspectRatio="xMidYMid meet">
