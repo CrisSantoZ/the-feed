@@ -1,6 +1,8 @@
 
 
 
+import { renderizarMapaPaisSVG } from './mapaPaisSVG.js';
+
 export async function renderizarMapaPais(paisNome) {
     const paises = window.paisesDataGlobal || [];
     const pais = paises.find(p => p.nome === paisNome);
@@ -32,7 +34,7 @@ export async function renderizarMapaPais(paisNome) {
         </div>
     `).join('');
 
-    const svgHtml = null;
+    const svgHtml = paisNome !== 'Brasil' ? await renderizarMapaPaisSVG(paisNome) : null;
 
     return `
         <div class="mapa-container" style="background:#030407;">
@@ -58,7 +60,12 @@ export async function renderizarMapaPais(paisNome) {
                     <div class="mapa-wrapper">
                         <brazil-component id="mapa-brasil" class="mapa-svg" hidden-states="false"></brazil-component>
                     </div>
-                ` : (svgHtml || '')}
+                ` : (svgHtml || `
+                    <div style="text-align:center;padding:30px;color:#888;">
+                        <div style="font-size:2rem;margin-bottom:10px;">🚧</div>
+                        Mapa de ${paisNome} em desenvolvimento
+                    </div>
+                `)}
 
                 <div style="color:#00f3ff;font-weight:bold;font-size:0.8rem;margin:15px 0 12px;letter-spacing:1px;">📍 ESTADOS / REGIÕES</div>
                 
@@ -78,4 +85,55 @@ export async function renderizarMapaPais(paisNome) {
 }
 
 export function afterRenderMapa(paisNome) {
+    if (paisNome === 'Brasil') return;
+
+    const wrapper = document.getElementById('mapa-svg-wrapper');
+    if (!wrapper) {
+        console.warn(`[MAPA] Wrapper SVG não encontrado para ${paisNome}`);
+        return;
+    }
+
+    const paths = wrapper.querySelectorAll('path[data-nome]');
+    if (!paths.length) {
+        console.warn(`[MAPA] Nenhum caminho clicável encontrado para ${paisNome}`);
+        return;
+    }
+
+    const playerEstado = sessionStorage.getItem('playerEstado') || '';
+    const playerEstadoNormalizado = playerEstado.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+    paths.forEach(path => {
+        const nome = path.dataset.nome || path.getAttribute('data-nome') || '';
+        const nomeNormalizado = nome.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+        path.style.cursor = 'pointer';
+        path.style.transition = 'fill 0.2s ease, stroke 0.2s ease, opacity 0.2s ease';
+        path.classList.add('regiao');
+
+        if (nomeNormalizado === playerEstadoNormalizado) {
+            path.style.fill = 'rgba(0,255,100,0.45)';
+            path.style.stroke = '#00ff66';
+            path.style.strokeWidth = '1.2';
+        }
+
+        path.addEventListener('mouseenter', () => {
+            path.style.opacity = '0.9';
+            if (nomeNormalizado !== playerEstadoNormalizado) {
+                path.style.fill = 'rgba(0,243,255,0.45)';
+            }
+        });
+
+        path.addEventListener('mouseleave', () => {
+            path.style.opacity = '1';
+            if (nomeNormalizado !== playerEstadoNormalizado) {
+                path.style.fill = '';
+            }
+        });
+
+        path.addEventListener('click', () => {
+            if (window.selecionarEstado) {
+                window.selecionarEstado(paisNome, nome);
+            }
+        });
+    });
 }

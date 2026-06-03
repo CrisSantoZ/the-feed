@@ -1,4 +1,4 @@
-const GITHUB = 'https://raw.githubusercontent.com/CrisSantoZ/the-feed/main/client/assets/maps';
+const MAPS_PATH = '/assets/maps';
 
 const ISO_POR_NOME = {
   'Brasil': 'BR', 'Estados Unidos': 'US', 'EUA': 'US', 'França': 'FR',
@@ -18,27 +18,29 @@ export async function renderizarMapaPaisSVG(paisNome) {
   if (!iso) return null;
   try {
     if (!cache[iso]) {
-      const resp = await fetch(`${GITHUB}/${iso}.svg`);
+      const resp = await fetch(`${MAPS_PATH}/${iso}.svg`);
       if (!resp.ok) return null;
       cache[iso] = await resp.text();
       if (!cache[iso].includes('<path')) { cache[iso] = null; return null; }
     }
     const svg = cache[iso];
     const vb = svg.match(/viewBox="([^"]+)"/)?.[1] || '0 0 800 600';
-    // Extrai só os paths com data-nome
     const paths = svg.match(/<path[^>]*data-nome="[^"]*"[^>]*d="[^"]*"[^>]*\/?>/g) || [];
-    // Extrai a primeira parte do SVG (até o primeiro path) + os paths + fecha
-    const inicio = svg.indexOf('<path');
+    if (!paths.length) return null;
     const pathsHtml = paths.join('\n          ');
     return `
-      <div class="mapa-wrapper" style="background:#0a0a14;border-radius:12px;padding:10px;margin-bottom:15px;">
+      <div id="mapa-svg-wrapper" class="mapa-wrapper" style="background:#0a0a14;border-radius:12px;padding:10px;margin-bottom:15px;">
         <svg viewBox="${vb}" style="width:100%;height:auto;display:block;" preserveAspectRatio="xMidYMid meet">
           <style>
-            .regiao { fill:rgba(0,243,255,0.3); stroke:#00f3ff; stroke-width:0.3; }
+            .regiao { fill:rgba(0,243,255,0.25); stroke:#00f3ff; stroke-width:0.2; pointer-events: all; transition: fill 0.2s ease, stroke 0.2s ease, opacity 0.2s ease; }
+            .regiao:hover { fill:rgba(0,243,255,0.45); }
           </style>
           ${pathsHtml}
         </svg>
       </div>
     `;
-  } catch (e) { return null; }
+  } catch (e) {
+    console.warn(`[MAPA SVG] Falha ao carregar SVG de ${paisNome}:`, e);
+    return null;
+  }
 }
